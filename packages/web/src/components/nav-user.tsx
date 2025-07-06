@@ -32,7 +32,8 @@ import type { User } from '@/types';
 import { useTranslations } from '@/context/TranslationContext';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 import { LanguageSwitcher } from './language-switcher';
 import { NotificationBadge } from './notification-badge';
@@ -42,10 +43,46 @@ export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
   const t = useTranslations('userNav');
   const { setTheme } = useTheme();
-  const { count: unreadCount } = useNotificationCount({ 
-    userId: user.id,
-    enabled: !!user.id 
-  });
+  const router = useRouter();
+  // Temporalmente deshabilitado para identificar el loop
+  // const { count: unreadCount } = useNotificationCount({ 
+  //   userId: user.id,
+  //   enabled: !!user.id 
+  // });
+  const unreadCount = 0;
+
+  const handleSignOut = useCallback(async () => {
+    try {
+      // Usar la misma ruta de logout que se configuró en el web
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        router.push('/auth/login');
+      } else {
+        console.warn('Logout endpoint failed, clearing cookies manually');
+        // En caso de error de la API, limpiar cookies manualmente
+        document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        document.cookie = 'refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        router.push('/auth/login');
+      }
+    } catch (error) {
+      console.error('Error signing out:', error);
+      
+      // En caso de error, limpiar las cookies localmente
+      document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = 'refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      router.push('/auth/login');
+    }
+  }, [router]);
+
+  const handleSetThemeLight = useCallback(() => setTheme('light'), [setTheme]);
+  const handleSetThemeDark = useCallback(() => setTheme('dark'), [setTheme]);
+  const handleSetThemeSystem = useCallback(() => setTheme('system'), [setTheme]);
 
   return (
     <SidebarMenu>
@@ -117,21 +154,21 @@ export function NavUser({ user }: { user: User }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => setTheme('light')}>
+              <DropdownMenuItem onClick={handleSetThemeLight}>
                 <Sun className="mr-2 h-4 w-4" />
                 <span>Light</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme('dark')}>
+              <DropdownMenuItem onClick={handleSetThemeDark}>
                 <Moon className="mr-2 h-4 w-4" />
                 <span>Dark</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme('system')}>
+              <DropdownMenuItem onClick={handleSetThemeSystem}>
                 <Laptop className="mr-2 h-4 w-4" />
                 <span>System</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem onClick={handleSignOut}>
               <LogOut />
               {t('logout')}
             </DropdownMenuItem>

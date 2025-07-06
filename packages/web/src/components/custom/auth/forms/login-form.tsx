@@ -60,8 +60,8 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
+    <form onSubmit={handleSubmit} className="space-y-4" suppressHydrationWarning>
+      <div className="space-y-2" suppressHydrationWarning>
         <Label htmlFor="email">{t('auth.login.email')}</Label>
         <Input
           id="email"
@@ -74,7 +74,7 @@ export const LoginForm = () => {
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2" suppressHydrationWarning>
         <Label htmlFor="password">{t('auth.login.password')}</Label>
         <Input
           id="password"
