@@ -1,0 +1,659 @@
+{
+  "NotFound": {
+    "title": "Página No Encontrada",
+    "description": "La página que buscas no existe."
+  },
+  "index": {
+    "title": "Inicio"
+  },
+  "homepage": {
+    "hero": {
+      "badge": "🚀 Next.js 14 + NextAuth v5 + Prisma + MongoDB",
+      "title": "La plantilla perfecta para tu",
+      "titleHighlight": " próximo proyecto",
+      "subtitle": "Ahorra semanas de desarrollo con nuestra plantilla completa. Autenticación, base de datos, dashboard admin, y más. Todo listo para producción.",
+      "getTemplate": "Obtener Template - $99",
+      "viewDemo": "Ver Demo",
+      "quickInstall": "Instalación en 5 minutos",
+      "freeUpdates": "Actualizaciones gratuitas",
+      "dashboardScreenshot": "[PLACEHOLDER: Imagen/Video del producto]",
+      "productPlaceholder": "[PLACEHOLDER: Imagen/Video del producto]"
+    },
+    "features": {
+      "title": "Todo lo que necesitas incluido",
+      "subtitle": "No pierdas tiempo configurando. Nuestra plantilla incluye todas las funcionalidades esenciales para tu aplicación moderna.",
+      "auth": {
+        "title": "Autenticación Completa",
+        "description": "NextAuth v5 con Google, GitHub, email y autenticación por credenciales. Verificación de email incluida."
+      },
+      "admin": {
+        "title": "Panel de Admin",
+        "description": "Dashboard completo para administrar usuarios, roles y permisos. Tablas con filtros, paginación y exportación."
+      },
+      "database": {
+        "title": "Base de Datos",
+        "description": "Prisma ORM configurado con MongoDB. Esquemas de usuario, sesiones y tokens ya definidos."
+      },
+      "ui": {
+        "title": "UI Components",
+        "description": "Shadcn/ui + Tailwind CSS. Componentes modernos, accesibles y totalmente personalizables."
+      },
+      "i18n": {
+        "title": "Internacionalización",
+        "description": "Soporte multi-idioma configurado. Español e inglés incluidos, fácil agregar más idiomas."
+      },
+      "production": {
+        "title": "Listo para Producción",
+        "description": "Configuración de TypeScript, ESLint, Prettier. Optimizado para Vercel y otros providers."
+      }
+    },
+    "pricing": {
+      "title": "Precio simple, valor infinito",
+      "subtitle": "Una sola compra, uso ilimitado en todos tus proyectos",
+      "badge": "🔥 Oferta de Lanzamiento",
+      "planTitle": "Template Completo",
+      "price": "$99",
+      "originalPrice": "$199",
+      "discount": "50% OFF",
+      "description": "Pago único • Uso ilimitado • Actualizaciones incluidas",
+      "features": {
+        "sourceCode": "Código fuente completo",
+        "nextjs": "Next.js 14 + App Router",
+        "nextauth": "NextAuth v5",
+        "database": "Prisma + MongoDB",
+        "ui": "Shadcn/ui + Tailwind",
+        "adminPanel": "Panel de administración",
+        "userManagement": "Gestión de usuarios",
+        "email": "Email con Resend",
+        "i18n": "Soporte multi-idioma",
+        "documentation": "Documentación completa"
+      },
+      "buyNow": "Comprar Ahora - $99",
+      "guarantee": "Garantía de devolución de 30 días"
+    },
+    "footer": {
+      "title": "Alkitu Template",
+      "description": "La plantilla de Next.js más completa para desarrolladores modernos.",
+      "product": {
+        "title": "Producto",
+        "features": "Características",
+        "pricing": "Precios",
+        "demo": "Demo"
+      },
+      "support": {
+        "title": "Soporte",
+        "documentation": "Documentación",
+        "contact": "Contacto",
+        "faq": "FAQ"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacidad",
+        "terms": "Términos",
+        "license": "Licencia",
+        "copyright": "© 2024 Alkitu Template. Todos los derechos reservados."
+      }
+    }
+  },
+  "navbar": {
+    "title": "Alkitu Template",
+    "language": "Idioma",
+    "spanish": "Español",
+    "english": "Inglés",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar Sesión"
+  },
+  "Metadata": {
+    "title": "Alkitu Template - Plantilla Next.js Completa",
+    "description": "La plantilla Next.js más completa con autenticación, base de datos, panel de administración y más.",
+    "trainingIBMTitle": "Entrenamiento IBM",
+    "trainingIBMDescription": "Capacitación profesional especializada",
+    "contactTitle": "Contacto",
+    "contactDescription": "Ponte en contacto con nosotros"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "subtitle": "Ingresa los detalles de tu cuenta para continuar",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión con correo",
+      "newPassword": "Ingresa una nueva contraseña",
+      "backToLogin": "Volver a la página de inicio de sesión",
+      "success": "Inicio de sesión exitoso"
+    },
+    "register": {
+      "title": "Crear una cuenta",
+      "subtitle": "Completa los siguientes campos para crear tu cuenta",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "name": "Nombre",
+      "lastName": "Apellido",
+      "phone": "Número de contacto",
+      "submit": "Registrarse con correo"
+    },
+    "verifyRequest": {
+      "title": "Revisa tu correo",
+      "message1": "Se ha enviado un enlace de inicio de sesión a",
+      "message2": "tu dirección de correo electrónico"
+    },
+    "newVerification": {
+      "title": "Verificar tu correo",
+      "message": "Verificando tu correo electrónico..."
+    },
+    "error": {
+      "title": "Error de Autenticación",
+      "message": "Algo salió mal. Por favor, inténtalo de nuevo."
+    },
+    "unauthorized": {
+      "title": "Acceso Denegado",
+      "description": "No tienes permisos para acceder a esta página",
+      "message": "Por favor, contacta con el administrador si crees que esto es un error.",
+      "goToDashboard": "Ir al Dashboard",
+      "goToLogin": "Iniciar Sesión"
+    },
+    "routes": {
+      "auth": "Autenticación",
+      "login": "Iniciar Sesión",
+      "register": "Registrarse",
+      "resetPassword": "Restablecer Contraseña",
+      "newPassword": "Nueva Contraseña",
+      "newVerification": "Nueva Verificación",
+      "verifyRequest": "Solicitud de Verificación"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Panel de Administración",
+      "userManagement": {
+        "title": "Gestión de Usuarios",
+        "description": "Gestionar usuarios, roles y permisos",
+        "viewUsers": "Ver Usuarios"
+      },
+      "settings": {
+        "title": "Configuración",
+        "description": "Configurar ajustes de la aplicación"
+      },
+      "analytics": {
+        "title": "Analíticas",
+        "description": "Ver analíticas e informes de la aplicación"
+      }
+    },
+    "users": {
+      "form": {
+        "name": "Nombre",
+        "lastName": "Apellido",
+        "email": "Correo electrónico",
+        "phone": "Teléfono",
+        "userInfo": "Información del Usuario:",
+        "accessLevel": "Nivel de Acceso:",
+        "userId": "ID del Usuario:",
+        "actions": "Acciones:",
+        "twoFactor": "Autenticación de Dos Factores",
+        "errors": {
+          "somethingWrong": "Algo salió mal",
+          "somethingWrongMessage": "Algo salió mal: {message}"
+        }
+      }
+    },
+    "routes": {
+      "admin": "Administración",
+      "users": "Usuarios",
+      "dashboard": "Panel"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "overview": "Dashboard",
+      "users": "Usuarios",
+      "userList": "Lista de Usuarios",
+      "createUser": "Crear Usuario",
+      "analytics": "Analíticas",
+      "reports": "Reportes",
+      "insights": "Insights",
+      "projects": "Proyectos",
+      "activeProjects": "Proyectos Activos",
+      "archived": "Archivados",
+      "settings": "Configuración",
+      "profile": "Perfil",
+      "preferences": "Preferencias",
+      "dashboard": "Dashboard"
+    },
+    "projects": {
+      "alkitu": "Plataforma Alkitu"
+    },
+    "teams": {
+      "development": "Equipo de Desarrollo"
+    }
+  },
+  "navigation": {
+    "platform": "Plataforma",
+    "user": {
+      "upgradeToPro": "Actualizar a Pro",
+      "account": "Cuenta",
+      "billing": "Facturación",
+      "notifications": "Notificaciones",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "subtitle": "Administra tus notificaciones y mantente actualizado con las últimas actividades.",
+    "fastMode": "Modo Rápido",
+    "unread": "sin leer",
+    "loaded": "cargadas",
+    "onPage": "en página",
+    "exportCsv": "Exportar CSV",
+    "markAsRead": "Marcar como leída",
+    "markPageAsRead": "Marcar página como leída",
+    "markLoadedAsRead": "Marcar cargadas como leídas",
+    "filteredResults": "Resultados filtrados",
+    "allNotifications": "Todas las notificaciones",
+    "moreAvailable": "más disponibles",
+    "total": "total",
+    "preferencesButton": "Preferencias",
+    "noNotifications": "Sin notificaciones",
+    "noNotificationsDescription": "¡Estás al día! Las nuevas notificaciones aparecerán aquí.",
+    "noMatchingFilters": "Ninguna notificación coincide con tus filtros",
+    "noMatchingFiltersDescription": "Intenta ajustar tus criterios de búsqueda o limpiar algunos filtros.",
+    "buttomAnalytics": "Analíticas",
+    "analytics": {
+      "back": "Volver a Notificaciones",
+      "title": "Analítica de Notificaciones",
+      "description": "Estadísticas e información detallada sobre tu actividad de notificaciones."
+    },
+    "filters": {
+      "title": "Filtrar Notificaciones",
+      "showing": "Mostrando",
+      "showingAll": "Mostrando todas",
+      "notifications": "notificaciones",
+      "of": "de",
+      "filter": "filtro",
+      "active": "activos",
+      "searchPlaceholder": "Buscar notificaciones... (prueba 'type:security' o 'urgent OR maintenance')",
+      "advancedSearchTips": "Consejos de Búsqueda Avanzada:",
+      "advancedTip1": "Usa comillas para frases exactas: \"actualización del sistema\"",
+      "advancedTip2": "Usa OR para múltiples términos: seguridad OR urgente",
+      "advancedTip3": "Usa - para excluir términos: notificación -spam",
+      "advancedTip4": "Usa type: para filtrar por tipo: type:seguridad",
+      "quickFilters": "Filtros rápidos:",
+      "savedFilters": "Filtros Guardados:",
+      "save": "Guardar",
+      "clearAll": "Limpiar todo",
+      "unread": "Sin leer",
+      "read": "Leídas",
+      "all": "Todas",
+      "notificationTypes": "Tipos de Notificaciones",
+      "dateRange": "Rango de Fechas",
+      "pickDate": "Seleccionar rango de fechas",
+      "clearDateRange": "Limpiar rango de fechas",
+      "sortBy": "Ordenar por",
+      "newest": "Más recientes",
+      "oldest": "Más antiguas",
+      "type": "Por tipo",
+      "saved": "Guardado",
+      "apply": "Aplicar",
+      "saveCurrentFilters": "Guardar filtros actuales",
+      "filterName": "Nombre del filtro",
+      "activeFilters": "Filtros activos:",
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "last7Days": "Últimos 7 días",
+      "last30Days": "Últimos 30 días",
+      "thisMonth": "Este mes",
+      "lastMonth": "Mes pasado",
+      "filters": "Filtros",
+      "selectSorting": "Seleccionar ordenamiento",
+      "search": "Búsqueda",
+      "status": "Estado",
+      "dateRangeSelected": "Rango de fechas seleccionado",
+      "sort": "Ordenar",
+      "cancel": "Cancelar"
+    },
+    "types": {
+      "welcome": "Bienvenida",
+      "security": "Seguridad",
+      "system": "Sistema",
+      "report": "Reportes",
+      "feature": "Características",
+      "maintenance": "Mantenimiento",
+      "urgent": "Urgente",
+      "info": "Información",
+      "mentions": "Menciones"
+    },
+    "preferences": {
+      "title": "Preferencias de Notificaciones",
+      "subtitle": "Personaliza cómo y cuándo recibir notificaciones.",
+      "resetToDefaults": "Restablecer a Valores Predeterminados",
+      "resetting": "Restableciendo...",
+      "savePreferences": "Guardar Preferencias",
+      "saving": "Guardando...",
+      "successUpdate": "¡Preferencias actualizadas exitosamente!",
+      "errorUpdate": "Error al actualizar preferencias",
+      "successReset": "¡Preferencias restablecidas a valores predeterminados!",
+      "errorReset": "Error al restablecer preferencias",
+      "email": {
+        "title": "Notificaciones por Email",
+        "description": "Configura los ajustes de notificaciones por email y frecuencia.",
+        "enable": "Habilitar Notificaciones por Email",
+        "enableDescription": "Recibir notificaciones vía email",
+        "frequency": "Frecuencia de Email",
+        "frequencyDescription": "Con qué frecuencia quieres recibir notificaciones por email",
+        "selectFrequency": "Seleccionar frecuencia",
+        "immediate": "Inmediato",
+        "hourly": "Resumen por hora",
+        "daily": "Resumen diario",
+        "weekly": "Resumen semanal",
+        "types": "Tipos de Notificaciones por Email",
+        "typesDescription": "Selecciona qué tipos de notificaciones quieres recibir por email"
+      },
+      "push": {
+        "title": "Preferencias de Notificaciones Push",
+        "description": "Configura qué tipos de notificaciones push quieres recibir.",
+        "enable": "Habilitar Notificaciones Push",
+        "enableDescription": "Permitir notificaciones push para esta cuenta",
+        "types": "Tipos de Notificaciones Push",
+        "typesDescription": "Selecciona qué tipos de notificaciones quieres recibir como notificaciones push",
+        "browserSettings": "Configuración de Notificaciones Push del Navegador",
+        "browserDescription": "Administra los permisos de notificaciones push de tu navegador y prueba la funcionalidad.",
+        "status": "Estado",
+        "granted": "Permitido",
+        "denied": "Denegado",
+        "default": "Predeterminado",
+        "subscribe": "Suscribirse",
+        "unsubscribe": "Desuscribirse",
+        "testNotification": "Notificación de Prueba",
+        "subscription": "Suscripción",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "subscribed": "¡Suscrito exitosamente!",
+        "unsubscribed": "¡Desuscrito exitosamente!",
+        "testSent": "¡Notificación de prueba enviada!",
+        "errorSubscribe": "Error al suscribirse a notificaciones push",
+        "errorUnsubscribe": "Error al desuscribirse de notificaciones push",
+        "errorTest": "Error al enviar notificación de prueba",
+        "blocked": "Las notificaciones push están bloqueadas. Para habilitarlas:",
+        "blockedStep1": "1. Haz clic en el ícono de candado en la barra de direcciones de tu navegador",
+        "blockedStep2": "2. Configura las notificaciones en \"Permitir\"",
+        "blockedStep3": "3. Actualiza la página e inténtalo de nuevo",
+        "disabledInfo": "Las notificaciones push están deshabilitadas en tus preferencias. Habilítalas arriba para administrar la configuración del navegador."
+      },
+      "inApp": {
+        "title": "Notificaciones en la Aplicación",
+        "description": "Configura las notificaciones mostradas dentro de la aplicación.",
+        "enable": "Habilitar Notificaciones en la Aplicación",
+        "enableDescription": "Mostrar notificaciones dentro de la aplicación"
+      },
+      "quietHours": {
+        "title": "Horas de Silencio",
+        "description": "Configura horarios en los que no quieres recibir notificaciones.",
+        "enable": "Habilitar Horas de Silencio",
+        "enableDescription": "Deshabilitar notificaciones durante horas específicas",
+        "start": "Hora de Inicio",
+        "end": "Hora de Fin",
+        "format": "La hora debe estar en formato HH:mm"
+      },
+      "marketing": {
+        "title": "Marketing y Promocional",
+        "description": "Administra las comunicaciones de marketing y promocionales.",
+        "marketing": "Comunicaciones de Marketing",
+        "marketingDescription": "Recibir emails de marketing y actualizaciones",
+        "promotional": "Ofertas Promocionales",
+        "promotionalDescription": "Recibir ofertas especiales y descuentos"
+      },
+      "notificationTypes": {
+        "welcome": {
+          "label": "Mensajes de bienvenida",
+          "description": "Bienvenida de nuevos usuarios e incorporación"
+        },
+        "security": {
+          "label": "Alertas de seguridad",
+          "description": "Intentos de inicio de sesión y problemas de seguridad"
+        },
+        "system": {
+          "label": "Actualizaciones del sistema",
+          "description": "Mantenimiento y notificaciones del sistema"
+        },
+        "urgent": {
+          "label": "Notificaciones urgentes",
+          "description": "Alertas críticas y sensibles al tiempo"
+        },
+        "mentions": {
+          "label": "Menciones",
+          "description": "Cuando eres mencionado o etiquetado"
+        },
+        "reports": {
+          "label": "Reportes",
+          "description": "Reportes semanales y mensuales"
+        },
+        "features": {
+          "label": "Nuevas características",
+          "description": "Actualizaciones de producto y nuevas características"
+        }
+      }
+    }
+  },
+  "Common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "yes": "Sí",
+    "no": "No",
+    "openMenu": "Abrir menú",
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "morePages": "Más páginas"
+    },
+    "general": {
+      "loading": "Cargando...",
+      "pageNotFound": "Página no encontrada",
+      "currentLanguage": "Idioma actual",
+      "home": "Inicio",
+      "contact": "Contacto",
+      "about": "Acerca de",
+      "services": "Servicios",
+      "welcome": "Bienvenido",
+      "logout": "Cerrar sesión",
+      "loadingError": "Error de carga"
+    },
+    "errorMessages": {
+      "loadingError": "Error de carga"
+    },
+    "columns": {
+      "id": "ID",
+      "data": "Datos",
+      "select": "Seleccionar",
+      "all": "Todos",
+      "createdAt": "Creado en",
+      "updatedAt": "Actualizado en",
+      "contacts": "Contactos",
+      "month": "Mes",
+      "year": "Año",
+      "actions": "Acciones",
+      "originalType": "Tipo original",
+      "dayOfMonth": "Día del mes"
+    },
+    "backups": {
+      "current": {
+        "title": "Actual",
+        "description": "Backup actual"
+      },
+      "daily": {
+        "title": "Diario",
+        "description": "Backup diario"
+      },
+      "monthly": {
+        "title": "Mensual",
+        "description": "Backup mensual"
+      },
+      "favorite": {
+        "title": "Favorito",
+        "description": "Backup favorito"
+      },
+      "actions": {
+        "createUpdateCurrent": "Crear/Actualizar actual",
+        "createUpdateDaily": "Crear/Actualizar diario",
+        "createUpdateMonthly": "Crear/Actualizar mensual"
+      },
+      "noBackupsFound": "No se encontraron backups"
+    },
+    "actions": {
+      "delete": "Eliminar",
+      "confirm": "Confirm",
+      "cancel": "Cancelar",
+      "viewDetails": "Ver detalles",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "copySuccessTitle": "Copiado exitosamente",
+      "copySuccessDescription": "El contenido ha sido copiado al portapapeles",
+      "create": "Crear",
+      "edit": "Editar"
+    },
+    "modals": {
+      "confirmation": {
+        "title": "Confirmación",
+        "deleteDescription": "¿Estás seguro de que quieres eliminar este elemento?",
+        "processingDescription": "Procesando..."
+      },
+      "deletion": {
+        "title": "Eliminación",
+        "description": "Eliminando elemento..."
+      },
+      "creatingUpdating": {
+        "title": "Creando/Actualizando",
+        "description": "Guardando cambios..."
+      },
+      "toggleFavorite": {
+        "title": "Favorito",
+        "adding": "Agregando a favoritos...",
+        "removing": "Eliminando de favoritos..."
+      }
+    },
+    "toasts": {
+      "success": {
+        "title": "Éxito",
+        "description": "Operación completada exitosamente"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Ocurrió un error"
+      }
+    },
+    "currentBackupTab": {
+      "title": "Backup Actual",
+      "description": "Información del backup actual",
+      "contacts": "Contactos",
+      "createUpdateButton": "Crear/Actualizar"
+    },
+    "backupDetails": {
+      "title": "Detalles del Backup",
+      "itemsPerPage": "Elementos por página",
+      "page": "Página",
+      "of": "de",
+      "data": "Datos",
+      "select": "Seleccionar",
+      "all": "Todos",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "backupActions": {
+      "alreadyInFavorites": "Ya en favoritos",
+      "addToFavorites": "Agregar a favoritos",
+      "viewDetails": "Ver detalles",
+      "deleteBackup": "Eliminar backup"
+    },
+    "dataTable": {
+      "noFavoriteBackups": "No hay backups favoritos"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "La plantilla perfecta para tu",
+      "titleSpan": "próximo proyecto",
+      "description": "Ahorra semanas de desarrollo con nuestra plantilla completa. Autenticación, base de datos, dashboard admin, y más. Todo listo para producción.",
+      "ctaBuy": "Obtener Template - $99",
+      "ctaDemo": "Ver Demo",
+      "feature1": "Instalación en 5 minutos",
+      "feature2": "Actualizaciones gratuitas",
+      "dashboardScreenshot": "Captura de pantalla del dashboard",
+      "placeholderImage": "[PLACEHOLDER: Imagen/Video del producto]"
+    },
+    "features": {
+      "title": "Todo lo que necesitas incluido",
+      "description": "No pierdas tiempo configurando. Nuestra plantilla incluye todas las funcionalidades esenciales para tu aplicación moderna.",
+      "auth": {
+        "title": "Autenticación Completa",
+        "description": "NextAuth v5 con Google, GitHub, email y autenticación por credenciales. Verificación de email incluida."
+      },
+      "adminPanel": {
+        "title": "Panel de Admin",
+        "description": "Dashboard completo para administrar usuarios, roles y permisos. Tablas con filtros, paginación y exportación."
+      },
+      "database": {
+        "title": "Base de Datos",
+        "description": "Prisma ORM configurado con MongoDB. Esquemas de usuario, sesiones y tokens ya definidos."
+      },
+      "uiComponents": {
+        "title": "UI Components",
+        "description": "Shadcn/ui + Tailwind CSS. Componentes modernos, accesibles y totalmente personalizables."
+      },
+      "internationalization": {
+        "title": "Internacionalización",
+        "description": "Soporte multi-idioma configurado. Español e inglés incluidos, fácil agregar más idiomas."
+      },
+      "productionReady": {
+        "title": "Listo para Producción",
+        "description": "Configuración de TypeScript, ESLint, Prettier. Optimizado para Vercel y otros providers."
+      }
+    },
+    "pricing": {
+      "title": "Precio simple, valor infinito",
+      "description": "Una sola compra, uso ilimitado en todos tus proyectos",
+      "badge": "🔥 Oferta de Lanzamiento",
+      "cardTitle": "Template Completo",
+      "cardDescription": "Pago único • Uso ilimitado • Actualizaciones incluidas",
+      "feature1": "Código fuente completo",
+      "feature2": "Next.js 14 + App Router",
+      "feature3": "NextAuth v5",
+      "feature4": "Prisma + MongoDB",
+      "feature5": "Shadcn/ui + Tailwind",
+      "feature6": "Panel de administración",
+      "feature7": "Gestión de usuarios",
+      "feature8": "Email con Resend",
+      "feature9": "Soporte multi-idioma",
+      "feature10": "Documentación completa",
+      "ctaBuy": "Comprar Ahora - $99",
+      "guarantee": "Garantía de devolución de 30 días"
+    },
+    "testimonials": {
+      "title": "Lo que dicen nuestros clientes",
+      "description": "Desarrolladores de todo el mundo confían en nuestra plantilla",
+      "quote1": "\"Increíble plantilla. Me ahorró semanas de desarrollo. La configuración de NextAuth v5 es perfecta.\"",
+      "author1Name": "Juan Pérez",
+      "author1Title": "Full Stack Developer",
+      "quote2": "\"El panel de admin es espectacular. Los componentes de Shadcn/ui están perfectamente integrados.\"",
+      "author2Name": "María Rodríguez",
+      "author2Title": "Frontend Developer",
+      "quote3": "\"Excelente calidad de código. TypeScript, ESLint, todo configurado perfectamente desde el inicio.\"",
+      "author3Name": "Carlos López",
+      "author3Title": "Senior Developer"
+    },
+    "cta": {
+      "title": "¿Listo para acelerar tu desarrollo?",
+      "description": "Únete a cientos de desarrolladores que ya están usando nuestra plantilla para crear aplicaciones increíbles.",
+      "buyNow": "Comprar Ahora - $99",
+      "viewDemo": "Ver Demo",
+      "guarantee": "Garantía de devolución de 30 días • Soporte por email • Actualizaciones gratuitas"
+    }
+  },
+  "userNav": {
+    "upgradeToPro": "Actualizar a Pro",
+    "account": "Cuenta",
+    "billing": "Facturación",
+    "notifications": "Notificaciones",
+    "logout": "Cerrar sesión"
+  }
+}

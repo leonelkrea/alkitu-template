@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "projects": {
+    "web": {
+      "root": "packages/web",
+      "projectType": "application",
+      "sourceRoot": "packages/web/src",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "options": {
+            "root": "packages/web",
+            "outputPath": "dist/packages/web"
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:dev",
+          "options": {
+            "buildTarget": "web:build",
+            "dev": true
+          }
+        }
+      }
+    },
+    "api": {
+      "root": "packages/api",
+      "projectType": "application",
+      "sourceRoot": "packages/api/src",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/packages/api",
+            "main": "packages/api/src/main.ts"
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        }
+      }
+    },
+    "shared": {
+      "root": "packages/shared",
+      "projectType": "library",
+      "sourceRoot": "packages/shared/src",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/js:tsc",
+          "options": {
+            "outputPath": "dist/packages/shared",
+            "tsConfig": "packages/shared/tsconfig.lib.json"
+          }
+        }
+      }
+    }
+  }
+}

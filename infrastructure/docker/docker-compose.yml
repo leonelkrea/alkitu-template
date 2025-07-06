@@ -1,0 +1,207 @@
+version: '3.8'
+
+services:
+  # MongoDB Database with Replica Set
+  mongodb:
+    image: mongo:7
+    container_name: alkitu-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: alkitu
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./alkitu-api/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./alkitu-api/mongodb-keyfile/keyfile:/etc/mongodb/keyfile:ro
+    networks:
+      - alkitu-network
+    command: mongod --replSet rs0 --bind_ip_all --auth --keyFile /etc/mongodb/keyfile
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # MongoDB Replica Set Setup
+  mongo-setup:
+    image: mongo:7
+    depends_on:
+      - mongodb
+    networks:
+      - alkitu-network
+    restart: "no"
+    command: >
+      bash -c "
+        sleep 10
+        mongosh --host mongodb:27017 -u admin -p password --authenticationDatabase admin --eval '
+        try {
+          rs.status();
+          print(\"Replica set already initialized\");
+        } catch (e) {
+          rs.initiate({
+            _id: \"rs0\",
+            members: [{ _id: 0, host: \"mongodb:27017\" }]
+          });
+          print(\"Replica set initialized successfully\");
+        }'
+      "
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: alkitu-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - alkitu-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API (NestJS)
+  api:
+    build:
+      context: ./alkitu-api
+      dockerfile: Dockerfile
+    container_name: alkitu-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: mongodb://admin:password@mongodb:27017/alkitu?authSource=admin&replicaSet=rs0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      REDIS_URL: redis://redis:6379
+      PORT: 3001
+      FRONTEND_URL: http://frontend:3000
+      
+      # Email Configuration
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      AUTH_RESEND_KEY: ${RESEND_API_KEY}
+      EMAIL_FROM: ${EMAIL_FROM:-noreply@alkitu.com}
+      
+      # OAuth Configuration
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      
+      # Google Services
+      GOOGLE_USER_EMAIL: ${GOOGLE_USER_EMAIL}
+      GOOGLE_USER_PASSWORD: ${GOOGLE_USER_PASSWORD}
+      
+      # Google Drive API
+      GOOGLE_DRIVE_CLIENT_EMAIL: ${GOOGLE_DRIVE_CLIENT_EMAIL}
+      GOOGLE_DRIVE_PRIVATE_KEY: ${GOOGLE_DRIVE_PRIVATE_KEY}
+      GOOGLE_DRIVE_PROJECT_ID: ${GOOGLE_DRIVE_PROJECT_ID}
+      GOOGLE_DRIVE_CLIENT_ID: ${GOOGLE_DRIVE_CLIENT_ID}
+      GOOGLE_DRIVE_ROOT_FOLDER_ID: ${GOOGLE_DRIVE_ROOT_FOLDER_ID}
+      
+      # External APIs
+      HOLDED_API_KEY: ${HOLDED_API_KEY}
+      
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - alkitu-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/trpc/hello?batch=1&input=%7B%220%22%3A%7B%22name%22%3A%22Health%22%7D%7D"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alkitu-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      
+      # Auth Configuration
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-your-nextauth-secret}
+      AUTH_SECRET: ${NEXTAUTH_SECRET:-your-nextauth-secret}
+      
+      # Database
+      DATABASE_URL: mongodb://admin:password@mongodb:27017/alkitu?authSource=admin&replicaSet=rs0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      
+      # APIs - same as backend
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      AUTH_RESEND_KEY: ${RESEND_API_KEY}
+      EMAIL_FROM: ${EMAIL_FROM:-noreply@alkitu.com}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_USER_EMAIL: ${GOOGLE_USER_EMAIL}
+      GOOGLE_USER_PASSWORD: ${GOOGLE_USER_PASSWORD}
+      GOOGLE_DRIVE_CLIENT_EMAIL: ${GOOGLE_DRIVE_CLIENT_EMAIL}
+      GOOGLE_DRIVE_PRIVATE_KEY: ${GOOGLE_DRIVE_PRIVATE_KEY}
+      GOOGLE_DRIVE_PROJECT_ID: ${GOOGLE_DRIVE_PROJECT_ID}
+      GOOGLE_DRIVE_CLIENT_ID: ${GOOGLE_DRIVE_CLIENT_ID}
+      GOOGLE_DRIVE_ROOT_FOLDER_ID: ${GOOGLE_DRIVE_ROOT_FOLDER_ID}
+      HOLDED_API_KEY: ${HOLDED_API_KEY}
+      
+    depends_on:
+      api:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - alkitu-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: alkitu-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-fullstack.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      frontend:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    networks:
+      - alkitu-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  alkitu-network:
+    driver: bridge

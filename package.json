@@ -1,0 +1,79 @@
+{
+  "name": "@alkitu/template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Alkitu Template - Complete Fullstack Monorepo with Web, API, and Mobile applications",
+  "keywords": [
+    "alkitu",
+    "template",
+    "monorepo",
+    "nextjs",
+    "nestjs",
+    "flutter",
+    "fullstack"
+  ],
+  "author": "Alkitu Team",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:web dev:api",
+    "dev:web": "npm run dev --workspace=@alkitu/web",
+    "dev:api": "npm run dev --workspace=@alkitu/api",
+    "dev:mobile": "cd packages/mobile && flutter run",
+    "dev:docker": "./scripts/dev.sh",
+    "build": "npm-run-all build:shared build:api build:web",
+    "build:shared": "npm run build --workspace=@alkitu/shared",
+    "build:web": "npm run build --workspace=@alkitu/web",
+    "build:api": "npm run build --workspace=@alkitu/api",
+    "test": "npm-run-all test:*",
+    "test:web": "npm run test --workspace=@alkitu/web",
+    "test:api": "npm run test --workspace=@alkitu/api",
+    "test:shared": "npm run test --workspace=@alkitu/shared",
+    "test:docker": "docker-compose -f docker-compose.dev.yml exec api npm run test",
+    "test:docker:cov": "docker-compose -f docker-compose.dev.yml exec api npm run test:cov",
+    "lint": "npm-run-all lint:*",
+    "lint:web": "npm run lint --workspace=@alkitu/web",
+    "lint:api": "npm run lint --workspace=@alkitu/api",
+    "lint:shared": "npm run lint --workspace=@alkitu/shared",
+    "type-check": "npm-run-all type-check:*",
+    "type-check:web": "npm run type-check --workspace=@alkitu/web",
+    "type-check:api": "npm run type-check --workspace=@alkitu/api",
+    "type-check:shared": "npm run type-check --workspace=@alkitu/shared",
+    "clean": "npm-run-all clean:* && rm -rf dist",
+    "clean:web": "npm run clean --workspace=@alkitu/web",
+    "clean:api": "npm run clean --workspace=@alkitu/api",
+    "clean:shared": "npm run clean --workspace=@alkitu/shared",
+    "docker:stop": "./scripts/stop.sh",
+    "docker:logs": "./scripts/logs.sh",
+    "docker:restart": "./scripts/restart.sh",
+    "db:shell": "./scripts/db-shell.sh",
+    "setup:env": "cp .env.template .env",
+    "migrate": "npm run prisma:migrate --workspace=@alkitu/api",
+    "db:push": "npm run prisma:push --workspace=@alkitu/api",
+    "db:studio": "npm run prisma:studio --workspace=@alkitu/api"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "concurrently": "^8.2.2",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/alkitu-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/alkitu-template/issues"
+  },
+  "homepage": "https://github.com/your-org/alkitu-template#readme",
+  "dependencies": {
+    "zustand": "^5.0.6"
+  }
+}

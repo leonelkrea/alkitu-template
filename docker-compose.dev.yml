@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  # Base de datos MongoDB con replica set
+  mongodb:
+    image: mongo:7
+    container_name: alkitu-mongodb-dev
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_dev_data:/data/db
+    networks:
+      - alkitu-network
+    command: mongod --replSet rs0 --bind_ip_all --noauth
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Inicialización del replica set de MongoDB
+  mongo-setup:
+    image: mongo:7
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - alkitu-network
+    restart: "no"
+    command: |
+      bash -c "
+        sleep 5
+        mongosh --host mongodb:27017 --eval '
+        try {
+          rs.status();
+          print(\"Replica set already initialized\");
+        } catch (e) {
+          rs.initiate({
+            _id: \"rs0\",
+            members: [{ _id: 0, host: \"mongodb:27017\" }]
+          });
+          print(\"Replica set initialized successfully\");
+          // Wait for the replica set to be ready
+          while (rs.status().ok !== 1 || rs.status().members[0].stateStr !== \"PRIMARY\") {
+            sleep(1000);
+          }
+          print(\"Replica set is ready!\");
+        }'
+      "
+
+  # Redis para cache y sesiones
+  redis:
+    image: redis:7-alpine
+    container_name: alkitu-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - alkitu-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Backend API con hot reload
+  api:
+    build:
+      context: .
+      dockerfile: packages/api/Dockerfile.dev
+    container_name: alkitu-api-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./packages/api:/app/packages/api
+      - ./packages/shared:/app/packages/shared
+      - api_node_modules:/app/packages/api/node_modules
+      - shared_node_modules:/app/packages/shared/node_modules
+    networks:
+      - alkitu-network
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=mongodb://mongodb:27017/alkitu?replicaSet=rs0&directConnection=true
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo-setup:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Web con hot reload
+  web:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile.dev
+    container_name: alkitu-web-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./packages/web:/app/packages/web
+      - ./packages/shared:/app/packages/shared
+      - web_node_modules:/app/packages/web/node_modules
+    networks:
+      - alkitu-network
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://api:3001
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mongodb_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+  api_node_modules:
+    driver: local
+  shared_node_modules:
+    driver: local
+  web_node_modules:
+    driver: local
+
+networks:
+  alkitu-network:
+    driver: bridge

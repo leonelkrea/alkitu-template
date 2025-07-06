@@ -1,0 +1,659 @@
+{
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist."
+  },
+  "index": {
+    "title": "Home"
+  },
+  "homepage": {
+    "hero": {
+      "badge": "🚀 Next.js 14 + NextAuth v5 + Prisma + MongoDB",
+      "title": "The perfect template for your",
+      "titleHighlight": " next project",
+      "subtitle": "Save weeks of development with our complete template. Authentication, database, admin dashboard, and more. All ready for production.",
+      "getTemplate": "Get Template - $99",
+      "viewDemo": "View Demo",
+      "quickInstall": "5-minute installation",
+      "freeUpdates": "Free updates",
+      "dashboardScreenshot": "Dashboard screenshot",
+      "productPlaceholder": "[PLACEHOLDER: Product Image/Video]"
+    },
+    "features": {
+      "title": "Everything you need included",
+      "subtitle": "Don't waste time setting up. Our template includes all the essential functionalities for your modern application.",
+      "auth": {
+        "title": "Complete Authentication",
+        "description": "NextAuth v5 with Google, GitHub, email, and credential authentication. Email verification included."
+      },
+      "admin": {
+        "title": "Admin Panel",
+        "description": "Complete dashboard to manage users, roles, and permissions. Tables with filters, pagination, and export."
+      },
+      "database": {
+        "title": "Database",
+        "description": "Prisma ORM configured with MongoDB. User, session, and token schemas already defined."
+      },
+      "ui": {
+        "title": "UI Components",
+        "description": "Shadcn/ui + Tailwind CSS. Modern, accessible, and fully customizable components."
+      },
+      "i18n": {
+        "title": "Internationalization",
+        "description": "Multi-language support configured. Spanish and English included, easy to add more languages."
+      },
+      "production": {
+        "title": "Production Ready",
+        "description": "TypeScript, ESLint, Prettier configuration. Optimized for Vercel and other providers."
+      }
+    },
+    "pricing": {
+      "title": "Simple pricing, infinite value",
+      "subtitle": "One-time purchase, unlimited use on all your projects",
+      "badge": "🔥 Launch Offer",
+      "planTitle": "Complete Template",
+      "price": "$99",
+      "originalPrice": "$199",
+      "discount": "50% OFF",
+      "description": "One-time payment • Unlimited use • Updates included",
+      "features": {
+        "sourceCode": "Complete source code",
+        "nextjs": "Next.js 14 + App Router",
+        "nextauth": "NextAuth v5",
+        "database": "Prisma + MongoDB",
+        "ui": "Shadcn/ui + Tailwind",
+        "adminPanel": "Admin panel",
+        "userManagement": "User management",
+        "email": "Email with Resend",
+        "i18n": "Multi-language support",
+        "documentation": "Complete documentation"
+      },
+      "buyNow": "Buy Now - $99",
+      "guarantee": "30-day money-back guarantee"
+    },
+    "footer": {
+      "title": "Alkitu Template",
+      "description": "The most complete Next.js template for modern developers.",
+      "product": {
+        "title": "Product",
+        "features": "Features",
+        "pricing": "Pricing",
+        "demo": "Demo"
+      },
+      "support": {
+        "title": "Support",
+        "documentation": "Documentation",
+        "contact": "Contact",
+        "faq": "FAQ"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "license": "License",
+        "copyright": "© 2024 Alkitu Template. All rights reserved."
+      }
+    }
+  },
+  "navbar": {
+    "title": "Alkitu Template",
+    "language": "Language",
+    "spanish": "Spanish",
+    "english": "English",
+    "login": "Sign In",
+    "register": "Sign Up",
+    "logout": "Sign Out"
+  },
+  "Metadata": {
+    "title": "Alkitu Template - Complete Next.js Starter",
+    "description": "The most complete Next.js template with authentication, database, admin panel and more.",
+    "trainingIBMTitle": "IBM Training",
+    "trainingIBMDescription": "IBM training and certification programs",
+    "contactTitle": "Contact",
+    "contactDescription": "Get in touch with us"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Enter your account details to continue",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in with email",
+      "newPassword": "Enter a new password",
+      "backToLogin": "Back to login page",
+      "success": "Login successful"
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Fill in the following fields to create your account",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "name": "Name",
+      "lastName": "Last Name",
+      "phone": "Contact number",
+      "submit": "Register with email"
+    },
+    "verifyRequest": {
+      "title": "Check your email",
+      "message1": "A sign in link has been sent to",
+      "message2": "your email address"
+    },
+    "newVerification": {
+      "title": "Verify your email",
+      "message": "Verifying your email..."
+    },
+    "error": {
+      "title": "Authentication Error",
+      "message": "Something went wrong. Please try again."
+    },
+    "unauthorized": {
+      "title": "Access Denied",
+      "description": "You don't have permission to access this page",
+      "message": "Please contact the administrator if you think this is an error.",
+      "goToDashboard": "Go to Dashboard",
+      "goToLogin": "Sign In"
+    },
+    "routes": {
+      "auth": "Authentication",
+      "login": "Login",
+      "register": "Register",
+      "resetPassword": "Reset Password",
+      "newPassword": "New Password",
+      "newVerification": "New Verification",
+      "verifyRequest": "Verify Request"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "overview": "Dashboard",
+      "users": "Users",
+      "userList": "User List",
+      "createUser": "Create User",
+      "analytics": "Analytics",
+      "reports": "Reports",
+      "insights": "Insights",
+      "projects": "Projects",
+      "activeProjects": "Active Projects",
+      "archived": "Archived",
+      "settings": "Settings",
+      "profile": "Profile",
+      "preferences": "Preferences",
+      "dashboard": "Dashboard"
+    },
+    "projects": {
+      "alkitu": "Alkitu Platform"
+    },
+    "teams": {
+      "development": "Development Team"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "userManagement": {
+        "title": "User Management",
+        "description": "Manage users, roles, and permissions",
+        "viewUsers": "View Users"
+      },
+      "settings": {
+        "title": "Settings",
+        "description": "Configure application settings"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "View application analytics and reports"
+      }
+    },
+    "users": {
+      "form": {
+        "name": "Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone",
+        "userInfo": "User Information:",
+        "accessLevel": "Access Level:",
+        "userId": "User ID:",
+        "actions": "Actions:",
+        "twoFactor": "Two Factor Authentication",
+        "errors": {
+          "somethingWrong": "Something went wrong",
+          "somethingWrongMessage": "Something went wrong: {message}"
+        }
+      }
+    },
+    "routes": {
+      "admin": "Admin",
+      "users": "Users",
+      "dashboard": "Dashboard"
+    }
+  },
+  "navigation": {
+    "platform": "Platform",
+    "user": {
+      "upgradeToPro": "Upgrade to Pro",
+      "account": "Account",
+      "billing": "Billing",
+      "notifications": "Notifications",
+      "logout": "Log out"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Manage your notifications and stay updated with the latest activities.",
+    "fastMode": "Fast Mode",
+    "unread": "unread",
+    "loaded": "loaded",
+    "onPage": "on page",
+    "exportCsv": "Export CSV",
+    "markAsRead": "Mark as read",
+    "markPageAsRead": "Mark page as read",
+    "markLoadedAsRead": "Mark loaded as read",
+    "filteredResults": "Filtered results",
+    "allNotifications": "All notifications",
+    "moreAvailable": "more available",
+    "total": "total",
+    "preferencesButton": "Preferences",
+    "noNotifications": "No notifications",
+    "noNotificationsDescription": "You're all caught up! New notifications will appear here.",
+    "noMatchingFilters": "No notifications match your filters",
+    "noMatchingFiltersDescription": "Try adjusting your search criteria or clearing some filters.",
+    "buttomAnalytics": "Analytics",
+    "analytics": {
+      "back": "Back to Notifications",
+      "title": "Notification Analytics",
+      "description": "Detailed insights and statistics about your notification activity."
+    },
+    "filters": {
+      "title": "Filter Notifications",
+      "showing": "Showing",
+      "showingAll": "Showing all",
+      "notifications": "notifications",
+      "of": "of",
+      "filter": "filter",
+      "active": "active",
+      "searchPlaceholder": "Search notifications... (try 'type:security' or 'urgent OR maintenance')",
+      "advancedSearchTips": "Advanced Search Tips:",
+      "advancedTip1": "Use quotes for exact phrases: \"system update\"",
+      "advancedTip2": "Use OR for multiple terms: security OR urgent",
+      "advancedTip3": "Use - to exclude terms: notification -spam",
+      "advancedTip4": "Use type: to filter by type: type:security",
+      "quickFilters": "Quick filters:",
+      "savedFilters": "Saved Filters:",
+      "save": "Save",
+      "clearAll": "Clear all",
+      "unread": "Unread",
+      "read": "Read",
+      "all": "All",
+      "notificationTypes": "Notification Types",
+      "dateRange": "Date Range",
+      "pickDate": "Pick a date range",
+      "clearDateRange": "Clear date range",
+      "sortBy": "Sort by",
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "type": "By type",
+      "saved": "Saved",
+      "apply": "Apply",
+      "saveCurrentFilters": "Save current filters",
+      "filterName": "Filter name",
+      "activeFilters": "Active filters:",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "thisMonth": "This month",
+      "lastMonth": "Last month",
+      "filters": "Filters",
+      "selectSorting": "Select sorting",
+      "search": "Search",
+      "status": "Status",
+      "dateRangeSelected": "Date range selected",
+      "sort": "Sort",
+      "cancel": "Cancel"
+    },
+    "types": {
+      "welcome": "Welcome",
+      "security": "Security",
+      "system": "System",
+      "report": "Reports",
+      "feature": "Features",
+      "maintenance": "Maintenance",
+      "urgent": "Urgent",
+      "info": "Information",
+      "mentions": "Mentions"
+    },
+    "preferences": {
+      "title": "Notification Preferences",
+      "subtitle": "Customize how and when you receive notifications.",
+      "resetToDefaults": "Reset to Defaults",
+      "resetting": "Resetting...",
+      "savePreferences": "Save Preferences",
+      "saving": "Saving...",
+      "successUpdate": "Preferences updated successfully!",
+      "errorUpdate": "Failed to update preferences",
+      "successReset": "Preferences reset to defaults!",
+      "errorReset": "Failed to reset preferences",
+      "email": {
+        "title": "Email Notifications",
+        "description": "Configure email notification settings and frequency.",
+        "enable": "Enable Email Notifications",
+        "enableDescription": "Receive notifications via email",
+        "frequency": "Email Frequency",
+        "frequencyDescription": "How often you want to receive email notifications",
+        "selectFrequency": "Select frequency",
+        "immediate": "Immediate",
+        "hourly": "Hourly digest",
+        "daily": "Daily digest",
+        "weekly": "Weekly digest",
+        "types": "Email Notification Types",
+        "typesDescription": "Select which types of notifications you want to receive via email"
+      },
+      "push": {
+        "title": "Push Notification Preferences",
+        "description": "Configure which types of push notifications you want to receive.",
+        "enable": "Enable Push Notifications",
+        "enableDescription": "Allow push notifications for this account",
+        "types": "Push Notification Types",
+        "typesDescription": "Select which types of notifications you want to receive as push notifications",
+        "browserSettings": "Browser Push Notification Settings",
+        "browserDescription": "Manage your browser's push notification permissions and test functionality.",
+        "status": "Status",
+        "granted": "Granted",
+        "denied": "Denied",
+        "default": "Default",
+        "subscribe": "Subscribe",
+        "unsubscribe": "Unsubscribe",
+        "testNotification": "Test Notification",
+        "subscription": "Subscription",
+        "active": "Active",
+        "inactive": "Inactive",
+        "subscribed": "Subscribed successfully!",
+        "unsubscribed": "Unsubscribed successfully!",
+        "testSent": "Test notification sent!",
+        "errorSubscribe": "Failed to subscribe to push notifications",
+        "errorUnsubscribe": "Failed to unsubscribe from push notifications",
+        "errorTest": "Failed to send test notification",
+        "blocked": "Push notifications are blocked. To enable them:",
+        "blockedStep1": "1. Click the lock icon in your browser's address bar",
+        "blockedStep2": "2. Set notifications to \"Allow\"",
+        "blockedStep3": "3. Refresh the page and try again",
+        "disabledInfo": "Push notifications are disabled in your preferences. Enable them above to manage browser settings."
+      },
+      "inApp": {
+        "title": "In-App Notifications",
+        "description": "Configure notifications shown within the application.",
+        "enable": "Enable In-App Notifications",
+        "enableDescription": "Show notifications within the application"
+      },
+      "quietHours": {
+        "title": "Quiet Hours",
+        "description": "Set times when you don't want to receive notifications.",
+        "enable": "Enable Quiet Hours",
+        "enableDescription": "Disable notifications during specific hours",
+        "start": "Start Time",
+        "end": "End Time",
+        "format": "Time must be in HH:mm format"
+      },
+      "marketing": {
+        "title": "Marketing & Promotional",
+        "description": "Manage marketing and promotional communications.",
+        "marketing": "Marketing Communications",
+        "marketingDescription": "Receive marketing emails and updates",
+        "promotional": "Promotional Offers",
+        "promotionalDescription": "Receive special offers and discounts"
+      },
+      "notificationTypes": {
+        "welcome": {
+          "label": "Welcome messages",
+          "description": "New user welcome and onboarding"
+        },
+        "security": {
+          "label": "Security alerts",
+          "description": "Login attempts and security issues"
+        },
+        "system": {
+          "label": "System updates",
+          "description": "Maintenance and system notifications"
+        },
+        "urgent": {
+          "label": "Urgent notifications",
+          "description": "Critical and time-sensitive alerts"
+        },
+        "mentions": {
+          "label": "Mentions",
+          "description": "When you are mentioned or tagged"
+        },
+        "reports": {
+          "label": "Reports",
+          "description": "Weekly and monthly reports"
+        },
+        "features": {
+          "label": "New features",
+          "description": "Product updates and new features"
+        }
+      }
+    }
+  },
+  "Common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "no": "No",
+    "openMenu": "Open menu",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "morePages": "More pages"
+    },
+    "general": {
+      "loading": "Loading...",
+      "pageNotFound": "Page not found",
+      "currentLanguage": "Current language",
+      "home": "Home",
+      "contact": "Contact",
+      "about": "About",
+      "services": "Services",
+      "welcome": "Welcome",
+      "logout": "Logout",
+      "loadingError": "Loading error"
+    },
+    "errorMessages": {
+      "loadingError": "Error loading data"
+    },
+    "columns": {
+      "id": "ID",
+      "data": "Data",
+      "select": "Select",
+      "all": "All",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "contacts": "Contacts",
+      "month": "Month",
+      "year": "Year",
+      "actions": "Actions",
+      "originalType": "Original Type",
+      "dayOfMonth": "Day of Month"
+    },
+    "backups": {
+      "current": {
+        "title": "Current Backup",
+        "description": "Current backup data"
+      },
+      "daily": {
+        "title": "Daily Backup",
+        "description": "Daily backup data"
+      },
+      "monthly": {
+        "title": "Monthly Backup",
+        "description": "Monthly backup data"
+      },
+      "favorite": {
+        "title": "Favorite Backup",
+        "description": "Favorite backup data"
+      },
+      "actions": {
+        "createUpdateCurrent": "Create/Update Current",
+        "createUpdateDaily": "Create/Update Daily",
+        "createUpdateMonthly": "Create/Update Monthly"
+      },
+      "noBackupsFound": "No backups found"
+    },
+    "actions": {
+      "delete": "Delete",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "viewDetails": "View Details",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copySuccessTitle": "Copied Successfully",
+      "copySuccessDescription": "Data copied to clipboard",
+      "create": "Create",
+      "edit": "Edit"
+    },
+    "modals": {
+      "confirmation": {
+        "title": "Confirmation",
+        "deleteDescription": "Are you sure you want to delete this item?",
+        "processingDescription": "Processing..."
+      },
+      "deletion": {
+        "title": "Delete Item",
+        "description": "This action cannot be undone"
+      },
+      "creatingUpdating": {
+        "title": "Creating/Updating",
+        "description": "Please wait..."
+      },
+      "toggleFavorite": {
+        "title": "Toggle Favorite",
+        "adding": "Adding to favorites",
+        "removing": "Removing from favorites"
+      }
+    },
+    "toasts": {
+      "success": {
+        "title": "Success",
+        "description": "Operation completed successfully"
+      },
+      "error": {
+        "title": "Error",
+        "description": "An error occurred"
+      }
+    },
+    "currentBackupTab": {
+      "title": "Current Backup",
+      "description": "Current backup information",
+      "contacts": "Contacts",
+      "createUpdateButton": "Create/Update"
+    },
+    "backupDetails": {
+      "title": "Backup Details",
+      "itemsPerPage": "Items per page",
+      "page": "Page",
+      "of": "of",
+      "data": "Data",
+      "select": "Select",
+      "all": "All",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "backupActions": {
+      "alreadyInFavorites": "Already in favorites",
+      "addToFavorites": "Add to favorites",
+      "viewDetails": "View details",
+      "deleteBackup": "Delete backup"
+    },
+    "dataTable": {
+      "noFavoriteBackups": "No favorite backups"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "The perfect template for your",
+      "titleSpan": "next project",
+      "description": "Save weeks of development with our complete template. Authentication, database, admin dashboard, and more. All ready for production.",
+      "ctaBuy": "Get Template - $99",
+      "ctaDemo": "View Demo",
+      "feature1": "5-minute installation",
+      "feature2": "Free updates",
+      "dashboardScreenshot": "Dashboard screenshot",
+      "placeholderImage": "[PLACEHOLDER: Product Image/Video]"
+    },
+    "features": {
+      "title": "Everything you need included",
+      "description": "Don't waste time setting up. Our template includes all the essential functionalities for your modern application.",
+      "auth": {
+        "title": "Complete Authentication",
+        "description": "NextAuth v5 with Google, GitHub, email, and credential authentication. Email verification included."
+      },
+      "adminPanel": {
+        "title": "Admin Panel",
+        "description": "Complete dashboard to manage users, roles, and permissions. Tables with filters, pagination, and export."
+      },
+      "database": {
+        "title": "Database",
+        "description": "Prisma ORM configured with MongoDB. User, session, and token schemas already defined."
+      },
+      "uiComponents": {
+        "title": "UI Components",
+        "description": "Shadcn/ui + Tailwind CSS. Modern, accessible, and fully customizable components."
+      },
+      "internationalization": {
+        "title": "Internationalization",
+        "description": "Multi-language support configured. Spanish and English included, easy to add more languages."
+      },
+      "productionReady": {
+        "title": "Production Ready",
+        "description": "TypeScript, ESLint, Prettier configuration. Optimized for Vercel and other providers."
+      }
+    },
+    "pricing": {
+      "title": "Simple pricing, infinite value",
+      "description": "One-time purchase, unlimited use on all your projects",
+      "badge": "🔥 Launch Offer",
+      "cardTitle": "Complete Template",
+      "cardDescription": "One-time payment • Unlimited use • Updates included",
+      "feature1": "Complete source code",
+      "feature2": "Next.js 14 + App Router",
+      "feature3": "NextAuth v5",
+      "feature4": "Prisma + MongoDB",
+      "feature5": "Shadcn/ui + Tailwind",
+      "feature6": "Admin panel",
+      "feature7": "User management",
+      "feature8": "Email with Resend",
+      "feature9": "Multi-language support",
+      "feature10": "Complete documentation",
+      "ctaBuy": "Buy Now - $99",
+      "guarantee": "30-day money-back guarantee"
+    },
+    "testimonials": {
+      "title": "What our customers say",
+      "description": "Developers worldwide trust our template",
+      "quote1": "\"Incredible template. Saved me weeks of development. NextAuth v5 setup is perfect.\"",
+      "author1Name": "Juan Perez",
+      "author1Title": "Full Stack Developer",
+      "quote2": "\"The admin panel is spectacular. Shadcn/ui components are perfectly integrated.\"",
+      "author2Name": "Maria Rodriguez",
+      "author2Title": "Frontend Developer",
+      "quote3": "\"Excellent code quality. TypeScript, ESLint, everything perfectly configured from the start.\"",
+      "author3Name": "Carlos Lopez",
+      "author3Title": "Senior Developer"
+    },
+    "cta": {
+      "title": "Ready to accelerate your development?",
+      "description": "Join hundreds of developers already using our template to build amazing applications.",
+      "buyNow": "Buy Now - $99",
+      "viewDemo": "View Demo",
+      "guarantee": "30-day money-back guarantee • Email support • Free updates"
+    }
+  },
+  "userNav": {
+    "upgradeToPro": "Upgrade to Pro",
+    "account": "Account",
+    "billing": "Billing",
+    "notifications": "Notifications",
+    "logout": "Log out"
+  }
+}
