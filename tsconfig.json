@@ -43,10 +43,10 @@
     }
   },
   "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    ".next/types/**/*.ts"
+    "packages/web/next-env.d.ts",
+    "packages/web/src/**/*.ts",
+    "packages/web/src/**/*.tsx",
+    "packages/web/.next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
