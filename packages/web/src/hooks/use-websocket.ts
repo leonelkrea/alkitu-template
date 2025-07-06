@@ -174,7 +174,7 @@ export function useWebSocket({
     return () => {
       disconnect();
     };
-  }, [enabled, userId, token, connect]);
+  }, [enabled, userId, token, connect, disconnect]);
 
   // Cleanup on unmount only
   useEffect(() => {

@@ -44,12 +44,10 @@ export function NavUser({ user }: { user: User }) {
   const t = useTranslations('userNav');
   const { setTheme } = useTheme();
   const router = useRouter();
-  // Temporalmente deshabilitado para identificar el loop
-  // const { count: unreadCount } = useNotificationCount({ 
-  //   userId: user.id,
-  //   enabled: !!user.id 
-  // });
-  const unreadCount = 0;
+  const { count: unreadCount } = useNotificationCount({ 
+    userId: user.id,
+    enabled: !!user.id 
+  });
 
   const handleSignOut = useCallback(async () => {
     try {

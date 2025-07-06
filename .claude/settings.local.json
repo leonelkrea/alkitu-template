@@ -23,7 +23,8 @@
       "Bash(docker-compose:*)",
       "Bash(timeout 20 docker-compose -f docker-compose.dev.yml logs -f api)",
       "Bash(npm run lint:*)",
-      "Bash(npm)"
+      "Bash(npm)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }

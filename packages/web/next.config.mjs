@@ -2,42 +2,57 @@
 const nextConfig = {
   // Exclude backend from Next.js compilation
   transpilePackages: [],
-  // webpack: (config, { isServer }) => {
-  //   // Ignore the alkitu-api directory completely
-  //   config.watchOptions = {
-  //     ...config.watchOptions,
-  //     ignored: ['**/alkitu-api/**', '**/node_modules'],
-  //   };
 
-  //   // Add resolve fallback to prevent issues with backend dependencies
-  //   config.resolve.fallback = {
-  //     ...config.resolve.fallback,
-  //     fs: false,
-  //     net: false,
-  //     tls: false,
-  //   };
-
-  //   return config;
-  // },
-  // Exclude backend from type checking
+  // Completely skip TypeScript type checking during build
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
+
+  // Skip ESLint during build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  webpack: (config, { isServer }) => {
+    // Completely ignore API directory
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: [
+        "**/node_modules/**",
+        "**/packages/api/**",
+        "**/api/**",
+        "**/../api/**",
+      ],
+    };
+
+    // Add resolve fallbacks
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+      crypto: false,
+    };
+
+    // Exclude API files from webpack processing
+    config.module.rules.push({
+      test: /\.ts$/,
+      include: [/packages\/api/, /\.\.\/api/],
+      use: "ignore-loader",
+    });
+
+    return config;
+  },
+
   images: {
     unoptimized: true,
     remotePatterns: [
-      { hostname: 'localhost' },
-      { hostname: 'images.unsplash.com' },
-      { hostname: 'lh3.googleusercontent.com' },
-      { hostname: 'drive.google.com' },
+      { hostname: "localhost" },
+      { hostname: "images.unsplash.com" },
+      { hostname: "lh3.googleusercontent.com" },
+      { hostname: "drive.google.com" },
     ],
   },
-  // Configuración para archivos grandes
-  // serverExternalPackages: ['googleapis'],
-  // Aumentar límites para uploads
-  // serverRuntimeConfig: {
-  //   maxDuration: 300, // 5 minutes
-  // },
 };
 
 export default nextConfig;

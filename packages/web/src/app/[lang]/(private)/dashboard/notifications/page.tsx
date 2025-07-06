@@ -578,7 +578,7 @@ export default function NotificationsPage() {
         fetchNotifications(currentFilters, page);
       }
     },
-    [infiniteScrollEnabled],
+    [infiniteScrollEnabled, fetchNotifications],
   );
 
   // Effects
@@ -592,7 +592,7 @@ export default function NotificationsPage() {
       mountedRef.current = false;
       abortControllerRef.current?.abort();
     };
-  }, [infiniteScrollEnabled]); // Only depend on infiniteScrollEnabled
+  }, [infiniteScrollEnabled, fetchNotifications, filters]); // Only depend on infiniteScrollEnabled
 
   // Toggle infinite scroll
   const toggleInfiniteScroll = useCallback(() => {
@@ -607,7 +607,7 @@ export default function NotificationsPage() {
       }
       return next;
     });
-  }, [infiniteRefresh]);
+  }, [infiniteRefresh, fetchNotifications]);
 
   // Actions
   const markAsRead = async (id: string) => {

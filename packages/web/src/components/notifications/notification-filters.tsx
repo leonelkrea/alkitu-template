@@ -294,7 +294,7 @@ export function NotificationFilters({
         updateUrl(newFilters);
       });
     },
-    [onFiltersChange, updateUrl],
+    [onFiltersChange, updateUrl, setFilters],
   );
 
   // Debounced search handler
@@ -532,7 +532,7 @@ export function NotificationFilters({
         clearTimeout(urlUpdateTimeoutRef.current);
       }
     };
-  }, []); // Only on mount - no dependencies to prevent re-runs
+  }, [onFiltersChange, parseUrlToFilters, searchParams, setFilters]); // Only on mount - no dependencies to prevent re-runs
 
   // Handle URL changes from external navigation only
   useEffect(() => {
@@ -554,7 +554,7 @@ export function NotificationFilters({
       setFilters(urlFilters);
       onFiltersChange(urlFilters);
     }
-  }, [searchParams]); // Only depend on searchParams to avoid infinite loops
+  }, [filters.dateRange?.from, filters.dateRange?.to, filters.search, filters.sortBy, filters.types, onFiltersChange, parseUrlToFilters, searchParams, setFilters]); // Only depend on searchParams to avoid infinite loops
 
   return (
     <Card className="mb-6">

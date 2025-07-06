@@ -103,6 +103,7 @@
     "cross-fetch": "^4.1.0",
     "eslint": "^8",
     "eslint-config-next": "^15.3.4",
+    "ignore-loader": "^0.1.2",
     "jsdom": "^26.1.0",
     "node-fetch": "^2.7.0",
     "postcss": "^8",

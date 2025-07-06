@@ -23,34 +23,40 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
       ],
-      "@prisma/*": [
-        "./prisma/*"
+      "@alkitu/shared": [
+        "../shared/src"
       ],
-      "@drive/*": [
-        "./src/features/drive/*"
-      ],
-      "@drive-components/*": [
-        "./src/app/[lang]/(marketing)/drive/components/*"
+      "@alkitu/shared/*": [
+        "../shared/src/*"
       ],
       "@ui/*": [
         "./src/components/ui/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
       ]
     }
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "src/mocks/**/*",
-    "src/setupTests.ts",
-    "alkitu-api/**/*"
+    "dist",
+    ".next",
+    "../api",
+    "../api/**",
+    "../../packages/api",
+    "../../packages/api/**",
+    "../**/*.spec.ts",
+    "../**/*.test.ts"
   ]
 }
