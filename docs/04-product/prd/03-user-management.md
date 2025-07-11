@@ -1,10 +1,16 @@
-# 👥 User Management PRD
+# 👥 User Management PRD (CORREGIDO)
 
 ## 📋 1. Introducción y Objetivos
 
 ### **Propósito del Módulo**
 
 El módulo de User Management es el **sistema central de gestión de usuarios** que maneja identidades, roles, permisos y perfiles en la plataforma Alkitu. Proporciona funcionalidades completas para administrar usuarios desde onboarding hasta gestión avanzada de organizaciones.
+
+### **🔗 Conexión con SOLID Implementation**
+
+- **Depende de**: SOLID-001 (Single Responsibility Principle) ✅ Completado
+- **Relacionado con**: REFACTOR-001 (UserService) - Ready to start
+- **Implementación**: Semana 9-10 (después de completar SOLID-002)
 
 ### **Objetivos Comerciales**
 
@@ -18,7 +24,7 @@ El módulo de User Management es el **sistema central de gestión de usuarios** 
 - **Security First**: Implementación de mejores prácticas de seguridad
 - **GDPR Compliance**: Cumplimiento total de regulaciones de privacidad
 - **Performance**: < 100ms para operaciones CRUD de usuarios
-- **Audit Trail**: Logging completo de acciones de usuarios
+- **Audit Trail**: Logging completo de acciones de usuarios ✅ **ENHANCED from Legacy**
 
 ---
 
@@ -141,189 +147,576 @@ Para mantener mi cuenta segura
 
 ---
 
-## 🛠️ 5. Requisitos Técnicos
+## 🛠️ 5. Requisitos Técnicos (CORREGIDOS)
 
-### **Database Schema**
-
-```sql
--- Users table (extended)
-CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email VARCHAR(255) UNIQUE NOT NULL,
-  username VARCHAR(50) UNIQUE,
-  password_hash VARCHAR(255),
-  first_name VARCHAR(100),
-  last_name VARCHAR(100),
-  display_name VARCHAR(200),
-  avatar_url TEXT,
-  bio TEXT,
-  phone VARCHAR(20),
-  timezone VARCHAR(50) DEFAULT 'UTC',
-  locale VARCHAR(10) DEFAULT 'en',
-  email_verified BOOLEAN DEFAULT FALSE,
-  phone_verified BOOLEAN DEFAULT FALSE,
-  two_factor_enabled BOOLEAN DEFAULT FALSE,
-  two_factor_secret VARCHAR(100),
-  status VARCHAR(20) DEFAULT 'active', -- active, suspended, deactivated
-  last_login_at TIMESTAMP,
-  last_seen_at TIMESTAMP,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW(),
-  deleted_at TIMESTAMP
-);
-
--- Organizations
-CREATE TABLE organizations (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR(255) NOT NULL,
-  slug VARCHAR(100) UNIQUE NOT NULL,
-  description TEXT,
-  logo_url TEXT,
-  website_url TEXT,
-  industry VARCHAR(100),
-  size VARCHAR(20), -- startup, small, medium, large, enterprise
-  settings JSONB DEFAULT '{}',
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW(),
-  deleted_at TIMESTAMP
-);
-
--- Organization Members
-CREATE TABLE organization_members (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
-  role VARCHAR(50) DEFAULT 'member',
-  permissions JSONB DEFAULT '{}',
-  invited_by UUID REFERENCES users(id),
-  invited_at TIMESTAMP,
-  joined_at TIMESTAMP DEFAULT NOW(),
-  status VARCHAR(20) DEFAULT 'active', -- active, invited, suspended
-  UNIQUE(user_id, organization_id)
-);
-
--- Roles
-CREATE TABLE roles (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
-  name VARCHAR(100) NOT NULL,
-  description TEXT,
-  permissions JSONB DEFAULT '{}',
-  is_default BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW(),
-  UNIQUE(organization_id, name)
-);
-
--- User Sessions (extended)
-CREATE TABLE user_sessions (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  token_hash VARCHAR(255) NOT NULL,
-  refresh_token_hash VARCHAR(255),
-  device_name VARCHAR(255),
-  ip_address INET,
-  user_agent TEXT,
-  location JSONB,
-  expires_at TIMESTAMP NOT NULL,
-  last_used_at TIMESTAMP DEFAULT NOW(),
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- User Activity Log
-CREATE TABLE user_activity_log (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
-  action VARCHAR(100) NOT NULL,
-  resource_type VARCHAR(50),
-  resource_id UUID,
-  details JSONB,
-  ip_address INET,
-  user_agent TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- User Preferences
-CREATE TABLE user_preferences (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  key VARCHAR(100) NOT NULL,
-  value JSONB,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW(),
-  UNIQUE(user_id, key)
-);
-
--- User Invitations
-CREATE TABLE user_invitations (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email VARCHAR(255) NOT NULL,
-  organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
-  invited_by UUID REFERENCES users(id) ON DELETE CASCADE,
-  role VARCHAR(50) DEFAULT 'member',
-  permissions JSONB DEFAULT '{}',
-  token VARCHAR(255) UNIQUE NOT NULL,
-  expires_at TIMESTAMP NOT NULL,
-  accepted_at TIMESTAMP,
-  accepted_by UUID REFERENCES users(id),
-  status VARCHAR(20) DEFAULT 'pending', -- pending, accepted, expired, cancelled
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-### **API Endpoints**
+### **🔧 Tech Stack Actual**
 
 ```typescript
-// Users Management API
-interface UserManagementAPI {
+// CORRECT Tech Stack (aligned with project)
+const USER_MANAGEMENT_TECH_STACK = {
+  backend: {
+    framework: "NestJS 10+",
+    database: "MongoDB with Prisma ORM", // ✅ CORRECTED
+    api: "tRPC + NestJS", // ✅ CORRECTED
+    validation: "Zod schemas", // ✅ CORRECTED
+    testing: "Jest + Stryker mutation testing",
+  },
+  frontend: {
+    framework: "Next.js 14+ App Router", // ✅ CORRECTED
+    ui: "shadcn/ui + Radix UI + Tailwind", // ✅ CORRECTED
+    state: "Zustand + React Query", // ✅ CORRECTED
+    forms: "React Hook Form + Zod",
+  },
+};
+```
+
+### **🗃️ Database Schema (Prisma + MongoDB)**
+
+```prisma
+// ✅ CORRECTED: Prisma schema instead of SQL
+// packages/api/prisma/schema.prisma
+
+model User {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  email             String    @unique
+  username          String?   @unique
+  passwordHash      String?
+  firstName         String?
+  lastName          String?
+  displayName       String?
+  avatarUrl         String?
+  bio               String?
+  phone             String?
+  timezone          String    @default("UTC")
+  locale            String    @default("en")
+  emailVerified     Boolean   @default(false)
+  phoneVerified     Boolean   @default(false)
+  twoFactorEnabled  Boolean   @default(false)
+  twoFactorSecret   String?
+  status            UserStatus @default(ACTIVE)
+  lastLoginAt       DateTime?
+  lastSeenAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  // Relations
+  organizationMembers OrganizationMember[]
+  sessions           UserSession[]
+  activityLogs       UserActivityLog[]
+  preferences        UserPreference[]
+  sentInvitations    UserInvitation[]    @relation("InvitedBy")
+  acceptedInvitations UserInvitation[]   @relation("AcceptedBy")
+  auditLogs          AuditLog[]          // ✅ ENHANCED from Legacy
+
+  @@map("users")
+}
+
+model Organization {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String   @unique
+  description String?
+  logoUrl     String?
+  websiteUrl  String?
+  industry    String?
+  size        String?  // startup, small, medium, large, enterprise
+  settings    Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  // Relations
+  members     OrganizationMember[]
+  roles       Role[]
+  invitations UserInvitation[]
+  activityLogs UserActivityLog[]
+
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String    @db.ObjectId
+  organizationId String    @db.ObjectId
+  role           String    @default("member")
+  permissions    Json      @default("{}")
+  invitedBy      String?   @db.ObjectId
+  invitedAt      DateTime?
+  joinedAt       DateTime  @default(now())
+  status         MemberStatus @default(ACTIVE)
+
+  // Relations
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@map("organization_members")
+}
+
+model Role {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String   @db.ObjectId
+  name           String
+  description    String?
+  permissions    Json     @default("{}")
+  isDefault      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, name])
+  @@map("roles")
+}
+
+model UserSession {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  tokenHash        String
+  refreshTokenHash String?
+  deviceName       String?
+  ipAddress        String?
+  userAgent        String?
+  location         Json?
+  expiresAt        DateTime
+  lastUsedAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
+}
+
+// ✅ ENHANCED from Legacy: Complete audit logging system
+model UserActivityLog {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  organizationId String?  @db.ObjectId
+  action         String
+  resourceType   String?
+  resourceId     String?
+  details        Json?
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("user_activity_logs")
+}
+
+// ✅ ENHANCED from Legacy: Comprehensive audit system
+model AuditLog {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  action         String   // CREATE, UPDATE, DELETE, LOGIN, LOGOUT, etc.
+  resourceType   String   // USER, ORGANIZATION, ROLE, etc.
+  resourceId     String?
+  oldValues      Json?
+  newValues      Json?
+  ipAddress      String?
+  userAgent      String?
+  timestamp      DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("audit_logs")
+}
+
+model UserPreference {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  key       String
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
+  @@map("user_preferences")
+}
+
+model UserInvitation {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  email          String
+  organizationId String   @db.ObjectId
+  invitedBy      String   @db.ObjectId
+  role           String   @default("member")
+  permissions    Json     @default("{}")
+  token          String   @unique
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  acceptedBy     String?  @db.ObjectId
+  status         InvitationStatus @default(PENDING)
+  createdAt      DateTime @default(now())
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  inviter      User         @relation("InvitedBy", fields: [invitedBy], references: [id], onDelete: Cascade)
+  accepter     User?        @relation("AcceptedBy", fields: [acceptedBy], references: [id])
+
+  @@map("user_invitations")
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum MemberStatus {
+  ACTIVE
+  INVITED
+  SUSPENDED
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  CANCELLED
+}
+```
+
+### **📡 API Endpoints (tRPC + NestJS)**
+
+```typescript
+// ✅ CORRECTED: tRPC router instead of REST endpoints
+// packages/api/src/trpc/routers/users.router.ts
+
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { userSchemas } from "../schemas/user.schemas";
+
+export const usersRouter = createTRPCRouter({
   // User CRUD
-  "GET /api/users": GetUsersResponse;
-  "GET /api/users/:id": GetUserResponse;
-  "POST /api/users": CreateUserRequest;
-  "PUT /api/users/:id": UpdateUserRequest;
-  "DELETE /api/users/:id": DeleteUserRequest;
+  list: protectedProcedure
+    .input(userSchemas.getUsersInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.userService.getUsers(input);
+    }),
+
+  getById: protectedProcedure
+    .input(userSchemas.getUserByIdInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.userService.getUserById(input.id);
+    }),
+
+  create: protectedProcedure
+    .input(userSchemas.createUserInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.userService.createUser(input);
+    }),
+
+  update: protectedProcedure
+    .input(userSchemas.updateUserInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.userService.updateUser(input);
+    }),
+
+  delete: protectedProcedure
+    .input(userSchemas.deleteUserInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.userService.deleteUser(input.id);
+    }),
 
   // User Profile
-  "GET /api/users/profile": GetProfileResponse;
-  "PUT /api/users/profile": UpdateProfileRequest;
-  "POST /api/users/avatar": UploadAvatarRequest;
+  getProfile: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.userService.getUserProfile(ctx.user.id);
+  }),
 
-  // Organizations
-  "GET /api/organizations": GetOrganizationsResponse;
-  "POST /api/organizations": CreateOrganizationRequest;
-  "PUT /api/organizations/:id": UpdateOrganizationRequest;
-  "DELETE /api/organizations/:id": DeleteOrganizationRequest;
+  updateProfile: protectedProcedure
+    .input(userSchemas.updateProfileInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.userService.updateUserProfile(ctx.user.id, input);
+    }),
 
-  // Organization Members
-  "GET /api/organizations/:id/members": GetMembersResponse;
-  "POST /api/organizations/:id/invite": InviteUserRequest;
-  "PUT /api/organizations/:id/members/:userId": UpdateMemberRequest;
-  "DELETE /api/organizations/:id/members/:userId": RemoveMemberRequest;
-
-  // Roles & Permissions
-  "GET /api/organizations/:id/roles": GetRolesResponse;
-  "POST /api/organizations/:id/roles": CreateRoleRequest;
-  "PUT /api/organizations/:id/roles/:roleId": UpdateRoleRequest;
-  "DELETE /api/organizations/:id/roles/:roleId": DeleteRoleRequest;
+  uploadAvatar: protectedProcedure
+    .input(userSchemas.uploadAvatarInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.userService.uploadAvatar(ctx.user.id, input);
+    }),
 
   // User Sessions
-  "GET /api/users/sessions": GetSessionsResponse;
-  "DELETE /api/users/sessions/:id": RevokeSessionRequest;
-  "DELETE /api/users/sessions": RevokeAllSessionsRequest;
+  getSessions: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.userService.getUserSessions(ctx.user.id);
+  }),
 
-  // User Activity
-  "GET /api/users/:id/activity": GetUserActivityResponse;
-  "GET /api/organizations/:id/activity": GetOrgActivityResponse;
+  revokeSession: protectedProcedure
+    .input(userSchemas.revokeSessionInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.userService.revokeSession(input.sessionId);
+    }),
+
+  revokeAllSessions: protectedProcedure.mutation(async ({ ctx }) => {
+    return await ctx.userService.revokeAllSessions(ctx.user.id);
+  }),
+
+  // User Activity & Audit (✅ ENHANCED from Legacy)
+  getActivity: protectedProcedure
+    .input(userSchemas.getUserActivityInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.userService.getUserActivity(input);
+    }),
+
+  getAuditLogs: protectedProcedure
+    .input(userSchemas.getAuditLogsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.auditService.getAuditLogs(input);
+    }),
 
   // User Preferences
-  "GET /api/users/preferences": GetPreferencesResponse;
-  "PUT /api/users/preferences": UpdatePreferencesRequest;
+  getPreferences: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.userService.getUserPreferences(ctx.user.id);
+  }),
 
-  // Invitations
-  "POST /api/invitations/accept": AcceptInvitationRequest;
-  "POST /api/invitations/decline": DeclineInvitationRequest;
-  "GET /api/invitations": GetInvitationsResponse;
+  updatePreferences: protectedProcedure
+    .input(userSchemas.updatePreferencesInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.userService.updateUserPreferences(ctx.user.id, input);
+    }),
+});
+
+// Organizations Router
+export const organizationsRouter = createTRPCRouter({
+  list: protectedProcedure
+    .input(userSchemas.getOrganizationsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.organizationService.getOrganizations(input);
+    }),
+
+  create: protectedProcedure
+    .input(userSchemas.createOrganizationInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.createOrganization(input);
+    }),
+
+  update: protectedProcedure
+    .input(userSchemas.updateOrganizationInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.updateOrganization(input);
+    }),
+
+  delete: protectedProcedure
+    .input(userSchemas.deleteOrganizationInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.deleteOrganization(input.id);
+    }),
+
+  // Organization Members
+  getMembers: protectedProcedure
+    .input(userSchemas.getOrgMembersInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.organizationService.getMembers(input.organizationId);
+    }),
+
+  inviteUser: protectedProcedure
+    .input(userSchemas.inviteUserInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.inviteUser(input);
+    }),
+
+  updateMember: protectedProcedure
+    .input(userSchemas.updateMemberInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.updateMember(input);
+    }),
+
+  removeMember: protectedProcedure
+    .input(userSchemas.removeMemberInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.removeMember(input);
+    }),
+
+  // Roles & Permissions
+  getRoles: protectedProcedure
+    .input(userSchemas.getOrgRolesInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.organizationService.getRoles(input.organizationId);
+    }),
+
+  createRole: protectedProcedure
+    .input(userSchemas.createRoleInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.createRole(input);
+    }),
+
+  updateRole: protectedProcedure
+    .input(userSchemas.updateRoleInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.updateRole(input);
+    }),
+
+  deleteRole: protectedProcedure
+    .input(userSchemas.deleteRoleInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.organizationService.deleteRole(input.roleId);
+    }),
+
+  // Organization Activity
+  getActivity: protectedProcedure
+    .input(userSchemas.getOrgActivityInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.organizationService.getActivity(input.organizationId);
+    }),
+});
+
+// Invitations Router
+export const invitationsRouter = createTRPCRouter({
+  list: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.invitationService.getUserInvitations(ctx.user.id);
+  }),
+
+  accept: publicProcedure
+    .input(userSchemas.acceptInvitationInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.invitationService.acceptInvitation(input);
+    }),
+
+  decline: publicProcedure
+    .input(userSchemas.declineInvitationInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.invitationService.declineInvitation(input);
+    }),
+
+  resend: protectedProcedure
+    .input(userSchemas.resendInvitationInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.invitationService.resendInvitation(input);
+    }),
+
+  cancel: protectedProcedure
+    .input(userSchemas.cancelInvitationInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.invitationService.cancelInvitation(input);
+    }),
+});
+```
+
+### **🔧 Backend Service (NestJS + SOLID)**
+
+```typescript
+// ✅ CORRECTED: SOLID-compliant service with proper interfaces
+// packages/api/src/users/users.service.ts
+
+@Injectable()
+export class UsersService implements IUsersService {
+  constructor(
+    private readonly userRepository: IUserRepository,
+    private readonly organizationRepository: IOrganizationRepository,
+    private readonly auditService: IAuditService, // ✅ ENHANCED from Legacy
+    private readonly notificationService: INotificationService,
+    private readonly fileService: IFileService,
+    private readonly encryptionService: IEncryptionService
+  ) {}
+
+  async getUsers(input: GetUsersInput): Promise<GetUsersResult> {
+    const users = await this.userRepository.findMany({
+      where: input.filters,
+      skip: input.skip,
+      take: input.take,
+      orderBy: input.orderBy,
+    });
+
+    // ✅ ENHANCED: Audit log for user list access
+    await this.auditService.log({
+      action: "USER_LIST_ACCESS",
+      resourceType: "USER",
+      userId: input.requesterId,
+      details: { filters: input.filters },
+    });
+
+    return {
+      users: users.map((user) => this.sanitizeUser(user)),
+      total: await this.userRepository.count(input.filters),
+    };
+  }
+
+  async createUser(input: CreateUserInput): Promise<CreateUserResult> {
+    // ✅ ENHANCED: Validation to ensure at least one admin exists
+    await this.validateAdminAccountRequirement(input);
+
+    const hashedPassword = await this.encryptionService.hashPassword(
+      input.password
+    );
+
+    const user = await this.userRepository.create({
+      ...input,
+      passwordHash: hashedPassword,
+    });
+
+    // ✅ ENHANCED: Complete audit logging
+    await this.auditService.log({
+      action: "USER_CREATED",
+      resourceType: "USER",
+      resourceId: user.id,
+      userId: input.createdBy,
+      newValues: this.sanitizeUser(user),
+    });
+
+    // ✅ ENHANCED: Advanced email templates
+    await this.notificationService.sendUserCreatedNotification(user, input);
+
+    return {
+      user: this.sanitizeUser(user),
+    };
+  }
+
+  async updateUser(input: UpdateUserInput): Promise<UpdateUserResult> {
+    const existingUser = await this.userRepository.findById(input.id);
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    // ✅ ENHANCED: Validation to ensure at least one admin exists
+    await this.validateAdminAccountRequirement(input);
+
+    const updatedUser = await this.userRepository.update(input.id, input.data);
+
+    // ✅ ENHANCED: Complete audit logging with old/new values
+    await this.auditService.log({
+      action: "USER_UPDATED",
+      resourceType: "USER",
+      resourceId: input.id,
+      userId: input.updatedBy,
+      oldValues: this.sanitizeUser(existingUser),
+      newValues: this.sanitizeUser(updatedUser),
+    });
+
+    // ✅ ENHANCED: Real-time updates via WebSocket
+    await this.notificationService.broadcastUserUpdate(updatedUser);
+
+    return {
+      user: this.sanitizeUser(updatedUser),
+    };
+  }
+
+  // ✅ ENHANCED from Legacy: Admin account validation
+  private async validateAdminAccountRequirement(input: any): Promise<void> {
+    if (input.role === "ADMIN" || input.status === "DEACTIVATED") {
+      const adminCount = await this.userRepository.countAdmins();
+      if (adminCount <= 1) {
+        throw new Error("Cannot modify the last admin account");
+      }
+    }
+  }
+
+  // ✅ ENHANCED from Legacy: Real-time user updates
+  private async broadcastUserUpdate(user: User): Promise<void> {
+    await this.notificationService.broadcast("USER_UPDATED", {
+      userId: user.id,
+      user: this.sanitizeUser(user),
+    });
+  }
+
+  // Other methods following SOLID principles...
 }
 ```
 

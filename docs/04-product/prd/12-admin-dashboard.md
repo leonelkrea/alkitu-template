@@ -1,4 +1,4 @@
-# 🛠️ Admin Dashboard & Management Module PRD
+# 🛠️ Admin Dashboard & Management Module PRD (CORREGIDO)
 
 ## 📋 1. Introducción y Objetivos
 
@@ -6,12 +6,22 @@
 
 El Admin Dashboard & Management es el **centro de control** para operar cualquier SaaS profesionalmente. Permite a business owners y administradores gestionar usuarios, monitorear métricas clave, configurar el sistema, y tomar decisiones data-driven para hacer crecer el negocio.
 
+### **🔗 Conexión con SOLID Implementation**
+
+- **Depende de**: SOLID-001 (Single Responsibility) - Separación de responsabilidades del dashboard
+- **Depende de**: SOLID-003 (Liskov Substitution) - Widgets intercambiables
+- **Integración**: **Dynamic Configuration System** - Configuración en tiempo real
+- **Integración**: **User Management** - Gestión avanzada de usuarios
+- **Integración**: **File Storage** - Analytics de archivos
+- **Implementación**: Semana 17-18 (después de file storage)
+
 ### **Objetivos Comerciales**
 
 - **Business Intelligence**: Métricas y analytics en tiempo real
 - **User Management**: Control total sobre usuarios y permisos
 - **Revenue Optimization**: Tools para maximizar ingresos
 - **Operational Efficiency**: Automatización de tareas repetitivas
+- **🔗 Configuration Control**: Gestión de feature flags y configuraciones
 
 ### **Metas Técnicas**
 
@@ -19,6 +29,7 @@ El Admin Dashboard & Management es el **centro de control** para operar cualquie
 - **Performance**: Dashboard carga en < 2 segundos
 - **Mobile Responsive**: Funcional en todos los devices
 - **Extensible**: Fácil agregar nuevos widgets y métricas
+- **✅ Enhanced**: Integración completa con sistema de configuración
 
 ---
 
@@ -330,66 +341,862 @@ components/admin/
     └── RealTimeIndicator.tsx      # Connection status
 ```
 
-### **Database Schema**
+### **🗃️ Database Schema (Prisma + MongoDB)**
 
-```sql
--- Admin Users & Roles
-CREATE TABLE admin_users (
-  id UUID PRIMARY KEY,
-  user_id UUID REFERENCES users(id),
-  role VARCHAR(50) NOT NULL, -- super_admin, admin, manager, support
-  permissions JSONB NOT NULL,
-  last_login TIMESTAMP,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+```prisma
+// ✅ CORRECTED: Prisma schema instead of SQL
+// packages/api/prisma/schema.prisma
 
--- Dashboard Metrics Cache
-CREATE TABLE dashboard_metrics (
-  id UUID PRIMARY KEY,
-  metric_type VARCHAR(100) NOT NULL,
-  time_period VARCHAR(50) NOT NULL, -- 24h, 7d, 30d, 90d
-  metric_data JSONB NOT NULL,
-  calculated_at TIMESTAMP DEFAULT NOW(),
-  expires_at TIMESTAMP NOT NULL
-);
+model AdminUser {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  organizationId String? @db.ObjectId
+  role          AdminRole
+  permissions   Json     @default("{}")
+  lastLogin     DateTime?
+  // Security
+  twoFactorEnabled Boolean @default(false)
+  ipRestrictions String[] @default([])
+  sessionCount   Int      @default(0)
+  // Audit
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?  @db.ObjectId
 
--- User Activities (for admin tracking)
-CREATE TABLE user_activities (
-  id UUID PRIMARY KEY,
-  user_id UUID REFERENCES users(id),
-  action VARCHAR(100) NOT NULL,
-  resource VARCHAR(100),
-  details JSONB,
-  ip_address INET,
-  user_agent TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  creator      User?         @relation("AdminCreatedBy", fields: [createdBy], references: [id])
+  activities   UserActivity[]
+  alertsResolved SystemAlert[] @relation("AlertResolver")
+  featureOverrides AdminFeatureOverride[]
 
--- System Alerts
-CREATE TABLE system_alerts (
-  id UUID PRIMARY KEY,
-  alert_type VARCHAR(50) NOT NULL, -- error, warning, info
-  title VARCHAR(255) NOT NULL,
-  message TEXT,
-  severity VARCHAR(20) DEFAULT 'medium', -- low, medium, high, critical
-  resolved BOOLEAN DEFAULT false,
-  resolved_by UUID REFERENCES admin_users(id),
-  created_at TIMESTAMP DEFAULT NOW(),
-  resolved_at TIMESTAMP
-);
+  @@unique([userId, organizationId])
+  @@map("admin_users")
+}
 
--- Feature Flag Overrides (admin controlled)
-CREATE TABLE admin_feature_overrides (
-  id UUID PRIMARY KEY,
-  feature_key VARCHAR(100) NOT NULL,
-  user_id UUID REFERENCES users(id),
-  organization_id UUID,
-  enabled BOOLEAN NOT NULL,
-  reason TEXT,
-  created_by UUID REFERENCES admin_users(id),
-  expires_at TIMESTAMP,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+model DashboardMetric {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  metricType   String   // 'revenue', 'users', 'usage', 'support'
+  timePeriod   String   // '24h', '7d', '30d', '90d'
+  metricData   Json
+  organizationId String? @db.ObjectId
+  // Cache settings
+  calculatedAt DateTime @default(now())
+  expiresAt    DateTime
+  isStale      Boolean  @default(false)
+
+  // Relations
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@unique([metricType, timePeriod, organizationId])
+  @@map("dashboard_metrics")
+}
+
+model UserActivity {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  adminId    String?  @db.ObjectId // If action performed by admin
+  action     String   // 'login', 'logout', 'create', 'update', 'delete'
+  resource   String?  // Resource affected
+  details    Json     @default("{}")
+  // Request metadata
+  ipAddress  String?
+  userAgent  String?
+  location   Json?    // { country, city, region }
+  timestamp  DateTime @default(now())
+
+  // Relations
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin AdminUser? @relation(fields: [adminId], references: [id])
+
+  @@map("user_activities")
+}
+
+model SystemAlert {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  alertType  AlertType
+  title      String
+  message    String
+  severity   AlertSeverity @default(MEDIUM)
+  // Resolution
+  resolved   Boolean  @default(false)
+  resolvedBy String?  @db.ObjectId
+  resolvedAt DateTime?
+  // Metadata
+  metadata   Json     @default("{}")
+  affectedUsers Int?   // Number of users affected
+  organizationId String? @db.ObjectId
+  // Timestamps
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  resolver     AdminUser?    @relation("AlertResolver", fields: [resolvedBy], references: [id])
+
+  @@map("system_alerts")
+}
+
+model AdminFeatureOverride {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  featureKey     String   // Feature flag key
+  userId         String?  @db.ObjectId
+  organizationId String?  @db.ObjectId
+  enabled        Boolean
+  reason         String?
+  // Admin info
+  createdBy      String   @db.ObjectId
+  expiresAt      DateTime?
+  createdAt      DateTime @default(now())
+
+  // Relations
+  user         User?         @relation(fields: [userId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  admin        AdminUser     @relation(fields: [createdBy], references: [id])
+
+  @@map("admin_feature_overrides")
+}
+
+// ✅ ENHANCED: Integration with Dynamic Configuration System
+model AdminDashboardConfig {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  adminId        String   @db.ObjectId
+  organizationId String?  @db.ObjectId
+  // Dashboard layout
+  widgets        Json     @default("[]") // Widget configuration
+  layout         Json     @default("{}") // Layout settings
+  theme          String   @default("light")
+  // Preferences
+  defaultTimeRange String @default("7d")
+  autoRefresh    Boolean  @default(true)
+  notifications  Json     @default("{}")
+  // Timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  admin        AdminUser     @relation(fields: [adminId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@unique([adminId, organizationId])
+  @@map("admin_dashboard_configs")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  SUPPORT
+  ANALYST
+}
+
+enum AlertType {
+  ERROR
+  WARNING
+  INFO
+  SECURITY
+  PERFORMANCE
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+```
+
+### **📡 API Endpoints (tRPC + NestJS)**
+
+```typescript
+// ✅ CORRECTED: tRPC router instead of REST endpoints
+// packages/api/src/trpc/routers/admin.router.ts
+
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { adminSchemas } from "../schemas/admin.schemas";
+
+export const adminRouter = createTRPCRouter({
+  // Dashboard Metrics
+  getDashboardMetrics: protectedProcedure
+    .input(adminSchemas.getDashboardMetricsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getDashboardMetrics(input);
+    }),
+
+  getRealtimeMetrics: protectedProcedure
+    .input(adminSchemas.getRealtimeMetricsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getRealtimeMetrics(input);
+    }),
+
+  // User Management
+  getUsers: protectedProcedure
+    .input(adminSchemas.getUsersInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getUsers(input);
+    }),
+
+  getUserDetails: protectedProcedure
+    .input(adminSchemas.getUserDetailsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getUserDetails(input.userId);
+    }),
+
+  updateUser: protectedProcedure
+    .input(adminSchemas.updateUserInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.updateUser(input);
+    }),
+
+  bulkUpdateUsers: protectedProcedure
+    .input(adminSchemas.bulkUpdateUsersInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.bulkUpdateUsers(input);
+    }),
+
+  impersonateUser: protectedProcedure
+    .input(adminSchemas.impersonateUserInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.impersonateUser(input.userId, ctx.user.id);
+    }),
+
+  // Analytics
+  getRevenueAnalytics: protectedProcedure
+    .input(adminSchemas.getRevenueAnalyticsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getRevenueAnalytics(input);
+    }),
+
+  getUsageAnalytics: protectedProcedure
+    .input(adminSchemas.getUsageAnalyticsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getUsageAnalytics(input);
+    }),
+
+  getCohortAnalysis: protectedProcedure
+    .input(adminSchemas.getCohortAnalysisInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getCohortAnalysis(input);
+    }),
+
+  // System Alerts
+  getSystemAlerts: protectedProcedure
+    .input(adminSchemas.getSystemAlertsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getSystemAlerts(input);
+    }),
+
+  resolveAlert: protectedProcedure
+    .input(adminSchemas.resolveAlertInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.resolveAlert(input.alertId, ctx.user.id);
+    }),
+
+  // ✅ ENHANCED: Configuration Management Integration
+  getFeatureFlags: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.adminService.getFeatureFlags();
+  }),
+
+  updateFeatureFlag: protectedProcedure
+    .input(adminSchemas.updateFeatureFlagInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.updateFeatureFlag(input);
+    }),
+
+  overrideFeatureForUser: protectedProcedure
+    .input(adminSchemas.overrideFeatureForUserInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.overrideFeatureForUser(input, ctx.user.id);
+    }),
+
+  // Dashboard Configuration
+  getDashboardConfig: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.adminService.getDashboardConfig(ctx.user.id);
+  }),
+
+  updateDashboardConfig: protectedProcedure
+    .input(adminSchemas.updateDashboardConfigInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.updateDashboardConfig(ctx.user.id, input);
+    }),
+
+  // Reports & Export
+  generateReport: protectedProcedure
+    .input(adminSchemas.generateReportInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.generateReport(input);
+    }),
+
+  exportData: protectedProcedure
+    .input(adminSchemas.exportDataInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.adminService.exportData(input);
+    }),
+
+  // Security & Audit
+  getAuditLogs: protectedProcedure
+    .input(adminSchemas.getAuditLogsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getAuditLogs(input);
+    }),
+
+  getSecurityEvents: protectedProcedure
+    .input(adminSchemas.getSecurityEventsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.adminService.getSecurityEvents(input);
+    }),
+});
+```
+
+### **🔧 Backend Service (NestJS + SOLID)**
+
+```typescript
+// ✅ CORRECTED: SOLID-compliant admin service
+// packages/api/src/admin/admin.service.ts
+
+@Injectable()
+export class AdminService implements IAdminService {
+  constructor(
+    private readonly userRepository: IUserRepository,
+    private readonly adminUserRepository: IAdminUserRepository,
+    private readonly dashboardMetricRepository: IDashboardMetricRepository,
+    private readonly systemAlertRepository: ISystemAlertRepository,
+    private readonly userActivityRepository: IUserActivityRepository,
+    private readonly configurationService: IConfigurationService,
+    private readonly analyticsService: IAnalyticsService,
+    private readonly websocketGateway: AdminWebSocketGateway,
+    private readonly eventEmitter: EventEmitter2
+  ) {}
+
+  async getDashboardMetrics(
+    input: GetDashboardMetricsInput
+  ): Promise<DashboardMetrics> {
+    // Check cache first
+    const cachedMetrics =
+      await this.dashboardMetricRepository.findByTypeAndPeriod(
+        input.metricType,
+        input.timePeriod,
+        input.organizationId
+      );
+
+    if (cachedMetrics && !this.isMetricStale(cachedMetrics)) {
+      return cachedMetrics.metricData as DashboardMetrics;
+    }
+
+    // Calculate fresh metrics
+    const metrics = await this.calculateDashboardMetrics(input);
+
+    // Cache the results
+    await this.dashboardMetricRepository.upsert({
+      metricType: input.metricType,
+      timePeriod: input.timePeriod,
+      organizationId: input.organizationId,
+      metricData: metrics,
+      calculatedAt: new Date(),
+      expiresAt: new Date(
+        Date.now() + this.getCacheExpirationTime(input.metricType)
+      ),
+    });
+
+    return metrics;
+  }
+
+  async getUsers(input: GetUsersInput): Promise<GetUsersResult> {
+    const users = await this.userRepository.findWithFilters({
+      skip: input.skip,
+      take: input.take,
+      where: this.buildUserFilters(input.filters),
+      include: {
+        subscriptions: true,
+        organizations: true,
+        activities: {
+          take: 5,
+          orderBy: { timestamp: "desc" },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const total = await this.userRepository.count(
+      this.buildUserFilters(input.filters)
+    );
+
+    return {
+      users: users.map((user) => this.sanitizeUserForAdmin(user)),
+      total,
+      hasMore: users.length === input.take,
+    };
+  }
+
+  async bulkUpdateUsers(
+    input: BulkUpdateUsersInput
+  ): Promise<BulkUpdateUsersResult> {
+    const results = [];
+
+    for (const userId of input.userIds) {
+      try {
+        const user = await this.userRepository.update(userId, input.updates);
+        results.push({
+          userId,
+          success: true,
+          user: this.sanitizeUserForAdmin(user),
+        });
+
+        // Log the action
+        await this.logUserActivity({
+          userId,
+          adminId: input.adminId,
+          action: "bulk_update",
+          resource: "user",
+          details: input.updates,
+        });
+      } catch (error) {
+        results.push({ userId, success: false, error: error.message });
+      }
+    }
+
+    // Emit real-time update
+    this.websocketGateway.broadcastUserUpdate({
+      type: "bulk_update",
+      userIds: input.userIds,
+      updates: input.updates,
+    });
+
+    return {
+      results,
+      total: input.userIds.length,
+      successful: results.filter((r) => r.success).length,
+      failed: results.filter((r) => !r.success).length,
+    };
+  }
+
+  // ✅ ENHANCED: Configuration management integration
+  async getFeatureFlags(): Promise<FeatureFlag[]> {
+    return await this.configurationService.getAllFeatureFlags();
+  }
+
+  async updateFeatureFlag(input: UpdateFeatureFlagInput): Promise<FeatureFlag> {
+    const flag = await this.configurationService.updateFeatureFlag(input);
+
+    // Emit real-time update
+    this.websocketGateway.broadcastFeatureFlagUpdate(flag);
+
+    return flag;
+  }
+
+  async overrideFeatureForUser(
+    input: OverrideFeatureForUserInput,
+    adminId: string
+  ): Promise<AdminFeatureOverride> {
+    const override = await this.adminFeatureOverrideRepository.create({
+      featureKey: input.featureKey,
+      userId: input.userId,
+      organizationId: input.organizationId,
+      enabled: input.enabled,
+      reason: input.reason,
+      createdBy: adminId,
+      expiresAt: input.expiresAt,
+    });
+
+    // Update configuration service
+    await this.configurationService.setUserFeatureOverride(
+      input.userId,
+      input.featureKey,
+      input.enabled
+    );
+
+    // Log the action
+    await this.logUserActivity({
+      userId: input.userId,
+      adminId,
+      action: "feature_override",
+      resource: "feature_flag",
+      details: { featureKey: input.featureKey, enabled: input.enabled },
+    });
+
+    return override;
+  }
+
+  private async calculateDashboardMetrics(
+    input: GetDashboardMetricsInput
+  ): Promise<DashboardMetrics> {
+    switch (input.metricType) {
+      case "users":
+        return await this.calculateUserMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      case "revenue":
+        return await this.calculateRevenueMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      case "usage":
+        return await this.calculateUsageMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      case "support":
+        return await this.calculateSupportMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      default:
+        throw new Error(`Unknown metric type: ${input.metricType}`);
+    }
+  }
+
+  private async calculateUserMetrics(
+    timePeriod: string,
+    organizationId?: string
+  ): Promise<UserMetrics> {
+    const timeRange = this.getTimeRange(timePeriod);
+
+    return {
+      totalUsers: await this.userRepository.count({ organizationId }),
+      activeUsers: await this.userRepository.count({
+        organizationId,
+        lastLoginAt: { gte: timeRange.start },
+      }),
+      newUsers: await this.userRepository.count({
+        organizationId,
+        createdAt: { gte: timeRange.start },
+      }),
+      churnedUsers: await this.userRepository.count({
+        organizationId,
+        deletedAt: { gte: timeRange.start },
+      }),
+      growth: await this.calculateUserGrowth(timeRange, organizationId),
+    };
+  }
+
+  private buildUserFilters(filters: UserFilters): any {
+    const where: any = {};
+
+    if (filters.search) {
+      where.OR = [
+        { name: { contains: filters.search, mode: "insensitive" } },
+        { email: { contains: filters.search, mode: "insensitive" } },
+      ];
+    }
+
+    if (filters.status) {
+      where.status = filters.status;
+    }
+
+    if (filters.role) {
+      where.role = filters.role;
+    }
+
+    if (filters.organizationId) {
+      where.organizationId = filters.organizationId;
+    }
+
+    if (filters.createdAfter) {
+      where.createdAt = { gte: new Date(filters.createdAfter) };
+    }
+
+    if (filters.lastLoginAfter) {
+      where.lastLoginAt = { gte: new Date(filters.lastLoginAfter) };
+    }
+
+    return where;
+  }
+
+  private sanitizeUserForAdmin(user: any): AdminUserView {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      status: user.status,
+      role: user.role,
+      createdAt: user.createdAt,
+      lastLoginAt: user.lastLoginAt,
+      organizationId: user.organizationId,
+      subscription: user.subscriptions?.[0],
+      activityCount: user.activities?.length || 0,
+      recentActivity: user.activities?.[0],
+    };
+  }
+
+  // Other methods following SOLID principles...
+}
+```
+
+### **🔧 Backend Service (NestJS + SOLID)**
+
+```typescript
+// ✅ CORRECTED: SOLID-compliant admin service
+// packages/api/src/admin/admin.service.ts
+
+@Injectable()
+export class AdminService implements IAdminService {
+  constructor(
+    private readonly userRepository: IUserRepository,
+    private readonly adminUserRepository: IAdminUserRepository,
+    private readonly dashboardMetricRepository: IDashboardMetricRepository,
+    private readonly systemAlertRepository: ISystemAlertRepository,
+    private readonly userActivityRepository: IUserActivityRepository,
+    private readonly configurationService: IConfigurationService,
+    private readonly analyticsService: IAnalyticsService,
+    private readonly websocketGateway: AdminWebSocketGateway,
+    private readonly eventEmitter: EventEmitter2
+  ) {}
+
+  async getDashboardMetrics(
+    input: GetDashboardMetricsInput
+  ): Promise<DashboardMetrics> {
+    // Check cache first
+    const cachedMetrics =
+      await this.dashboardMetricRepository.findByTypeAndPeriod(
+        input.metricType,
+        input.timePeriod,
+        input.organizationId
+      );
+
+    if (cachedMetrics && !this.isMetricStale(cachedMetrics)) {
+      return cachedMetrics.metricData as DashboardMetrics;
+    }
+
+    // Calculate fresh metrics
+    const metrics = await this.calculateDashboardMetrics(input);
+
+    // Cache the results
+    await this.dashboardMetricRepository.upsert({
+      metricType: input.metricType,
+      timePeriod: input.timePeriod,
+      organizationId: input.organizationId,
+      metricData: metrics,
+      calculatedAt: new Date(),
+      expiresAt: new Date(
+        Date.now() + this.getCacheExpirationTime(input.metricType)
+      ),
+    });
+
+    return metrics;
+  }
+
+  async getUsers(input: GetUsersInput): Promise<GetUsersResult> {
+    const users = await this.userRepository.findWithFilters({
+      skip: input.skip,
+      take: input.take,
+      where: this.buildUserFilters(input.filters),
+      include: {
+        subscriptions: true,
+        organizations: true,
+        activities: {
+          take: 5,
+          orderBy: { timestamp: "desc" },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const total = await this.userRepository.count(
+      this.buildUserFilters(input.filters)
+    );
+
+    return {
+      users: users.map((user) => this.sanitizeUserForAdmin(user)),
+      total,
+      hasMore: users.length === input.take,
+    };
+  }
+
+  async bulkUpdateUsers(
+    input: BulkUpdateUsersInput
+  ): Promise<BulkUpdateUsersResult> {
+    const results = [];
+
+    for (const userId of input.userIds) {
+      try {
+        const user = await this.userRepository.update(userId, input.updates);
+        results.push({
+          userId,
+          success: true,
+          user: this.sanitizeUserForAdmin(user),
+        });
+
+        // Log the action
+        await this.logUserActivity({
+          userId,
+          adminId: input.adminId,
+          action: "bulk_update",
+          resource: "user",
+          details: input.updates,
+        });
+      } catch (error) {
+        results.push({ userId, success: false, error: error.message });
+      }
+    }
+
+    // Emit real-time update
+    this.websocketGateway.broadcastUserUpdate({
+      type: "bulk_update",
+      userIds: input.userIds,
+      updates: input.updates,
+    });
+
+    return {
+      results,
+      total: input.userIds.length,
+      successful: results.filter((r) => r.success).length,
+      failed: results.filter((r) => !r.success).length,
+    };
+  }
+
+  // ✅ ENHANCED: Configuration management integration
+  async getFeatureFlags(): Promise<FeatureFlag[]> {
+    return await this.configurationService.getAllFeatureFlags();
+  }
+
+  async updateFeatureFlag(input: UpdateFeatureFlagInput): Promise<FeatureFlag> {
+    const flag = await this.configurationService.updateFeatureFlag(input);
+
+    // Emit real-time update
+    this.websocketGateway.broadcastFeatureFlagUpdate(flag);
+
+    return flag;
+  }
+
+  async overrideFeatureForUser(
+    input: OverrideFeatureForUserInput,
+    adminId: string
+  ): Promise<AdminFeatureOverride> {
+    const override = await this.adminFeatureOverrideRepository.create({
+      featureKey: input.featureKey,
+      userId: input.userId,
+      organizationId: input.organizationId,
+      enabled: input.enabled,
+      reason: input.reason,
+      createdBy: adminId,
+      expiresAt: input.expiresAt,
+    });
+
+    // Update configuration service
+    await this.configurationService.setUserFeatureOverride(
+      input.userId,
+      input.featureKey,
+      input.enabled
+    );
+
+    // Log the action
+    await this.logUserActivity({
+      userId: input.userId,
+      adminId,
+      action: "feature_override",
+      resource: "feature_flag",
+      details: { featureKey: input.featureKey, enabled: input.enabled },
+    });
+
+    return override;
+  }
+
+  private async calculateDashboardMetrics(
+    input: GetDashboardMetricsInput
+  ): Promise<DashboardMetrics> {
+    switch (input.metricType) {
+      case "users":
+        return await this.calculateUserMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      case "revenue":
+        return await this.calculateRevenueMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      case "usage":
+        return await this.calculateUsageMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      case "support":
+        return await this.calculateSupportMetrics(
+          input.timePeriod,
+          input.organizationId
+        );
+      default:
+        throw new Error(`Unknown metric type: ${input.metricType}`);
+    }
+  }
+
+  private async calculateUserMetrics(
+    timePeriod: string,
+    organizationId?: string
+  ): Promise<UserMetrics> {
+    const timeRange = this.getTimeRange(timePeriod);
+
+    return {
+      totalUsers: await this.userRepository.count({ organizationId }),
+      activeUsers: await this.userRepository.count({
+        organizationId,
+        lastLoginAt: { gte: timeRange.start },
+      }),
+      newUsers: await this.userRepository.count({
+        organizationId,
+        createdAt: { gte: timeRange.start },
+      }),
+      churnedUsers: await this.userRepository.count({
+        organizationId,
+        deletedAt: { gte: timeRange.start },
+      }),
+      growth: await this.calculateUserGrowth(timeRange, organizationId),
+    };
+  }
+
+  private buildUserFilters(filters: UserFilters): any {
+    const where: any = {};
+
+    if (filters.search) {
+      where.OR = [
+        { name: { contains: filters.search, mode: "insensitive" } },
+        { email: { contains: filters.search, mode: "insensitive" } },
+      ];
+    }
+
+    if (filters.status) {
+      where.status = filters.status;
+    }
+
+    if (filters.role) {
+      where.role = filters.role;
+    }
+
+    if (filters.organizationId) {
+      where.organizationId = filters.organizationId;
+    }
+
+    if (filters.createdAfter) {
+      where.createdAt = { gte: new Date(filters.createdAfter) };
+    }
+
+    if (filters.lastLoginAfter) {
+      where.lastLoginAt = { gte: new Date(filters.lastLoginAfter) };
+    }
+
+    return where;
+  }
+
+  private sanitizeUserForAdmin(user: any): AdminUserView {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      status: user.status,
+      role: user.role,
+      createdAt: user.createdAt,
+      lastLoginAt: user.lastLoginAt,
+      organizationId: user.organizationId,
+      subscription: user.subscriptions?.[0],
+      activityCount: user.activities?.length || 0,
+      recentActivity: user.activities?.[0],
+    };
+  }
+
+  // Other methods following SOLID principles...
+}
 ```
 
 ---

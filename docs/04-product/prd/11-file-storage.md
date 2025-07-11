@@ -1,4 +1,4 @@
-# 📁 File Management & Storage Module PRD
+# 📁 File Management & Storage Module PRD (CORREGIDO)
 
 ## 📋 1. Introducción y Objetivos
 
@@ -6,12 +6,21 @@
 
 El módulo de File Management & Storage permite que cualquier SaaS maneje archivos de forma profesional: avatares de usuario, documentos, imágenes, videos, y cualquier tipo de archivo que los usuarios necesiten subir. Con **CloudFlare R2** como proveedor principal, ofrece costos ultra-bajos y performance global.
 
+### **🔗 Conexión con SOLID Implementation**
+
+- **Depende de**: SOLID-004 (Interface Segregation) - Storage provider interfaces
+- **Depende de**: SOLID-005 (Dependency Inversion) - Storage abstraction layers
+- **Integración**: **User Management** - File ownership and permissions
+- **Integración**: **Admin Dashboard** - File analytics and management
+- **Implementación**: Semana 15-16 (después de configuration system)
+
 ### **Objetivos Comerciales**
 
 - **Cost Efficiency**: 90% menos costo que AWS S3
 - **Global Performance**: CDN global incluido
 - **Zero Egress Fees**: Sin costos de transferencia
 - **Developer Friendly**: Setup en < 20 minutos
+- **🔗 Enterprise Features**: Integración con user management y admin dashboard
 
 ### **Metas Técnicas**
 
@@ -19,6 +28,7 @@ El módulo de File Management & Storage permite que cualquier SaaS maneje archiv
 - **Processing Speed**: < 3 segundos para image optimization
 - **Global Latency**: < 100ms desde cualquier ubicación
 - **Availability**: 99.9% uptime garantizado
+- **✅ Enhanced**: Integración completa con sistema de usuarios y permisos
 
 ---
 
@@ -311,58 +321,498 @@ components/files/
 └── FileAnalytics.tsx          # Usage analytics
 ```
 
-### **Database Schema**
+### **🗃️ Database Schema (Prisma + MongoDB)**
 
-```sql
--- Files
-CREATE TABLE files (
-  id UUID PRIMARY KEY,
-  user_id UUID REFERENCES users(id),
-  original_name VARCHAR(255) NOT NULL,
-  storage_key VARCHAR(500) NOT NULL,
-  file_size BIGINT NOT NULL,
-  mime_type VARCHAR(100) NOT NULL,
-  storage_provider VARCHAR(50) DEFAULT 'r2',
-  processing_status VARCHAR(50) DEFAULT 'pending',
-  public_access BOOLEAN DEFAULT false,
-  metadata JSONB,
-  uploaded_at TIMESTAMP DEFAULT NOW(),
-  expires_at TIMESTAMP,
-  deleted_at TIMESTAMP
-);
+```prisma
+// ✅ CORRECTED: Prisma schema instead of SQL
+// packages/api/prisma/schema.prisma
 
--- File Versions (for editing/history)
-CREATE TABLE file_versions (
-  id UUID PRIMARY KEY,
-  file_id UUID REFERENCES files(id),
-  version_number INTEGER NOT NULL,
-  storage_key VARCHAR(500) NOT NULL,
-  file_size BIGINT NOT NULL,
-  changes_description TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+model File {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId
+  organizationId  String?  @db.ObjectId
+  originalName    String
+  storageKey      String   // CloudFlare R2 key
+  fileName        String   // Clean filename
+  fileSize        Int
+  mimeType        String
+  storageProvider StorageProvider @default(CLOUDFLARE_R2)
+  processingStatus ProcessingStatus @default(PENDING)
+  publicAccess    Boolean  @default(false)
+  // File metadata
+  metadata        Json     @default("{}")
+  dimensions      Json?    // For images/videos: { width, height }
+  duration        Int?     // For videos/audio in seconds
+  thumbnailKey    String?  // Thumbnail storage key
+  // Access control
+  accessLevel     FileAccessLevel @default(PRIVATE)
+  downloadCount   Int      @default(0)
+  // Timestamps
+  uploadedAt      DateTime @default(now())
+  expiresAt       DateTime?
+  deletedAt       DateTime?
+  lastAccessedAt  DateTime?
 
--- File Shares (for sharing files)
-CREATE TABLE file_shares (
-  id UUID PRIMARY KEY,
-  file_id UUID REFERENCES files(id),
-  shared_by UUID REFERENCES users(id),
-  shared_with UUID REFERENCES users(id),
-  access_level VARCHAR(20) DEFAULT 'read', -- read, write, admin
-  expires_at TIMESTAMP,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  versions     FileVersion[]
+  shares       FileShare[]
+  analytics    FileAnalytic[]
+  processingJobs FileProcessingJob[]
 
--- File Usage Analytics
-CREATE TABLE file_analytics (
-  id UUID PRIMARY KEY,
-  file_id UUID REFERENCES files(id),
-  action VARCHAR(50) NOT NULL, -- upload, download, view, delete
-  user_id UUID REFERENCES users(id),
-  ip_address INET,
-  user_agent TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+  @@map("files")
+}
+
+model FileVersion {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  fileId              String   @db.ObjectId
+  versionNumber       Int
+  storageKey          String   // CloudFlare R2 key for this version
+  fileSize            Int
+  changesDescription  String?
+  createdBy           String   @db.ObjectId
+  createdAt           DateTime @default(now())
+
+  // Relations
+  file      File @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  createdByUser User @relation(fields: [createdBy], references: [id])
+
+  @@unique([fileId, versionNumber])
+  @@map("file_versions")
+}
+
+model FileShare {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  fileId      String   @db.ObjectId
+  sharedBy    String   @db.ObjectId
+  sharedWith  String?  @db.ObjectId // If null, it's a public share
+  accessLevel FileAccessLevel @default(READ)
+  shareToken  String?  @unique // For public shares
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  file       File  @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  sharer     User  @relation("FilesSharedBy", fields: [sharedBy], references: [id])
+  recipient  User? @relation("FilesSharedWith", fields: [sharedWith], references: [id])
+
+  @@map("file_shares")
+}
+
+model FileAnalytic {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  fileId    String   @db.ObjectId
+  action    FileAction
+  userId    String?  @db.ObjectId
+  ipAddress String?
+  userAgent String?
+  // Request metadata
+  referer   String?
+  country   String?
+  city      String?
+  timestamp DateTime @default(now())
+
+  // Relations
+  file File  @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("file_analytics")
+}
+
+// File processing jobs
+model FileProcessingJob {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  fileId        String   @db.ObjectId
+  jobType       ProcessingJobType
+  status        ProcessingStatus @default(PENDING)
+  progress      Int      @default(0)
+  errorMessage  String?
+  result        Json?    // Processing results
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+
+  // Relations
+  file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@map("file_processing_jobs")
+}
+
+enum StorageProvider {
+  CLOUDFLARE_R2
+  AWS_S3
+  GOOGLE_CLOUD
+  LOCAL
+}
+
+enum FileAccessLevel {
+  PRIVATE
+  READ
+  WRITE
+  ADMIN
+  PUBLIC
+}
+
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum FileAction {
+  UPLOAD
+  DOWNLOAD
+  VIEW
+  DELETE
+  SHARE
+  COPY
+  MOVE
+}
+
+enum ProcessingJobType {
+  IMAGE_OPTIMIZATION
+  THUMBNAIL_GENERATION
+  VIDEO_TRANSCODING
+  VIRUS_SCAN
+  METADATA_EXTRACTION
+}
+```
+
+### **📡 API Endpoints (tRPC + NestJS)**
+
+```typescript
+// ✅ CORRECTED: tRPC router instead of REST endpoints
+// packages/api/src/trpc/routers/files.router.ts
+
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { fileSchemas } from "../schemas/file.schemas";
+
+export const filesRouter = createTRPCRouter({
+  // File Upload
+  generateUploadUrl: protectedProcedure
+    .input(fileSchemas.generateUploadUrlInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.fileService.generateUploadUrl(input);
+    }),
+
+  confirmUpload: protectedProcedure
+    .input(fileSchemas.confirmUploadInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.fileService.confirmUpload(input);
+    }),
+
+  // File Management
+  getFiles: protectedProcedure
+    .input(fileSchemas.getFilesInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.fileService.getFiles(ctx.user.id, input);
+    }),
+
+  getFile: protectedProcedure
+    .input(fileSchemas.getFileInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.fileService.getFile(input.id);
+    }),
+
+  deleteFile: protectedProcedure
+    .input(fileSchemas.deleteFileInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.fileService.deleteFile(input.id);
+    }),
+
+  updateFile: protectedProcedure
+    .input(fileSchemas.updateFileInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.fileService.updateFile(input);
+    }),
+
+  // File Sharing
+  shareFile: protectedProcedure
+    .input(fileSchemas.shareFileInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.fileService.shareFile(input);
+    }),
+
+  getSharedFiles: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.fileService.getSharedFiles(ctx.user.id);
+  }),
+
+  revokeShare: protectedProcedure
+    .input(fileSchemas.revokeShareInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.fileService.revokeShare(input.shareId);
+    }),
+
+  // File Processing
+  processFile: protectedProcedure
+    .input(fileSchemas.processFileInput)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.fileService.processFile(input);
+    }),
+
+  getProcessingStatus: protectedProcedure
+    .input(fileSchemas.getProcessingStatusInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.fileService.getProcessingStatus(input.fileId);
+    }),
+
+  // Public file access
+  getPublicFile: publicProcedure
+    .input(fileSchemas.getPublicFileInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.fileService.getPublicFile(input.token);
+    }),
+
+  downloadFile: publicProcedure
+    .input(fileSchemas.downloadFileInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.fileService.getDownloadUrl(input.fileId, input.token);
+    }),
+
+  // Analytics
+  getFileAnalytics: protectedProcedure
+    .input(fileSchemas.getFileAnalyticsInput)
+    .query(async ({ input, ctx }) => {
+      return await ctx.fileService.getFileAnalytics(input);
+    }),
+
+  // Admin endpoints
+  getStorageUsage: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.fileService.getStorageUsage(ctx.user.id);
+  }),
+
+  cleanupExpiredFiles: protectedProcedure.mutation(async ({ ctx }) => {
+    return await ctx.fileService.cleanupExpiredFiles();
+  }),
+});
+```
+
+### **🔧 Backend Service (NestJS + SOLID)**
+
+```typescript
+// ✅ CORRECTED: SOLID-compliant service with CloudFlare R2 integration
+// packages/api/src/files/files.service.ts
+
+@Injectable()
+export class FilesService implements IFilesService {
+  constructor(
+    private readonly fileRepository: IFileRepository,
+    private readonly cloudflareR2Service: ICloudflareR2Service,
+    private readonly imageProcessingService: IImageProcessingService,
+    private readonly virusScanService: IVirusScanService,
+    private readonly fileAnalyticsService: IFileAnalyticsService,
+    private readonly eventEmitter: EventEmitter2
+  ) {}
+
+  async generateUploadUrl(
+    input: GenerateUploadUrlInput
+  ): Promise<GenerateUploadUrlResult> {
+    // Validate file type and size
+    if (!this.isValidFileType(input.mimeType)) {
+      throw new Error("File type not allowed");
+    }
+
+    if (input.fileSize > this.getMaxFileSize(input.mimeType)) {
+      throw new Error("File size exceeds limit");
+    }
+
+    // Generate unique storage key
+    const storageKey = this.generateStorageKey(input.fileName, input.userId);
+
+    // Create presigned URL for CloudFlare R2
+    const uploadUrl = await this.cloudflareR2Service.generateUploadUrl({
+      key: storageKey,
+      contentType: input.mimeType,
+      contentLength: input.fileSize,
+      expiresIn: 3600, // 1 hour
+    });
+
+    // Create file record in database
+    const file = await this.fileRepository.create({
+      userId: input.userId,
+      organizationId: input.organizationId,
+      originalName: input.fileName,
+      storageKey,
+      fileName: this.sanitizeFileName(input.fileName),
+      fileSize: input.fileSize,
+      mimeType: input.mimeType,
+      processingStatus: ProcessingStatus.PENDING,
+    });
+
+    return {
+      uploadUrl,
+      fileId: file.id,
+      storageKey,
+      expiresAt: new Date(Date.now() + 3600000), // 1 hour from now
+    };
+  }
+
+  async confirmUpload(input: ConfirmUploadInput): Promise<ConfirmUploadResult> {
+    // Verify file was uploaded successfully
+    const exists = await this.cloudflareR2Service.objectExists(
+      input.storageKey
+    );
+    if (!exists) {
+      throw new Error("File upload not found");
+    }
+
+    // Update file status
+    const file = await this.fileRepository.update(input.fileId, {
+      processingStatus: ProcessingStatus.PROCESSING,
+    });
+
+    // Queue processing tasks
+    await this.queueProcessingTasks(file);
+
+    // Emit event
+    this.eventEmitter.emit("file.uploaded", {
+      fileId: file.id,
+      userId: file.userId,
+      fileSize: file.fileSize,
+      mimeType: file.mimeType,
+    });
+
+    return {
+      file: this.sanitizeFile(file),
+      processingQueued: true,
+    };
+  }
+
+  async getFiles(
+    userId: string,
+    input: GetFilesInput
+  ): Promise<GetFilesResult> {
+    const files = await this.fileRepository.findByUserId(userId, {
+      skip: input.skip,
+      take: input.take,
+      where: {
+        ...(input.mimeType && { mimeType: { contains: input.mimeType } }),
+        ...(input.search && {
+          OR: [
+            { originalName: { contains: input.search, mode: "insensitive" } },
+            { fileName: { contains: input.search, mode: "insensitive" } },
+          ],
+        }),
+        deletedAt: null,
+      },
+      orderBy: { uploadedAt: "desc" },
+    });
+
+    return {
+      files: files.map((file) => this.sanitizeFile(file)),
+      total: await this.fileRepository.countByUserId(userId),
+      hasMore: files.length === input.take,
+    };
+  }
+
+  async shareFile(input: ShareFileInput): Promise<ShareFileResult> {
+    const file = await this.fileRepository.findById(input.fileId);
+    if (!file) {
+      throw new Error("File not found");
+    }
+
+    // Check permissions
+    if (file.userId !== input.sharedBy) {
+      throw new Error("Insufficient permissions");
+    }
+
+    // Create share record
+    const share = await this.fileShareRepository.create({
+      fileId: input.fileId,
+      sharedBy: input.sharedBy,
+      sharedWith: input.sharedWith,
+      accessLevel: input.accessLevel,
+      shareToken: input.isPublic ? this.generateShareToken() : undefined,
+      expiresAt: input.expiresAt,
+    });
+
+    // Generate share URL
+    const shareUrl = input.isPublic
+      ? `${process.env.APP_URL}/files/shared/${share.shareToken}`
+      : null;
+
+    return {
+      share: this.sanitizeShare(share),
+      shareUrl,
+    };
+  }
+
+  private async queueProcessingTasks(file: File): Promise<void> {
+    const tasks = [];
+
+    // Image optimization
+    if (file.mimeType.startsWith("image/")) {
+      tasks.push(this.imageProcessingService.queueOptimization(file.id));
+      tasks.push(this.imageProcessingService.queueThumbnailGeneration(file.id));
+    }
+
+    // Virus scanning
+    tasks.push(this.virusScanService.queueScan(file.id));
+
+    // Metadata extraction
+    tasks.push(this.queueMetadataExtraction(file.id));
+
+    await Promise.all(tasks);
+  }
+
+  private generateStorageKey(fileName: string, userId: string): string {
+    const date = new Date().toISOString().slice(0, 10);
+    const uuid = randomUUID();
+    const extension = fileName.split(".").pop();
+    return `${userId}/${date}/${uuid}.${extension}`;
+  }
+
+  private sanitizeFileName(fileName: string): string {
+    return fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
+  }
+
+  private isValidFileType(mimeType: string): boolean {
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "application/pdf",
+      "text/plain",
+      "application/json",
+      "video/mp4",
+      "video/webm",
+      "audio/mp3",
+      "audio/wav",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ];
+    return allowedTypes.includes(mimeType);
+  }
+
+  private getMaxFileSize(mimeType: string): number {
+    // Different limits for different file types
+    if (mimeType.startsWith("image/")) return 10 * 1024 * 1024; // 10MB
+    if (mimeType.startsWith("video/")) return 100 * 1024 * 1024; // 100MB
+    if (mimeType.startsWith("audio/")) return 50 * 1024 * 1024; // 50MB
+    return 25 * 1024 * 1024; // 25MB default
+  }
+
+  private sanitizeFile(file: File): SafeFile {
+    return {
+      id: file.id,
+      originalName: file.originalName,
+      fileName: file.fileName,
+      fileSize: file.fileSize,
+      mimeType: file.mimeType,
+      uploadedAt: file.uploadedAt,
+      processingStatus: file.processingStatus,
+      publicAccess: file.publicAccess,
+      downloadCount: file.downloadCount,
+    };
+  }
+
+  // Other methods following SOLID principles...
+}
 ```
 
 ---
