@@ -76,7 +76,7 @@ Complete testing strategy for the Alkitu Template using TDD (Test-Driven Develop
 ### **Configuration Files**
 
 ```
-packages-solid/
+packages/
 ├── stryker.conf.json         # Mutation testing config
 ├── jest.config.js            # Jest configuration
 ├── .eslintrc.js              # Code quality rules
@@ -597,4 +597,4 @@ npm run type-check
 
 ---
 
-*This testing strategy ensures that the Alkitu Template maintains the highest quality standards through comprehensive test coverage, mutation testing, and continuous quality validation.*
+_This testing strategy ensures that the Alkitu Template maintains the highest quality standards through comprehensive test coverage, mutation testing, and continuous quality validation._

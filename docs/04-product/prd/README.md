@@ -310,7 +310,7 @@ El PRD actúa como un puente entre la **visión comercial** del template y su **
 - [Documentación de Arquitectura SOLID](../solid-migration/)
 - [Guía de Agentes IA](../ai-agents/)
 - [Configuración de Feature Flags](../../packages/shared/src/config/freemium-flags.ts)
-- [Docker Development Setup](../docker/parallel-development.yml)
+- [Docker Development Setup](../../docker-compose.dev.yml)
 
 ---
 

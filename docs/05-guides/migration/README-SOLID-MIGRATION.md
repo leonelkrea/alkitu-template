@@ -120,8 +120,8 @@
 git clone <repository-url>
 cd Alkitu-template
 
-# Iniciar desarrollo paralelo
-./scripts/start-parallel-dev.sh
+# Iniciar desarrollo
+./scripts/dev.sh
 ```
 
 ### **2. Acceder a los Entornos**
@@ -305,16 +305,16 @@ open http://localhost:8080/coverage/
 
 ```bash
 # Iniciar entorno completo
-./scripts/start-parallel-dev.sh
+./scripts/dev.sh
 
 # Ver logs
-docker-compose -f docker/parallel-development.yml logs -f
+npm run docker:logs
 
 # Parar entorno
-docker-compose -f docker/parallel-development.yml down
+npm run docker:stop
 
 # Rebuild servicios
-docker-compose -f docker/parallel-development.yml up --build
+npm run dev:docker
 ```
 
 ### **Servicios Docker**
@@ -457,7 +457,7 @@ docker-compose -f docker/parallel-development.yml up --build
 ### **Setup Inicial**
 
 - [ ] Clonar repositorio
-- [ ] Ejecutar `./scripts/start-parallel-dev.sh`
+- [ ] Ejecutar `./scripts/dev.sh`
 - [ ] Verificar acceso a dashboards
 - [ ] Configurar agentes IA
 

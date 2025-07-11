@@ -20,10 +20,10 @@
 
 ### **Deliverables**
 
-- [ ] **Domain Interfaces** (`packages-solid/shared/src/interfaces/`)
-- [ ] **Service Contracts** (`packages-solid/api/src/contracts/`)
-- [ ] **Repository Interfaces** (`packages-solid/api/src/repositories/interfaces/`)
-- [ ] **Module Configuration** (`packages-solid/shared/src/config/modules.config.ts`)
+- [ ] **Domain Interfaces** (`packages/shared/src/interfaces/`)
+- [ ] **Service Contracts** (`packages/api/src/contracts/`)
+- [ ] **Repository Interfaces** (`packages/api/src/repositories/interfaces/`)
+- [ ] **Module Configuration** (`packages/shared/src/config/modules.config.ts`)
 - [ ] **Architecture Documentation** (`docs/architecture/solid-design.md`)
 
 ---
@@ -98,7 +98,7 @@ export interface FeatureFlag {
 ### **3. Layer Separation**
 
 ```
-packages-solid/
+packages/
 ├── shared/
 │   ├── interfaces/         # Domain interfaces
 │   ├── types/             # Shared types

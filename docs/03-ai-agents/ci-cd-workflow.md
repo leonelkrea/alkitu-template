@@ -73,8 +73,8 @@ npm run quality:gates         # Quality gates completos
 
 ```bash
 # Comandos para agentes
-docker-compose -f docker-compose.ci.yml up --abort-on-container-exit
-docker-compose -f docker-compose.ci.yml down
+npm run dev:docker
+npm run docker:stop
 ```
 
 #### **🔴 test-runner**: Red Phase Testing
@@ -220,7 +220,7 @@ npm run build:web             # Build web package
 ```bash
 # Docker Commands
 npm run build:docker          # Build Docker containers
-docker-compose -f docker-compose.ci.yml up    # Start CI environment
+npm run dev:docker    # Start development environment
 
 # Agent Commands
 npm run agent:test            # Agent-specific testing
@@ -291,8 +291,8 @@ open reports/mutation/mutation.html
 
 ```bash
 # Debug Docker environment
-docker-compose -f docker-compose.ci.yml logs
-docker-compose -f docker-compose.ci.yml exec test-runner bash
+npm run docker:logs
+npm run docker:restart api
 ```
 
 ---

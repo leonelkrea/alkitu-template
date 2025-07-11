@@ -23,9 +23,9 @@
 ### **Deliverables**
 
 - [ ] **Stryker Configuration** (`stryker.conf.json`)
-- [ ] **Test Setup** (`packages-solid/api/src/test/setup.ts`)
-- [ ] **Contract Tests** (`packages-solid/api/src/test/contracts/`)
-- [ ] **Integration Tests** (`packages-solid/api/src/test/integration/`)
+- [ ] **Test Setup** (`packages/api/src/test/setup.ts`)
+- [ ] **Contract Tests** (`packages/api/src/test/contracts/`)
+- [ ] **Integration Tests** (`packages/api/src/test/integration/`)
 - [ ] **Mutation Reports** (`reports/mutation/`)
 - [ ] **Quality Dashboard** (`docs/quality/dashboard.md`)
 
@@ -52,7 +52,7 @@
 ### **Configuration Files**
 
 ```
-packages-solid/
+packages/
 ├── stryker.conf.json
 ├── jest.config.js
 ├── .eslintrc.js

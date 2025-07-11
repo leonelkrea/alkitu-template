@@ -74,6 +74,7 @@
 ### ✅ **Servicios Completamente Implementados**
 
 #### **Backend Services**
+
 - **Authentication**: JWT + Passport + 2FA + OAuth (GitHub/Google)
 - **Email**: Resend 4.6.0 con plantillas HTML completas
 - **Push Notifications**: Web-Push 3.6.7 con Service Worker
@@ -82,6 +83,7 @@
 - **Notifications**: Sistema completo con múltiples canales
 
 #### **Frontend Features**
+
 - **Translation System**: Sistema i18n completo ES/EN
 - **Data Tables**: TanStack Table 8.16.0 usado extensivamente
 - **Animations**: Framer Motion 11.0.14 para micro-interacciones
@@ -91,12 +93,14 @@
 ### ⚠️ **Servicios Configurados pero Deshabilitados**
 
 #### **GraphQL API**
+
 - **Estado**: Configurado en `modules.config.ts` pero deshabilitado por defecto
 - **Móvil**: Usa `graphql_flutter` pero backend no expone GraphQL
 - **Activación**: `ENABLE_MOBILE=true` en variables de entorno
 - **Desarrollo**: Se habilita automáticamente en modo development
 
 #### **Mobile App**
+
 - **Estado**: Flutter app completamente configurado pero deshabilitado
 - **Dependencias**: GraphQL + Auth configurados
 - **Activación**: Requiere habilitar GraphQL primero
@@ -104,21 +108,25 @@
 ### ❌ **Servicios NO Implementados**
 
 #### **Sistemas de Pago**
+
 - **Redsys**: Mencionado pero NO implementado
 - **Stripe**: PRD completo disponible pero sin implementar
 - **PayPal**: No implementado
 - **Billing**: Solo estructura básica (modelo Prisma)
 
 #### **Servicios de Infraestructura**
+
 - **Redis**: Configurado pero omitido intencionalmente (para chat futuro)
 - **Queue System**: No implementado (se añadirá con Redis + chat)
-- **Logging**: Winston no implementado (usando console.log)  
+- **Logging**: Winston no implementado (usando console.log)
 - **Rate Limiting**: Básico implementado (suficiente para MVP)
 
 #### **🎯 Decisión Redis: Omisión Estratégica**
+
 Redis está **completamente configurado** en Docker pero **intencionalmente omitido** porque:
+
 - Sistema JWT actual es altamente optimizado sin Redis
-- MongoDB maneja sesiones eficientemente  
+- MongoDB maneja sesiones eficientemente
 - Decodificación JWT local evita calls al backend
 - **Reservado para**: Chat real-time, messaging, user presence
 
@@ -1108,70 +1116,62 @@ interface TDDWorkflow {
 }
 ```
 
-### 🐳 **Docker-Compose para CI/CD**
+### 🐳 **Docker para Desarrollo**
 
 ```yaml
-# docker-compose.ci.yml
+# docker-compose.dev.yml (Simplificado)
 version: "3.8"
 services:
-  # Testing Environment
-  test-runner:
+  # Backend API
+  api:
     build:
       context: .
-      dockerfile: Dockerfile.test
-    volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=test
-      - DATABASE_URL=mongodb://test-mongo:27017/alkitu_test
-    depends_on:
-      - test-mongo
-      - test-redis
-    command: npm run test:ci
-
-  test-mongo:
-    image: mongo:7
-    environment:
-      - MONGO_INITDB_DATABASE=alkitu_test
+      dockerfile: packages/api/Dockerfile.dev
     ports:
-      - "27018:27017"
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=mongodb://mongodb:27017/alkitu
+    volumes:
+      - ./packages/api:/app/packages/api
+      - ./packages/shared:/app/packages/shared
+    depends_on:
+      - mongodb
+      - redis
 
-  test-redis:
+  # Frontend Web
+  web:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:3001
+    volumes:
+      - ./packages/web:/app/packages/web
+    depends_on:
+      - api
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  # Redis Cache
+  redis:
     image: redis:7-alpine
     ports:
-      - "6380:6379"
-
-  # Build Environment
-  builder:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: builder
+      - "6379:6379"
     volumes:
-      - build-cache:/app/dist
-      - .:/app
-    command: npm run build:all
-
-  # Quality Gates
-  quality-checker:
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-    volumes:
-      - .:/app
-    depends_on:
-      - test-runner
-    command: |
-      sh -c "
-        npm run lint &&
-        npm run type-check &&
-        npm run test:coverage &&
-        npm run test:mutation
-      "
+      - redis_data:/data/db
 
 volumes:
-  build-cache:
+  mongodb_data:
+  redis_data:
 ```
 
 ### 🚀 **GitHub Actions para Agentes**
@@ -1259,29 +1259,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: 🐳 Start Docker Compose Test Environment
+      - name: 🐳 Start Development Environment
         run: |
-          docker-compose -f docker-compose.ci.yml up -d
+          npm run dev:docker
           sleep 30  # Wait for services to be ready
 
-      - name: Run E2E tests in Docker
+      - name: Run tests
         run: |
-          docker-compose -f docker-compose.ci.yml exec -T test-runner npm run test:e2e
+          npm run test:all
 
-      - name: Validate Docker build
+      - name: Build all packages
         run: |
-          docker-compose -f docker-compose.ci.yml exec -T builder npm run build:all
+          npm run build
 
       - name: Quality gates validation
         run: |
-          docker-compose -f docker-compose.ci.yml exec -T quality-checker bash -c "
-            npm run test:coverage &&
-            npm run lint &&
-            npm run type-check
-          "
+          npm run lint
+          npm run type-check
 
-      - name: Cleanup Docker
-        run: docker-compose -f docker-compose.ci.yml down
+      - name: Cleanup
+        run: npm run docker:stop
 
   # Phase 4: Deploy (if all tests pass)
   deploy:
@@ -1359,29 +1356,33 @@ interface QualityGates {
     "test:refactor": "npm run lint && npm run type-check && npm run test:all",
 
     // Testing Commands
-    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
-    "test:unit": "jest --config jest.config.js",
-    "test:integration": "jest --config jest.integration.config.js",
-    "test:e2e": "playwright test",
-    "test:mutation": "stryker run",
-    "test:coverage": "jest --coverage --coverageReporters=text-lcov",
-    "test:ci": "npm run test:all && npm run test:mutation",
+    "test": "npm-run-all test:*",
+    "test:web": "cd packages/web && npm run test",
+    "test:api": "cd packages/api && npm run test",
+    "test:shared": "cd packages/shared && npm run test",
 
     // Building Commands
     "build:all": "npm run build:shared && npm run build:api && npm run build:web",
     "build:shared": "npm run build --workspace=@alkitu/shared",
     "build:api": "npm run build --workspace=@alkitu/api",
     "build:web": "npm run build --workspace=@alkitu/web",
-    "build:docker": "docker-compose -f docker-compose.ci.yml build",
+    "build:docker": "npm run dev:docker",
 
     // Quality Commands
-    "quality:check": "npm run lint && npm run type-check && npm run test:coverage",
-    "quality:gates": "npm run quality:check && npm run test:mutation",
+    "lint": "npm-run-all lint:*",
+    "type-check": "npm-run-all type-check:*",
+    "clean": "npm-run-all clean:*",
 
-    // Agent Commands
-    "agent:test": "npm run test:tdd",
-    "agent:build": "npm run build:all && npm run test:ci",
-    "agent:deploy": "npm run quality:gates && npm run deploy"
+    // Docker Commands
+    "docker:stop": "./scripts/stop.sh",
+    "docker:logs": "./scripts/logs.sh",
+    "docker:restart": "./scripts/restart.sh",
+
+    // Database Commands
+    "db:shell": "./scripts/db-shell.sh",
+    "db:migrate": "cd packages/api && npm run prisma:migrate",
+    "db:push": "cd packages/api && npm run prisma:push",
+    "db:studio": "cd packages/api && npm run prisma:studio"
   }
 }
 ```
