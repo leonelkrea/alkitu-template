@@ -89,3 +89,29 @@ temp/
 *.njsproj
 *.sln
 *.sw?
+
+# Build artifacts
+*.tsbuildinfo
+*.map
+
+# Backup files  
+*.backup
+*.bak
+
+# Test cookies/tokens
+cookies*.txt
+*.cookies
+
+# Cache directories
+.vite/
+.claude/
+.turbo/
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs específicos
+api.log
+*.log
