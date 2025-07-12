@@ -12,15 +12,13 @@ describe('Authentication Integration Tests', () => {
   beforeEach(() => {
     mockFetch = vi.fn();
     global.fetch = mockFetch;
-    
-    // Reset environment variables
-    process.env.NEXT_PUBLIC_API_URL = 'http://localhost:3001';
-    process.env.NODE_ENV = 'development';
+    vi.unstubAllEnvs(); // Ensure a clean slate for each test
   });
 
   afterEach(() => {
     global.fetch = originalFetch;
     vi.clearAllMocks();
+    vi.unstubAllEnvs(); // Clean up stubs after each test
   });
 
   describe('Login to Logout Flow', () => {

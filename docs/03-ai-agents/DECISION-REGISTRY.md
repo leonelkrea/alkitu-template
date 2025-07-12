@@ -2,34 +2,36 @@
 
 ## 📋 Decisiones Activas
 
-| ID     | Fecha      | Agente       | Categoría | Status   | Impacto | Archivo                                                                      |
-| ------ | ---------- | ------------ | --------- | -------- | ------- | ---------------------------------------------------------------------------- |
-| DR-001 | 2024-01-15 | Architecture | ADR       | APPROVED | HIGH    | [DR-001-mongodb-prisma.md](decisions/architecture/DR-001-mongodb-prisma.md)  |
-| DR-002 | 2024-01-16 | Backend      | TDR       | APPROVED | MEDIUM  | [DR-002-nestjs-structure.md](decisions/technical/DR-002-nestjs-structure.md) |
-| DR-003 | 2024-01-17 | Testing      | TDR       | PROPOSED | LOW     | [DR-003-testing-strategy.md](decisions/technical/DR-003-testing-strategy.md) |
+| ID     | Fecha      | Agente       | Categoría | Status   | Impacto | Archivo                                                                                                       |
+| ------ | ---------- | ------------ | --------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| DR-001 | 2024-01-15 | Architecture | ADR       | APPROVED | HIGH    | [DR-001-mongodb-prisma.md](decisions/architecture/DR-001-mongodb-prisma.md)                                   |
+| DR-002 | 2024-01-16 | Backend      | TDR       | APPROVED | MEDIUM  | [DR-002-nestjs-structure.md](decisions/technical/DR-002-nestjs-structure.md)                                  |
+| DR-003 | 2024-01-17 | Testing      | TDR       | PROPOSED | LOW     | [DR-003-testing-strategy.md](decisions/technical/DR-003-testing-strategy.md)                                  |
+| DR-004 | 2024-01-15 | Architecture | ADR       | APPROVED | HIGH    | [DR-004-solid-principles-implementation.md](decisions/architecture/DR-004-solid-principles-implementation.md) |
+| DR-005 | 2024-01-15 | Testing      | TDR       | APPROVED | HIGH    | [DR-005-mutation-testing-strategy.md](decisions/technical/DR-005-mutation-testing-strategy.md)                |
 
 ## 📊 Estadísticas
 
 ### Por Categoría
 
-- **Architecture (ADR)**: 5 decisiones
-- **Technical (TDR)**: 8 decisiones
-- **Security (SDR)**: 3 decisiones
-- **Business Logic (BDR)**: 2 decisiones
+- **Architecture (ADR)**: 2 decisiones
+- **Technical (TDR)**: 3 decisiones
+- **Security (SDR)**: 0 decisiones
+- **Business Logic (BDR)**: 0 decisiones
 
 ### Por Estado
 
-- **APPROVED**: 15 decisiones
-- **PROPOSED**: 2 decisiones
-- **UNDER_REVIEW**: 1 decisión
+- **APPROVED**: 4 decisiones
+- **PROPOSED**: 1 decisión
+- **UNDER_REVIEW**: 0 decisiones
 - **REJECTED**: 0 decisiones
 - **SUPERSEDED**: 0 decisiones
 
 ### Por Impacto
 
-- **HIGH**: 6 decisiones
-- **MEDIUM**: 8 decisiones
-- **LOW**: 4 decisiones
+- **HIGH**: 3 decisiones
+- **MEDIUM**: 1 decisión
+- **LOW**: 1 decisión
 
 ## 🔄 Decisiones Pendientes de Revisión
 
@@ -47,10 +49,10 @@
 
 ### Agentes Más Activos
 
-1. **Backend Agent**: 8 decisiones
-2. **Architecture Agent**: 5 decisiones
-3. **Testing Agent**: 3 decisiones
-4. **Frontend Agent**: 2 decisiones
+1. **Architecture Agent**: 2 decisiones
+2. **Backend Agent**: 1 decisión
+3. **Testing Agent**: 2 decisiones
+4. **Frontend Agent**: 0 decisiones
 
 ## 📅 Próximas Revisiones
 

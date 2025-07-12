@@ -71,8 +71,14 @@ describe('usePushNotifications', () => {
     (navigator.serviceWorker.getRegistration as any).mockClear();
 
     // Reset notification permission using the same reference
-    window.Notification._permission = 'default';
-    global.Notification._permission = 'default';
+    Object.defineProperty(window.Notification, 'permission', {
+      writable: true,
+      value: 'default',
+    });
+    Object.defineProperty(global.Notification, 'permission', {
+      writable: true,
+      value: 'default',
+    });
 
     // Reset and set up the requestPermission mock
     window.Notification.requestPermission = vi.fn().mockResolvedValue('granted');
@@ -125,8 +131,14 @@ describe('usePushNotifications', () => {
     });
 
     it('should set initial permission status', () => {
-      window.Notification._permission = 'granted';
-      global.Notification._permission = 'granted';
+      Object.defineProperty(window.Notification, 'permission', {
+        writable: true,
+        value: 'granted',
+      });
+      Object.defineProperty(global.Notification, 'permission', {
+        writable: true,
+        value: 'granted',
+      });
 
       const { result } = renderHook(() =>
         usePushNotifications({
@@ -142,8 +154,14 @@ describe('usePushNotifications', () => {
   describe('permission handling', () => {
     it('should request permission successfully', async () => {
       (window.Notification.requestPermission as any).mockImplementation(() => {
-        window.Notification.permission = 'granted';
-        global.Notification.permission = 'granted';
+        Object.defineProperty(window.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
+        Object.defineProperty(global.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
         return Promise.resolve('granted');
       });
 
@@ -199,8 +217,14 @@ describe('usePushNotifications', () => {
     it('should subscribe to push notifications successfully', async () => {
       // Mock permission as granted
       (window.Notification.requestPermission as any).mockImplementation(() => {
-        window.Notification.permission = 'granted';
-        global.Notification.permission = 'granted';
+        Object.defineProperty(window.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
+        Object.defineProperty(global.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
         return Promise.resolve('granted');
       });
       
@@ -257,8 +281,14 @@ describe('usePushNotifications', () => {
       
       // Mock permission as granted for subscription
       (window.Notification.requestPermission as any).mockImplementation(() => {
-        window.Notification.permission = 'granted';
-        global.Notification.permission = 'granted';
+        Object.defineProperty(window.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
+        Object.defineProperty(global.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
         return Promise.resolve('granted');
       });
 
@@ -334,8 +364,14 @@ describe('usePushNotifications', () => {
     it('should send test notification when subscribed', async () => {
       // Mock permission as granted for subscription
       (window.Notification.requestPermission as any).mockImplementation(() => {
-        window.Notification.permission = 'granted';
-        global.Notification.permission = 'granted';
+        Object.defineProperty(window.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
+        Object.defineProperty(global.Notification, 'permission', {
+          writable: true,
+          value: 'granted',
+        });
         return Promise.resolve('granted');
       });
       

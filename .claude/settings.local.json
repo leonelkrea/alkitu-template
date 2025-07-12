@@ -25,7 +25,8 @@
       "Bash(npm run lint:*)",
       "Bash(npm)",
       "Bash(ls:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(touch:*)"
     ],
     "deny": []
   }

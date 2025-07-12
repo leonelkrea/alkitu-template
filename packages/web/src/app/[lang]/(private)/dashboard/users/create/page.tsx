@@ -36,8 +36,19 @@ interface CreateUserForm {
   terms: boolean;
 }
 
+interface CreateUserFormErrors {
+  name?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  contactNumber?: string;
+  role?: string;
+  terms?: string;
+}
+
 const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[\S]+@[\S]+\.[\S]+$/;
   return emailRegex.test(email);
 };
 
@@ -48,7 +59,7 @@ const validatePassword = (password: string): boolean => {
     /[A-Z]/.test(password) &&
     /[a-z]/.test(password) &&
     /\d/.test(password) &&
-    /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    /[^a-zA-Z0-9\s]/.test(password)
   );
 };
 
@@ -67,7 +78,7 @@ const CreateUserPage = () => {
     terms: false,
   });
 
-  const [errors, setErrors] = useState<Partial<CreateUserForm>>({});
+  const [errors, setErrors] = useState<CreateUserFormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
 
   const registerMutation = trpcReact.user.register.useMutation({
@@ -81,7 +92,7 @@ const CreateUserPage = () => {
   });
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<CreateUserForm> = {};
+    const newErrors: CreateUserFormErrors = {};
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
@@ -112,7 +123,7 @@ const CreateUserPage = () => {
       newErrors.terms = 'You must accept the terms and conditions';
     }
 
-    setErrors(newErrors);
+    setErrors(newErrors as CreateUserFormErrors);
     return Object.keys(newErrors).length === 0;
   };
 

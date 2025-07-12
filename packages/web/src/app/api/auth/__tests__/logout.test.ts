@@ -12,7 +12,11 @@ describe('/api/auth/logout', () => {
     
     // Reset environment variables
     process.env.NEXT_PUBLIC_API_URL = 'http://localhost:3001';
-    process.env.NODE_ENV = 'development';
+    vi.unstubAllEnvs(); // Ensure a clean slate for each test
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs(); // Clean up stubs after each test
   });
 
   it('should logout successfully when auth token is present', async () => {
@@ -151,7 +155,7 @@ describe('/api/auth/logout', () => {
   });
 
   it('should use production cookie settings when NODE_ENV is production', async () => {
-    process.env.NODE_ENV = 'production';
+    vi.stubEnv('NODE_ENV', 'production');
 
     const mockRequest = {
       cookies: {

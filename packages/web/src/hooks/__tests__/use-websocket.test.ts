@@ -163,7 +163,7 @@ describe('useWebSocket', () => {
 
     // Simulate receiving a new notification
     const newNotificationHandler = mockSocket.on.mock.calls.find(
-      (call) => call[0] === 'notification:new',
+      (call: [string, Function]) => call[0] === 'notification:new',
     )?.[1];
 
     act(() => {
@@ -186,7 +186,7 @@ describe('useWebSocket', () => {
 
     // Simulate count update event
     const countUpdateHandler = mockSocket.on.mock.calls.find(
-      (call) => call[0] === 'notification:count_updated',
+      (call: [string, Function]) => call[0] === 'notification:count_updated',
     )?.[1];
 
     act(() => {
@@ -209,7 +209,7 @@ describe('useWebSocket', () => {
 
     // Simulate connection event
     const connectHandler = mockSocket.on.mock.calls.find(
-      (call) => call[0] === 'connect',
+      (call: [string, Function]) => call[0] === 'connect',
     )?.[1];
 
     act(() => {
@@ -232,7 +232,7 @@ describe('useWebSocket', () => {
 
     // Simulate disconnect event
     const disconnectHandler = mockSocket.on.mock.calls.find(
-      (call) => call[0] === 'disconnect',
+      (call: [string, Function]) => call[0] === 'disconnect',
     )?.[1];
 
     act(() => {
@@ -252,7 +252,7 @@ describe('useWebSocket', () => {
 
     // Simulate connection error
     const errorHandler = mockSocket.on.mock.calls.find(
-      (call) => call[0] === 'connect_error',
+      (call: [string, Function]) => call[0] === 'connect_error',
     )?.[1];
 
     const error = new Error('Connection failed');
