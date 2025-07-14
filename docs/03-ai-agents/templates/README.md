@@ -46,6 +46,36 @@ Esta carpeta contiene las plantillas estandarizadas para crear PRDs (Product Req
 - **Destino**: `docs/04-product/tickets/[TICKET-ID]/changes.md`
 - **Tracking**: Cambios de código, validaciones, métricas
 
+### **Para Workflow y Calidad:**
+
+#### **`HEALTH-CHECK-TEMPLATE.md`** ✨ **NUEVO**
+
+- **Uso**: Validación de salud del sistema pre/post trabajo
+- **Destino**: `docs/04-product/tickets/[TICKET-ID]/health-check.md`
+- **Incluye**: Validación SOLID, métricas de calidad, estado del sistema
+- **Propósito**: Asegurar estabilidad antes y después de cambios
+
+#### **`PEER-REVIEW-TEMPLATE.md`** ✨ **NUEVO**
+
+- **Uso**: Revisión cruzada entre agentes
+- **Destino**: `docs/04-product/tickets/[TICKET-ID]/peer-review.md`
+- **Incluye**: Revisión SOLID, calidad de código, recomendaciones
+- **Propósito**: Validación de calidad y mejores prácticas
+
+#### **`IMPACT-ANALYSIS-TEMPLATE.md`** ✨ **NUEVO**
+
+- **Uso**: Análisis de impacto de cambios
+- **Destino**: `docs/04-product/tickets/[TICKET-ID]/impact-analysis.md`
+- **Incluye**: Evaluación de riesgos, dependencias, timeline
+- **Propósito**: Prevenir consecuencias no deseadas
+
+#### **`DECISION-RECORD-TEMPLATE.md`** ✨ **NUEVO**
+
+- **Uso**: Documentar decisiones técnicas y arquitectónicas
+- **Destino**: `docs/03-ai-agents/decisions/[category]/DR-XXX.md`
+- **Incluye**: Contexto, opciones, rationale, consecuencias
+- **Propósito**: Rastrar decisiones importantes y su razonamiento
+
 ## 🔧 **Cómo Usar las Plantillas**
 
 ### **Crear PRD**

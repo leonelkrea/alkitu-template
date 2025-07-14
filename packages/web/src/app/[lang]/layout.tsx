@@ -2,8 +2,9 @@ import './globals.css';
 import { Providers } from '../../components/providers/Providers';
 import { cn, inter } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
+import { ChatWidget } from '@/components/public/ChatWidget/ChatWidget';
 // import { Analytics } from '@vercel/analytics/react';
-// import { SpeedInsights } from '@vercel/speed-insights/next';
+// import { SpeedInsights }m from '@vercel/speed-insights/next';
 import esTranslations from '../../locales/es/common.json';
 import enTranslations from '../../locales/en/common.json';
 
@@ -32,6 +33,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
             {children}
             <Toaster />
           </main>
+          <ChatWidget />
           {/* <Analytics /> */}
           {/* <SpeedInsights /> */}
         </Providers>

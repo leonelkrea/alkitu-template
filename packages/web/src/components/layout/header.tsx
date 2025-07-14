@@ -2,6 +2,7 @@ import React from "react";
 import TailwindGrid from "../grid/TailwindGrid";
 import BreadcrumbNavigation from "./breadcrumb-navigation";
 import { Separator } from "../ui/separator";
+import { NotificationCenter } from "../notifications/NotificationCenter";
 
 interface HeaderProps {
   type: "auth" | "admin" | "user";
@@ -27,6 +28,7 @@ function Header({ type, homeLabel, dropdownSliceEnd, separator }: HeaderProps) {
             homeLabel={homeLabel}
             dropdownSliceEnd={dropdownSliceEnd}
           />
+          <NotificationCenter />
         </div>
       </header>
     </TailwindGrid>

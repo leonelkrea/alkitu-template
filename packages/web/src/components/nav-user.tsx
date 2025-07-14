@@ -78,9 +78,7 @@ export function NavUser({ user }: { user: User }) {
     }
   }, [router]);
 
-  const handleSetThemeLight = useCallback(() => setTheme('light'), [setTheme]);
-  const handleSetThemeDark = useCallback(() => setTheme('dark'), [setTheme]);
-  const handleSetThemeSystem = useCallback(() => setTheme('system'), [setTheme]);
+  
 
   return (
     <SidebarMenu>
@@ -152,15 +150,15 @@ export function NavUser({ user }: { user: User }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={handleSetThemeLight}>
+              <DropdownMenuItem onClick={() => setTheme("light")}>
                 <Sun className="mr-2 h-4 w-4" />
                 <span>Light</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSetThemeDark}>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
                 <Moon className="mr-2 h-4 w-4" />
                 <span>Dark</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSetThemeSystem}>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
                 <Laptop className="mr-2 h-4 w-4" />
                 <span>System</span>
               </DropdownMenuItem>
