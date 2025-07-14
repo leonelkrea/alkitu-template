@@ -26,7 +26,11 @@
       "Bash(npm)",
       "Bash(ls:*)",
       "Bash(rm:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(npm run prisma:push:*)",
+      "Bash(npm run start:*)",
+      "Bash(open http://localhost:3000)",
+      "Bash(docker:*)"
     ],
     "deny": []
   }
