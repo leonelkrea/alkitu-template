@@ -15,9 +15,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from '@/components/adapters/Card';
+import { Badge } from '@/components/adapters/Badge';
+import { Button } from '@/components/adapters/Button';
+import { Typography } from '@/components/adapters/Typography';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import {
@@ -117,6 +118,7 @@ const NotificationCard = React.memo(function NotificationCard({
 
   return (
     <Card
+      migrated={true}
       className={`transition-all duration-200 ${!notification.read ? 'border-l-4 border-l-blue-500 bg-blue-50/30 dark:bg-blue-950/20' : 'hover:shadow-md'}`}
     >
       <CardHeader className="pb-3">
@@ -134,6 +136,7 @@ const NotificationCard = React.memo(function NotificationCard({
             <Badge
               className={getTypeColor(notification.type)}
               variant="secondary"
+              migrated={true}
             >
               {notification.type}
             </Badge>
@@ -148,6 +151,7 @@ const NotificationCard = React.memo(function NotificationCard({
                 size="sm"
                 onClick={() => onMarkAsRead(notification.id)}
                 className="h-8 px-2"
+                migrated={true}
               >
                 <Check className="w-4 h-4" />
               </Button>
@@ -212,8 +216,8 @@ const NotificationHeader = React.memo(function NotificationHeader({
   return (
     <div className="flex items-center justify-between mb-6">
       <div>
-        <h1 className="text-3xl font-bold">{t('title')}</h1>
-        <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
+        <Typography variant="h1" className="text-3xl font-bold" migrated={true}>{t('title')}</Typography>
+        <Typography variant="body" className="text-muted-foreground mt-1" migrated={true}>{t('subtitle')}</Typography>
         {totalCount > 0 && (
           <p className="text-sm text-muted-foreground mt-1">
             {isFilteredFetch ? t('filteredResults') : t('allNotifications')} •

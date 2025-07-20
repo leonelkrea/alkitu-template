@@ -1,7 +1,8 @@
 'use client';
 
 import { useTranslations } from '@/context/TranslationContext';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/adapters/Button';
+import { Typography } from '@/components/adapters/Typography';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { NotificationAnalytics } from '@/components/notifications/notification-analytics';
@@ -16,7 +17,7 @@ export default function NotificationAnalyticsPage() {
     <div className="p-6 max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="outline" size="sm" asChild>
+        <Button variant="outline" size="sm" asChild migrated={true}>
           <Link
             href="/dashboard/notifications"
             className="flex items-center gap-1"
@@ -26,10 +27,10 @@ export default function NotificationAnalyticsPage() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">{t('analytics.title')}</h1>
-          <p className="text-muted-foreground mt-1">
+          <Typography variant="h1" className="text-3xl font-bold" migrated={true}>{t('analytics.title')}</Typography>
+          <Typography variant="body" className="text-muted-foreground mt-1" migrated={true}>
             {t('analytics.description')}
-          </p>
+          </Typography>
         </div>
       </div>
 

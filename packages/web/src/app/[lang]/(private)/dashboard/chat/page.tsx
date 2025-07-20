@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { trpc } from '@/lib/trpc';
 import { ConversationList } from '@/components/chat/ConversationList';
 import { ConversationFilters } from '@/components/chat/ConversationFilters';
+import { Typography } from '@/components/adapters/Typography';
 import { useState } from 'react';
 
 export default function ChatDashboardPage() {
@@ -19,7 +20,9 @@ export default function ChatDashboardPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Chat Conversations</h1>
+      <Typography variant="h1" className="text-3xl font-bold mb-6" migrated={true}>
+        Chat Conversations
+      </Typography>
       <ConversationFilters onApplyFilters={setFilters} />
       <ConversationList conversations={conversations} />
     </div>

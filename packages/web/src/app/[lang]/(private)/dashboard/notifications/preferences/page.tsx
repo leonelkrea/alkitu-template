@@ -11,8 +11,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+} from '@/components/adapters/Card';
+import { Button } from '@/components/adapters/Button';
+import { Typography } from '@/components/adapters/Typography';
 import {
   Form,
   FormControl,
@@ -30,9 +31,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/adapters/Input';
 import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/adapters/Badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from '@/context/TranslationContext';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';

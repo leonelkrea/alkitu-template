@@ -1,14 +1,15 @@
 'use client';
 
 import { useTranslations } from '@/context/TranslationContext';
+import { Typography } from '@/components/adapters/Typography';
 
 export default function SettingsPage() {
   const t = useTranslations('dashboard.settings');
 
   return (
     <div>
-      <h1>{t('title')}</h1>
-      <p>{t('description')}</p>
+      <Typography variant="h1" migrated={true}>{t('title')}</Typography>
+      <Typography variant="body" migrated={true}>{t('description')}</Typography>
     </div>
   );
 }

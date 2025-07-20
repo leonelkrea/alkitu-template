@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/adapters/Button';
+import { Input } from '@/components/adapters/Input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from '@/context/TranslationContext';
@@ -98,6 +98,7 @@ export const RegisterForm = () => {
             placeholder={t('auth.register.name')}
             required
             disabled={isLoading}
+            migrated={true}
           />
         </div>
 
@@ -111,6 +112,7 @@ export const RegisterForm = () => {
             placeholder={t('auth.register.lastName')}
             required
             disabled={isLoading}
+            migrated={true}
           />
         </div>
       </div>
@@ -125,6 +127,7 @@ export const RegisterForm = () => {
           placeholder={t('auth.register.email')}
           required
           disabled={isLoading}
+          migrated={true}
         />
       </div>
 
@@ -137,6 +140,7 @@ export const RegisterForm = () => {
           onChange={(e) => handleChange('contactNumber', e.target.value)}
           placeholder={t('auth.register.phone')}
           disabled={isLoading}
+          migrated={true}
         />
       </div>
 
@@ -150,6 +154,7 @@ export const RegisterForm = () => {
           placeholder={t('auth.register.password')}
           required
           disabled={isLoading}
+          migrated={true}
         />
       </div>
 
@@ -165,6 +170,7 @@ export const RegisterForm = () => {
           placeholder={t('auth.register.confirmPassword')}
           required
           disabled={isLoading}
+          migrated={true}
         />
       </div>
 
@@ -185,7 +191,7 @@ export const RegisterForm = () => {
       <FormError message={error} />
       <FormSuccess message={success} />
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full" disabled={isLoading} migrated={true}>
         {isLoading ? t('Common.general.loading') : t('auth.register.submit')}
       </Button>
     </form>

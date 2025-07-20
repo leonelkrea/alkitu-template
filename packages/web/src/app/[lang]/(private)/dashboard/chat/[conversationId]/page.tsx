@@ -10,6 +10,7 @@ import { io } from 'socket.io-client';
 import { AssignmentSelect } from '@/components/chat/AssignmentSelect';
 import { StatusSelect } from '@/components/chat/StatusSelect';
 import { InternalNotes } from '@/components/chat/InternalNotes';
+import { Typography } from '@/components/adapters/Typography';
 
 export default function ConversationDetailPage() {
   const params = useParams();
@@ -93,10 +94,10 @@ export default function ConversationDetailPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">
+      <Typography variant="h1" className="text-3xl font-bold mb-6" migrated={true}>
         Conversation with{' '}
         {conversation.contactInfo?.name || conversation.contactInfo?.email}
-      </h1>
+      </Typography>
       <div className="flex space-x-4 mb-4">
         <AssignmentSelect
           currentAssignment={conversation.assignedToId}

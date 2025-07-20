@@ -1,0 +1,1 @@
+// Este archivo se elimina ya que las adaptaciones móviles se muestran directamente en ComponentDemo

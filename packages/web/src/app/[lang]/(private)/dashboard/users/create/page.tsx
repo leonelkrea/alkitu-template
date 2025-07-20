@@ -8,10 +8,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+} from '@/components/adapters/Card';
+import { Input } from '@/components/adapters/Input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/adapters/Button';
+import { Typography } from '@/components/adapters/Typography';
 import {
   Select,
   SelectContent,
@@ -164,22 +165,22 @@ const CreateUserPage = () => {
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href={`/${lang}/dashboard/users`}>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" migrated={true}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Users
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+          <Typography variant="h1" className="text-2xl font-bold flex items-center gap-2" migrated={true}>
             <User className="h-6 w-6" />
             Create New User
-          </h1>
-          <p className="text-gray-600">Add a new user to the system</p>
+          </Typography>
+          <Typography variant="body" className="text-gray-600" migrated={true}>Add a new user to the system</Typography>
         </div>
       </div>
 
       {/* Form */}
-      <Card>
+      <Card migrated={true}>
         <CardHeader>
           <CardTitle>User Information</CardTitle>
           <CardDescription>
@@ -198,6 +199,7 @@ const CreateUserPage = () => {
                   onChange={(e) => handleInputChange('name', e.target.value)}
                   className={errors.name ? 'border-red-500' : ''}
                   placeholder="Enter first name"
+                  migrated={true}
                 />
                 {errors.name && (
                   <p className="text-sm text-red-500">{errors.name}</p>
@@ -214,6 +216,7 @@ const CreateUserPage = () => {
                   }
                   className={errors.lastName ? 'border-red-500' : ''}
                   placeholder="Enter last name"
+                  migrated={true}
                 />
                 {errors.lastName && (
                   <p className="text-sm text-red-500">{errors.lastName}</p>
@@ -229,6 +232,7 @@ const CreateUserPage = () => {
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   className={errors.email ? 'border-red-500' : ''}
                   placeholder="user@example.com"
+                  migrated={true}
                 />
                 {errors.email && (
                   <p className="text-sm text-red-500">{errors.email}</p>
@@ -244,6 +248,7 @@ const CreateUserPage = () => {
                     handleInputChange('contactNumber', e.target.value)
                   }
                   placeholder="+1 (555) 123-4567"
+                  migrated={true}
                 />
               </div>
 
@@ -258,6 +263,7 @@ const CreateUserPage = () => {
                   }
                   className={errors.password ? 'border-red-500' : ''}
                   placeholder="Enter password"
+                  migrated={true}
                 />
                 {errors.password && (
                   <p className="text-sm text-red-500">{errors.password}</p>
@@ -279,6 +285,7 @@ const CreateUserPage = () => {
                   }
                   className={errors.confirmPassword ? 'border-red-500' : ''}
                   placeholder="Confirm password"
+                  migrated={true}
                 />
                 {errors.confirmPassword && (
                   <p className="text-sm text-red-500">
@@ -329,12 +336,13 @@ const CreateUserPage = () => {
                 type="submit"
                 disabled={registerMutation.isPending}
                 className="min-w-[120px]"
+                migrated={true}
               >
                 <Save className="h-4 w-4 mr-2" />
                 {registerMutation.isPending ? 'Creating...' : 'Create User'}
               </Button>
               <Link href={`/${lang}/dashboard/users`}>
-                <Button variant="outline" type="button">
+                <Button variant="outline" type="button" migrated={true}>
                   Cancel
                 </Button>
               </Link>

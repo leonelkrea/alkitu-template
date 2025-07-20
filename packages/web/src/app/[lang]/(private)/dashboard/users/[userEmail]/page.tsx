@@ -7,11 +7,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+} from '@/components/adapters/Card';
+import { Input } from '@/components/adapters/Input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/adapters/Button';
+import { Badge } from '@/components/adapters/Badge';
+import { Typography } from '@/components/adapters/Typography';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
@@ -365,24 +366,25 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href={`/${lang}/dashboard/users`}>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" migrated={true}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Users
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Typography variant="h1" className="text-2xl font-bold flex items-center gap-2" migrated={true}>
               <User className="h-6 w-6" />
               {user.name || user.email}
-            </h1>
-            <p className="text-gray-600">{user.email}</p>
+            </Typography>
+            <Typography variant="body" className="text-gray-600" migrated={true}>{user.email}</Typography>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant={getRoleBadgeVariant(user.role)}>{user.role}</Badge>
+          <Badge variant={getRoleBadgeVariant(user.role)} migrated={true}>{user.role}</Badge>
           <Button
             variant={editMode ? 'default' : 'outline'}
             onClick={() => setEditMode(!editMode)}
+            migrated={true}
           >
             <Edit className="h-4 w-4 mr-2" />
             {editMode ? 'Cancel Edit' : 'Edit Profile'}
@@ -401,7 +403,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="space-y-6">
-          <Card>
+          <Card migrated={true}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -425,7 +427,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                     update the user&apos;s profile.
                   </p>
                   <div className="flex gap-2 mt-3">
-                    <Button onClick={handleSaveProfile} size="sm">
+                    <Button onClick={handleSaveProfile} size="sm" migrated={true}>
                       <Save className="h-4 w-4 mr-2" />
                       Save Changes
                     </Button>
@@ -433,6 +435,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       variant="outline"
                       onClick={() => setEditMode(false)}
                       size="sm"
+                      migrated={true}
                     >
                       Cancel
                     </Button>
@@ -449,6 +452,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                     value={formData.email}
                     disabled
                     className="bg-gray-50"
+                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -460,6 +464,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       setFormData({ ...formData, name: e.target.value })
                     }
                     disabled={!editMode}
+                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -471,6 +476,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       setFormData({ ...formData, lastName: e.target.value })
                     }
                     disabled={!editMode}
+                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -485,6 +491,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       })
                     }
                     disabled={!editMode}
+                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -513,7 +520,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                 <div className="space-y-2">
                   <Label>Account Status</Label>
                   <div className="flex items-center gap-2">
-                    <Badge variant={user.terms ? 'default' : 'destructive'}>
+                    <Badge variant={user.terms ? 'default' : 'destructive'} migrated={true}>
                       {user.terms ? 'Active' : 'Inactive'}
                     </Badge>
                     <span className="text-sm text-gray-600">
@@ -565,7 +572,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Security Tab */}
         <TabsContent value="security" className="space-y-6">
-          <Card>
+          <Card migrated={true}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
@@ -745,7 +752,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Products Tab */}
         <TabsContent value="products" className="space-y-6">
-          <Card>
+          <Card migrated={true}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Package className="h-5 w-5" />
@@ -770,7 +777,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Groups Tab */}
         <TabsContent value="groups" className="space-y-6">
-          <Card>
+          <Card migrated={true}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
@@ -795,7 +802,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Actions Tab */}
         <TabsContent value="actions" className="space-y-6">
-          <Card>
+          <Card migrated={true}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5" />

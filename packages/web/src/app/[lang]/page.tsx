@@ -1,15 +1,15 @@
 'use client';
 
 import { LandingNavbar } from '../../components/layout/landing-navbar';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/adapters/Button';
+import { Badge } from '@/components/adapters/Badge';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/adapters/Card';
 import {
   CheckCircle,
   Star,
@@ -38,7 +38,7 @@ export default function Home() {
         className="py-16 sm:py-24 lg:py-32"
       >
         <div className="col-span-4 lg:col-span-6 space-y-6">
-          <Badge className="w-fit">{t('homepage.hero.badge')}</Badge>
+          <Badge className="w-fit" migrated={true}>{t('homepage.hero.badge')}</Badge>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             {t('homepage.hero.title')}
             <span className="text-primary">
@@ -49,7 +49,7 @@ export default function Home() {
             {t('homepage.hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="text-lg px-8 py-6" asChild>
+            <Button size="lg" className="text-lg px-8 py-6" asChild migrated={true}>
               <Link href="#pricing">{t('homepage.hero.getTemplate')}</Link>
             </Button>
             <Button
@@ -57,6 +57,7 @@ export default function Home() {
               variant="outline"
               className="text-lg px-8 py-6"
               asChild
+              migrated={true}
             >
               <Link href="#demo">{t('homepage.hero.viewDemo')}</Link>
             </Button>
@@ -101,7 +102,7 @@ export default function Home() {
             </p>
           </div>
 
-          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors">
+          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors" migrated={false}>
             <CardHeader>
               <Shield className="h-10 w-10 text-primary mb-2" />
               <CardTitle>{t('homepage.features.auth.title')}</CardTitle>
@@ -111,7 +112,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors">
+          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors" migrated={false}>
             <CardHeader>
               <Users className="h-10 w-10 text-primary mb-2" />
               <CardTitle>{t('homepage.features.admin.title')}</CardTitle>
@@ -121,7 +122,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors">
+          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors" migrated={false}>
             <CardHeader>
               <Zap className="h-10 w-10 text-primary mb-2" />
               <CardTitle>{t('homepage.features.database.title')}</CardTitle>
@@ -131,7 +132,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors">
+          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors" migrated={false}>
             <CardHeader>
               <Palette className="h-10 w-10 text-primary mb-2" />
               <CardTitle>{t('homepage.features.ui.title')}</CardTitle>
@@ -141,7 +142,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors">
+          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors" migrated={false}>
             <CardHeader>
               <Globe className="h-10 w-10 text-primary mb-2" />
               <CardTitle>{t('homepage.features.i18n.title')}</CardTitle>
@@ -151,7 +152,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors">
+          <Card className="col-span-4 md:col-span-4 lg:col-span-4 border-2 hover:border-primary/50 transition-colors" migrated={false}>
             <CardHeader>
               <Star className="h-10 w-10 text-primary mb-2" />
               <CardTitle>{t('homepage.features.production.title')}</CardTitle>
@@ -175,9 +176,9 @@ export default function Home() {
             </p>
           </div>
 
-          <Card className="col-span-4 md:col-span-8 lg:col-span-12 relative border-2 border-primary">
+          <Card className="col-span-4 md:col-span-8 lg:col-span-12 relative border-2 border-primary" migrated={false}>
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <Badge className="bg-primary text-primary-foreground px-4 py-1">
+              <Badge className="bg-primary text-primary-foreground px-4 py-1" migrated={true}>
                 {t('homepage.pricing.badge')}
               </Badge>
             </div>
@@ -250,7 +251,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="pt-6">
-                <Button size="lg" className="w-full text-lg py-6" asChild>
+                <Button size="lg" className="w-full text-lg py-6" asChild migrated={true}>
                   <Link href="#purchase">{t('homepage.pricing.buyNow')}</Link>
                 </Button>
                 <p className="text-center text-sm text-muted-foreground mt-3">

@@ -21,9 +21,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
+} from '../adapters/Card';
+import { Badge } from '../adapters/Badge';
+import { Button } from '../adapters/Button';
 import { Separator } from '../ui/separator';
 import { Progress } from '../ui/progress';
 import { useTranslations } from '@/context/TranslationContext';
@@ -183,7 +183,7 @@ function DashboardWelcome() {
 
   return (
     <div className="col-span-4 md:col-span-8 lg:col-span-12 mb-6">
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800" migrated={false}>
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-blue-900 dark:text-blue-100">
             {t?.('welcome.title') || 'Welcome to Alkitu Dashboard'}
@@ -198,12 +198,14 @@ function DashboardWelcome() {
             <Badge
               variant="secondary"
               className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+              migrated={true}
             >
               {t?.('welcome.status') || 'System Online'}
             </Badge>
             <Badge
               variant="outline"
               className="border-green-200 text-green-700 dark:border-green-800 dark:text-green-300"
+              migrated={true}
             >
               {t?.('welcome.version') || 'v1.0.0'}
             </Badge>
@@ -222,7 +224,7 @@ function DashboardOverview() {
     <>
       {/* Quick Stats */}
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card>
+        <Card migrated={false}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.totalUsers') || 'Total Users'}
@@ -239,7 +241,7 @@ function DashboardOverview() {
       </div>
 
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card>
+        <Card migrated={false}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.activeProjects') || 'Active Projects'}
@@ -256,7 +258,7 @@ function DashboardOverview() {
       </div>
 
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card>
+        <Card migrated={false}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.revenue') || 'Revenue'}
@@ -273,7 +275,7 @@ function DashboardOverview() {
       </div>
 
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card>
+        <Card migrated={false}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.notifications') || 'Notifications'}
@@ -291,7 +293,7 @@ function DashboardOverview() {
 
       {/* Recent Activity */}
       <div className="col-span-4 md:col-span-4 lg:col-span-8">
-        <Card>
+        <Card migrated={false}>
           <CardHeader>
             <CardTitle>
               {t?.('recentActivity.title') || 'Recent Activity'}
@@ -344,7 +346,7 @@ function DashboardOverview() {
 
       {/* Progress Overview */}
       <div className="col-span-4 md:col-span-4 lg:col-span-4">
-        <Card>
+        <Card migrated={false}>
           <CardHeader>
             <CardTitle>{t?.('progress.title') || 'Project Progress'}</CardTitle>
             <CardDescription>
@@ -375,7 +377,7 @@ function DashboardOverview() {
               <Progress value={92} className="h-2" />
             </div>
             <Separator />
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" migrated={true}>
               {t?.('progress.viewAll') || 'View All Projects'}
             </Button>
           </CardContent>

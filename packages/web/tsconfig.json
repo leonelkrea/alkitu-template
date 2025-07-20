@@ -36,6 +36,30 @@
       "@alkitu/shared/*": [
         "../shared/src/*"
       ],
+      "@alkitu/design-system": [
+        "../design-system/src"
+      ],
+      "@alkitu/design-system/*": [
+        "../design-system/src/*"
+      ],
+      "@ds/*": [
+        "../design-system/src/components/*"
+      ],
+      "@ds/atoms": [
+        "../design-system/src/components/atoms"
+      ],
+      "@ds/molecules": [
+        "../design-system/src/components/molecules"
+      ],
+      "@ds/organisms": [
+        "../design-system/src/components/organisms"
+      ],
+      "@ds/templates": [
+        "../design-system/src/components/templates"
+      ],
+      "@ds/tokens": [
+        "../design-system/src/themes/tokens"
+      ],
       "@ui/*": [
         "./src/components/ui/*"
       ],

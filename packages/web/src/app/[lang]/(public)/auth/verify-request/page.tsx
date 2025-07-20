@@ -2,6 +2,7 @@
 
 import { AuthCardWrapper } from '@/components/custom/auth/card/auth-card-wrapper';
 import { useTranslations } from '@/context/TranslationContext';
+import { Typography } from '@/components/adapters/Typography';
 
 export default function VerifyRequestPage() {
   const t = useTranslations();
@@ -12,11 +13,11 @@ export default function VerifyRequestPage() {
       backButtonLabel="Back to Login"
       backButtonHref="/auth/login"
     >
-      <p className="text-center text-muted-foreground">
+      <Typography variant="body" className="text-center text-muted-foreground" migrated={true}>
         {t('auth.verifyRequest.message1')}
         <br />
         {t('auth.verifyRequest.message2')}
-      </p>
+      </Typography>
     </AuthCardWrapper>
   );
 }

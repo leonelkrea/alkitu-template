@@ -13,7 +13,7 @@ Welcome to the Alkitu Template, a comprehensive, enterprise-grade starter kit fo
 - **🧪 Testing Updates** - Planned
 - **🎨 Frontend Integration** - Planned
 
-**👉 [VIEW DETAILED STATUS](docs/04-product/PROJECT-DASHBOARD.md)**
+**👉 VIEW DETAILED STATUS** (Dashboard under renovation - see docs/README.md for current status)
 
 ## 🎯 Core Features
 
@@ -60,8 +60,8 @@ All project documentation is located in the `/docs` directory. It is organized t
     - **Database:** MongoDB (via Prisma)
 
 4.  **View project status:**
-    - **Project Dashboard:** [docs/04-product/PROJECT-DASHBOARD.md](docs/04-product/PROJECT-DASHBOARD.md)
-    - **Workflow Status:** [docs/04-product/WORKFLOW-STATUS.md](docs/04-product/WORKFLOW-STATUS.md)
+    - **Project Documentation:** [docs/README.md](docs/README.md) (Main documentation hub)
+    - **Legacy Dashboards:** Deprecated (under renovation with current dates)
 
 ## 🤝 Contributing
 
@@ -74,8 +74,8 @@ We welcome contributions! Please read our **[Contributing Guide](CONTRIBUTING.md
 Before executing any task, all agents must:
 
 1.  Read this `README.md` completely.
-2.  **CHECK CURRENT STATUS:** Review [PROJECT-DASHBOARD.md](docs/04-product/PROJECT-DASHBOARD.md) for immediate priorities.
-3.  **UNDERSTAND WORKFLOW:** Read [WORKFLOW-STATUS.md](docs/04-product/WORKFLOW-STATUS.md) for current phase.
+2.  **CHECK CURRENT STATUS:** Review [docs/README.md](docs/README.md) for current project status.
+3.  **UNDERSTAND WORKFLOW:** Consult documentation hub for current workflow status.
 4.  Consult the **[AI Agent Protocols](docs/03-ai-agents/README.md)** for enhanced workflows and communication protocols.
 5.  Review active tickets in the **[Product & Features](docs/04-product/README.md)** section.
 6.  Follow the **[Testing Strategy](docs/05-testing/README.md)** for all code changes.

@@ -2,6 +2,7 @@
 
 import { useTranslations } from '@/context/TranslationContext';
 import { trpcReact } from '@/lib/trpc';
+import { Typography } from '@/components/adapters/Typography';
 
 export default function BillingPage() {
   const t = useTranslations('userNav');
@@ -17,7 +18,7 @@ export default function BillingPage() {
 
   return (
     <div>
-      <h1>{t('billing')}</h1>
+      <Typography variant="h1" migrated={true}>{t('billing')}</Typography>
       {billingRecords?.billingRecords.map((record: any) => (
         <div key={record.id}>
           <p>Plan: {record.plan}</p>

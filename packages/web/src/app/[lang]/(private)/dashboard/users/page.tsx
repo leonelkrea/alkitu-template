@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/adapters/Card';
 import {
   Table,
   TableBody,
@@ -16,8 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Input } from '@/components/adapters/Input';
+import { Button } from '@/components/adapters/Button';
 import {
   Select,
   SelectContent,
@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/adapters/Badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   SearchIcon,
@@ -293,7 +293,7 @@ const UsersPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card>
+      <Card migrated={false}>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -307,11 +307,12 @@ const UsersPage = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
+                migrated={true}
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filters
               </Button>
-              <Button onClick={handleAddUser}>
+              <Button onClick={handleAddUser} migrated={true}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add User
               </Button>
@@ -328,6 +329,7 @@ const UsersPage = () => {
                 <Input
                   placeholder="Search users..."
                   value={filters.search}
+                  migrated={true}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                   className="pl-10"
                 />
@@ -382,7 +384,7 @@ const UsersPage = () => {
 
       {/* Bulk Actions */}
       {selectedUsers.length > 0 && (
-        <Card>
+        <Card migrated={false}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">
@@ -393,6 +395,7 @@ const UsersPage = () => {
                   variant="outline"
                   size="sm"
                   onClick={handleBulkActivate}
+                  migrated={true}
                   disabled={bulkUpdateStatusMutation.isPending}
                 >
                   <UserCheck className="h-4 w-4 mr-2" />
@@ -402,6 +405,7 @@ const UsersPage = () => {
                   variant="outline"
                   size="sm"
                   onClick={handleBulkDeactivate}
+                  migrated={true}
                   disabled={bulkUpdateStatusMutation.isPending}
                 >
                   <UserX className="h-4 w-4 mr-2" />
@@ -411,6 +415,7 @@ const UsersPage = () => {
                   variant="destructive"
                   size="sm"
                   onClick={handleBulkDelete}
+                  migrated={true}
                   disabled={bulkDeleteUsersMutation.isPending}
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
@@ -423,7 +428,7 @@ const UsersPage = () => {
       )}
 
       {/* Users Table */}
-      <Card>
+      <Card migrated={false}>
         <CardContent className="pt-6">
           <Table>
             <TableHeader>
@@ -541,6 +546,7 @@ const UsersPage = () => {
                   size="sm"
                   disabled={!pagination.hasPrev}
                   onClick={() => handlePageChange(pagination.page - 1)}
+                  migrated={true}
                 >
                   Previous
                 </Button>
@@ -552,6 +558,7 @@ const UsersPage = () => {
                   size="sm"
                   disabled={!pagination.hasNext}
                   onClick={() => handlePageChange(pagination.page + 1)}
+                  migrated={true}
                 >
                   Next
                 </Button>

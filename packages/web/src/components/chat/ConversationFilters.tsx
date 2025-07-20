@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Input } from '@/components/adapters/Input';
+import { Button } from '@/components/adapters/Button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ConversationStatus } from '@prisma/client';
 
@@ -26,6 +26,7 @@ export function ConversationFilters({ onApplyFilters }: ConversationFiltersProps
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="flex-1"
+        migrated={true}
       />
       <Select onValueChange={(value: ConversationStatus | '') => setStatus(value === '' ? undefined : value)} value={status || ''}>
         <SelectTrigger className="w-[180px]">
@@ -38,7 +39,7 @@ export function ConversationFilters({ onApplyFilters }: ConversationFiltersProps
           ))}
         </SelectContent>
       </Select>
-      <Button onClick={handleApply}>Apply Filters</Button>
+      <Button onClick={handleApply} migrated={true}>Apply Filters</Button>
     </div>
   );
 }

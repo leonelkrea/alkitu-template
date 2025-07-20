@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/adapters/Button';
+import { Input } from '@/components/adapters/Input';
 import { Label } from '@/components/ui/label';
 import { useTranslations } from '@/context/TranslationContext';
 import { FormError } from '@/components/shared/messages/form-error';
@@ -99,6 +99,7 @@ export const NewPasswordForm = () => {
           placeholder={t('auth.login.newPassword')}
           required
           disabled={isLoading}
+          migrated={true}
         />
       </div>
 
@@ -114,13 +115,14 @@ export const NewPasswordForm = () => {
           placeholder={t('auth.register.confirmPassword')}
           required
           disabled={isLoading}
+          migrated={true}
         />
       </div>
 
       <FormError message={error} />
       <FormSuccess message={success} />
 
-      <Button type="submit" className="w-full" disabled={isLoading || !token}>
+      <Button type="submit" className="w-full" disabled={isLoading || !token} migrated={true}>
         {isLoading ? t('Common.general.loading') : 'Reset Password'}
       </Button>
     </form>
