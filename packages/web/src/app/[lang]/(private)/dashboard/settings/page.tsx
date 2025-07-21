@@ -9,7 +9,7 @@ export default function SettingsPage() {
   return (
     <div>
       <Typography variant="h1" migrated={true}>{t('title')}</Typography>
-      <Typography variant="body" migrated={true}>{t('description')}</Typography>
+      <Typography variant="p" migrated={true}>{t('description')}</Typography>
     </div>
   );
 }

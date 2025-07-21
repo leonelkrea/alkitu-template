@@ -13,7 +13,7 @@ export default function AuthErrorPage() {
       backButtonLabel="Back to Login"
       backButtonHref="/auth/login"
     >
-      <Typography variant="body" className="text-destructive text-center" migrated={true}>
+      <Typography variant="p" className="text-destructive text-center" migrated={true}>
         Something went wrong during authentication. Please try again.
       </Typography>
     </AuthCardWrapper>

@@ -9,11 +9,11 @@ export function NotificationCenter() {
   const queryClient = useQueryClient();
   const { data: notifications = [] } = useQuery({
     queryKey: ['notifications'],
-    queryFn: () => trpc.notifications.findAll.query(),
+    queryFn: () => trpc.notification.getNotifications.query({ userId: 'current-user' }),
   });
 
   const markAsReadMutation = useMutation({
-    mutationFn: (notificationId: string) => trpc.notifications.markAsRead.mutate({ notificationId }),
+    mutationFn: (notificationId: string) => trpc.notification.markAsRead.mutate({ notificationId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
@@ -22,9 +22,9 @@ export function NotificationCenter() {
   return (
     <div>
       <Bell />
-      <span>{notifications.filter(n => !n.read).length}</span>
+      <span>{notifications.filter((n: any) => !n.read).length}</span>
       <ul>
-        {notifications.map(notification => (
+        {notifications.map((notification: any) => (
           <li key={notification.id}>
             <p>{notification.message}</p>
             {!notification.read && (

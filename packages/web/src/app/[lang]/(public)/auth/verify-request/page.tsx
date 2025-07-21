@@ -13,7 +13,7 @@ export default function VerifyRequestPage() {
       backButtonLabel="Back to Login"
       backButtonHref="/auth/login"
     >
-      <Typography variant="body" className="text-center text-muted-foreground" migrated={true}>
+      <Typography variant="p" className="text-center text-muted-foreground" migrated={true}>
         {t('auth.verifyRequest.message1')}
         <br />
         {t('auth.verifyRequest.message2')}

@@ -217,7 +217,7 @@ const NotificationHeader = React.memo(function NotificationHeader({
     <div className="flex items-center justify-between mb-6">
       <div>
         <Typography variant="h1" className="text-3xl font-bold" migrated={true}>{t('title')}</Typography>
-        <Typography variant="body" className="text-muted-foreground mt-1" migrated={true}>{t('subtitle')}</Typography>
+        <Typography variant="p" className="text-muted-foreground mt-1" migrated={true}>{t('subtitle')}</Typography>
         {totalCount > 0 && (
           <p className="text-sm text-muted-foreground mt-1">
             {isFilteredFetch ? t('filteredResults') : t('allNotifications')} •

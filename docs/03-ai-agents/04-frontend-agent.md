@@ -2,15 +2,27 @@
 
 ## 🎯 Role Definition
 
-**Primary Responsibility**: Implementar interfaces frontend para Products, User Groups, Tags y Chat System usando Next.js 15, tRPC, Tailwind CSS y Shadcn/ui.
+**Primary Responsibility**: Implementar y validar Design System Alkitu con testing completo, seguido de interfaces frontend para Products, User Groups, Tags y Chat System usando Next.js 15, tRPC, Tailwind CSS y Design System nativo.
 
-**Duration**: Días 16-20 (implementación de UI)
+**Duration**: 
+- **Phase 1**: Design System Review & Testing (5 semanas) - **PRIORITY CRÍTICA**
+- **Phase 2**: Feature Implementation (Días 16-20)
 
 ---
 
 ## 📋 Responsibilities
 
-### **Core UI Implementation**
+### **🚨 CRITICAL PRIORITY: Design System Validation**
+
+**ANTES DE CUALQUIER DESARROLLO DE FEATURES:**
+
+1. **Design System Component Review**: Revisar y validar 56 componentes existentes
+2. **Testing Infrastructure**: Implementar testing completo (Unit, A11y, Theme, Mobile)
+3. **Branding System**: Validar Storage → Database migration para themes
+4. **Accessibility Compliance**: Lograr WCAG 2.1 AA en todos los componentes
+5. **Performance Optimization**: Bundle size y loading optimization
+
+### **Secondary: Core UI Implementation**
 
 1. **Products Management UI**: Admin dashboard para gestión de productos
 2. **User Groups Interface**: Sistema de grupos con permisos y membresías
@@ -20,6 +32,14 @@
 
 ### **Deliverables**
 
+#### **🚨 CRITICAL - Design System Validation (PRIORITY 1)**
+- [ ] **Design System Testing**: 90%+ coverage para 56 componentes
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA para todos los componentes
+- [ ] **Branding System**: Storage + Database integration
+- [ ] **Performance Optimization**: Bundle < 500KB, Load < 1.5s
+- [ ] **Component Documentation**: Testing guides y best practices
+
+#### **Secondary - Feature Implementation (PRIORITY 2)**
 - [ ] **Products Dashboard** (`packages/web/src/app/[lang]/(private)/dashboard/products/`)
 - [ ] **Groups Management** (`packages/web/src/app/[lang]/(private)/dashboard/groups/`)
 - [ ] **Tags Interface** (`packages/web/src/app/[lang]/(private)/dashboard/tags/`)
@@ -47,13 +67,22 @@
 - **Analytics**: Vercel Analytics + Speed Insights
 - **File Upload**: Integración con servicios de storage
 
-### **UI Design System**
+### **🎨 Design System (PRIORITY CRÍTICA)**
 
-- **Components**: Shadcn/ui base components
-- **Icons**: Lucide React icons
+#### **Alkitu Native Design System**
+- **Components**: 56 componentes nativos (Átomos → Templates)
+- **Architecture**: Perfect Atomic Design implementation
+- **Mobile-First**: Dedicated mobile components
+- **Branding**: Dynamic branding system con database persistence
+- **Testing**: 4-tier testing (Unit, A11y, Theme, Mobile)
+- **Accessibility**: WCAG 2.1 AA compliance
+- **Performance**: Bundle optimized < 500KB
+
+#### **Supporting Libraries**
+- **Icons**: Lucide React icons (integrado)
 - **Animations**: Framer Motion
 - **Charts**: Recharts for analytics
-- **Tables**: TanStack Table
+- **Tables**: TanStack Table (componente nativo implementado)
 
 ### **Internationalization (i18n)**
 
@@ -161,7 +190,78 @@ packages/web/src/
 
 ## 📐 Implementation Plan
 
-### **Phase 1: Products Management UI (Days 16-17)**
+### **🚨 PHASE 0: Design System Validation (CRITICAL - Weeks 1-5)**
+
+**Status**: MUST COMPLETE BEFORE ANY FEATURE DEVELOPMENT
+
+#### **Week 1: Infrastructure & Átomos Setup**
+```yaml
+Critical Actions:
+  - Setup testing infrastructure (Vitest, @axe-core/react, Storybook)
+  - Implement ApplicationBranding database schema
+  - Review and test first 5 átomos (Typography, Button, Input, Icon, Badge)
+  - Establish testing patterns and quality gates
+
+Deliverables:
+  - Testing infrastructure operational
+  - Database schema deployed
+  - 5 átomos with 90%+ test coverage
+  - Performance baseline established
+```
+
+#### **Week 2: Átomos Completion**
+```yaml
+Critical Actions:
+  - Complete all 13 átomos with full testing suite
+  - Implement Storage-first branding enhancement
+  - Validate mobile responsiveness
+  - Establish performance monitoring
+
+Deliverables:
+  - 13/13 átomos with WCAG 2.1 AA compliance
+  - Branding system enhanced (Storage + URL logos)
+  - Mobile responsiveness validated
+  - Performance metrics within targets
+```
+
+#### **Week 3: Moléculas & Database Integration**
+```yaml
+Critical Actions:
+  - Complete all 8 moléculas with full testing
+  - Implement Database integration for branding
+  - Validate theme switching scenarios
+  - Performance optimization round 1
+
+Deliverables:
+  - 8/8 moléculas with full test coverage
+  - Database branding system operational
+  - Theme switching fully functional
+  - Bundle size within targets
+```
+
+#### **Week 4-5: Organismos & Final Validation**
+```yaml
+Critical Actions:
+  - Complete all 16 organismos with testing
+  - Final performance optimization
+  - Comprehensive accessibility audit
+  - Documentation updates
+
+Deliverables:
+  - 16/16 organismos validated
+  - Performance targets achieved
+  - WCAG 2.1 AA compliance verified
+  - Complete documentation updated
+```
+
+**🎯 Success Criteria Before Feature Development:**
+- [ ] ✅ 90%+ test coverage across all 56 components
+- [ ] ✅ WCAG 2.1 AA compliance verified
+- [ ] ✅ Branding system Storage + Database functional
+- [ ] ✅ Performance targets met (< 500KB, < 1.5s)
+- [ ] ✅ Mobile responsiveness validated
+
+### **Phase 1: Products Management UI (Days 16-17) - POST Design System**
 
 #### **Day 16: Products Dashboard Foundation**
 
@@ -287,7 +387,68 @@ Deliverables:
 
 ---
 
-## 🧩 Component Architecture
+## 🚨 **DESIGN SYSTEM CRITICAL IMPLEMENTATION**
+
+### **Component Testing Architecture (MANDATORY)**
+
+```typescript
+// Required structure for ALL components
+components/atoms/ComponentName/
+├── ComponentName.tsx
+├── ComponentName.test.tsx        // Unit & integration tests
+├── ComponentName.a11y.test.tsx   // Accessibility tests  
+├── ComponentName.theme.test.tsx  // Theme/branding tests
+├── ComponentName.mobile.test.tsx // Mobile-specific tests
+└── ComponentName.stories.tsx     // Storybook stories
+```
+
+### **Database Schema Implementation (CRITICAL)**
+
+```prisma
+// ApplicationBranding model - MUST IMPLEMENT
+model ApplicationBranding {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId  String?  @db.ObjectId
+  
+  // Logo Configuration (URL-based)
+  logoType        LogoType @default(TEXT)
+  logoText        String?
+  logoSvg         String?
+  logoImageUrl    String?  // URL approach, no direct storage
+  logoScale       Float    @default(1.0)
+  
+  // Color Theme
+  primaryColor    String   @default("#007ee6")
+  secondaryColor  String   @default("#6B7280")
+  
+  // Meta
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("application_branding")
+}
+
+enum LogoType {
+  TEXT
+  SVG
+  IMAGE_URL
+}
+```
+
+### **Quality Gates (MANDATORY per Component)**
+
+```typescript
+interface ComponentQualityGate {
+  unitTestCoverage: number;     // REQUIRED: 90%+
+  accessibilityScore: string;   // REQUIRED: WCAG 2.1 AA
+  themeIntegration: boolean;    // REQUIRED: All scenarios pass
+  mobileValidation: boolean;    // REQUIRED: Touch interactions work
+  performanceImpact: string;    // REQUIRED: < 5KB bundle increase
+}
+```
+
+## 🧩 Component Architecture (POST Design System Validation)
 
 ### **Products Components**
 
@@ -916,9 +1077,62 @@ packages/web/src/hooks/
 
 ---
 
-## 🧪 Testing Strategy
+## 🧪 Testing Strategy (CRITICAL IMPLEMENTATION)
 
-### **Component Testing**
+### **🚨 MANDATORY 4-Tier Testing per Component**
+
+#### **1. Unit Tests (REQUIRED)**
+```typescript
+// Props validation, rendering, interactions
+describe('ComponentName Unit Tests', () => {
+  it('renders correctly with default props', () => {});
+  it('handles all prop variations', () => {});
+  it('responds to user interactions', () => {});
+  it('maintains state correctly', () => {});
+});
+```
+
+#### **2. Accessibility Tests (WCAG 2.1 AA REQUIRED)**
+```typescript
+// ARIA attributes, keyboard navigation, screen readers
+import { axe, toHaveNoViolations } from 'jest-axe';
+
+describe('ComponentName Accessibility', () => {
+  it('meets WCAG 2.1 AA standards', async () => {
+    const { container } = render(<ComponentName />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+  
+  it('supports keyboard navigation', () => {});
+  it('has proper ARIA attributes', () => {});
+  it('works with screen readers', () => {});
+});
+```
+
+#### **3. Theme Integration Tests (REQUIRED)**
+```typescript
+// Branding context integration, color application
+describe('ComponentName Theme Integration', () => {
+  it('applies branding colors correctly', () => {});
+  it('handles theme switching', () => {});
+  it('integrates with BrandingContext', () => {});
+  it('fallback to defaults when no theme', () => {});
+});
+```
+
+#### **4. Mobile Tests (REQUIRED)**
+```typescript
+// Touch interactions, responsive behavior
+describe('ComponentName Mobile', () => {
+  it('works on touch devices', () => {});
+  it('adapts to mobile viewports', () => {});
+  it('has proper touch targets', () => {});
+  it('handles mobile-specific interactions', () => {});
+});
+```
+
+### **Component Testing (POST Design System Validation)**
 
 ```typescript
 // ProductForm.test.tsx
@@ -1067,22 +1281,73 @@ const ChatWidget = () => (
 
 ## 🎯 Success Metrics
 
-### **Performance Metrics**
+### **🚨 CRITICAL - Design System Metrics (MUST ACHIEVE)**
 
+#### **Component Quality (MANDATORY)**
+- [ ] **Test Coverage**: 90%+ for all 56 components
+- [ ] **Accessibility Compliance**: WCAG 2.1 AA for ALL components
+- [ ] **Theme Integration**: 100% branding scenarios working
+- [ ] **Mobile Validation**: Touch interactions on ALL components
+- [ ] **Performance Impact**: < 5KB bundle increase per component
+
+#### **System Performance (MANDATORY)**
+- [ ] **Bundle Size**: < 500KB total (CRITICAL)
 - [ ] **First Contentful Paint**: < 1.5s
+- [ ] **Accessibility Score**: 95%+ overall
+- [ ] **Mobile Responsiveness**: 100% components mobile-ready
+
+#### **Branding System (MANDATORY)**
+- [ ] **Storage Integration**: LocalStorage + URL logos working
+- [ ] **Database Integration**: ApplicationBranding model operational
+- [ ] **Theme Switching**: Real-time updates across all components
+- [ ] **Multi-tenant Support**: Organization-based branding
+
+### **Secondary - Feature Implementation Metrics**
+
+#### **Performance Metrics**
 - [ ] **Largest Contentful Paint**: < 2.5s
 - [ ] **Cumulative Layout Shift**: < 0.1
 - [ ] **First Input Delay**: < 100ms
-- [ ] **Bundle Size**: < 500KB initial load
 
-### **User Experience Metrics**
-
-- [ ] **Accessibility Score**: 95%+ (WCAG 2.1 AA)
-- [ ] **Mobile Responsiveness**: All breakpoints covered
+#### **User Experience Metrics**
 - [ ] **Form Validation**: Real-time feedback
 - [ ] **Loading States**: All async operations covered
 - [ ] **Error Handling**: Graceful error boundaries
 
 ---
 
-**Frontend Agent está diseñado para crear interfaces de usuario modernas, accesibles y performantes que cumplan con los estándares de UX del template comercial.**
+---
+
+## 🚨 **CRITICAL IMPLEMENTATION ORDER**
+
+### **MANDATORY SEQUENCE:**
+
+1. **WEEK 1-5: DESIGN SYSTEM VALIDATION** ⭐ **CRITICAL PRIORITY**
+   - Component testing implementation
+   - Accessibility compliance (WCAG 2.1 AA)
+   - Branding system Storage → Database
+   - Performance optimization
+   - Mobile responsiveness validation
+
+2. **WEEK 6+: FEATURE DEVELOPMENT** (Only after Design System validation)
+   - Products Management UI
+   - User Groups Interface
+   - Tags Management
+   - Chat System
+   - API Integration
+
+### **🚫 PROHIBITIONS:**
+- **NO feature development** until Design System validation complete
+- **NO skipping** accessibility testing
+- **NO breaking changes** without comprehensive testing
+- **NO performance regressions** allowed
+
+### **✅ SUCCESS DEFINITION:**
+Design System validation is **COMPLETE** only when:
+- [ ] All 56 components have 90%+ test coverage
+- [ ] WCAG 2.1 AA compliance verified
+- [ ] Branding system Storage + Database operational
+- [ ] Performance targets achieved
+- [ ] Mobile responsiveness validated
+
+**Frontend Agent está diseñado para validar y optimizar el Design System Alkitu antes de crear nuevas interfaces, garantizando una base sólida, accesible y performante para todo el desarrollo frontend.**

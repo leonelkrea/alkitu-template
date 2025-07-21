@@ -28,7 +28,7 @@ export default function NotificationAnalyticsPage() {
         </Button>
         <div>
           <Typography variant="h1" className="text-3xl font-bold" migrated={true}>{t('analytics.title')}</Typography>
-          <Typography variant="body" className="text-muted-foreground mt-1" migrated={true}>
+          <Typography variant="p" className="text-muted-foreground mt-1" migrated={true}>
             {t('analytics.description')}
           </Typography>
         </div>

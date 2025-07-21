@@ -16,7 +16,7 @@ export function ChatWidget() {
 
   const { data: config } = useQuery({
     queryKey: ['chatbotConfig'],
-    queryFn: () => trpc.chatbotConfig.getConfig.query(),
+    queryFn: () => trpc.chatbotConfig.get.query(),
   });
 
   const { conversation, messages, isLoading, sendMessage, startConversation } =

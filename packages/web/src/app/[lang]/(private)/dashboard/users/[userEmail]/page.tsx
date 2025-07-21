@@ -376,7 +376,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
               <User className="h-6 w-6" />
               {user.name || user.email}
             </Typography>
-            <Typography variant="body" className="text-gray-600" migrated={true}>{user.email}</Typography>
+            <Typography variant="p" className="text-gray-600" migrated={true}>{user.email}</Typography>
           </div>
         </div>
         <div className="flex items-center gap-2">

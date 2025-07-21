@@ -17,7 +17,13 @@ export default function ChatAnalyticsPage() {
   return (
     <div className="container mx-auto py-10">
       <Typography variant="h1" className="text-3xl font-bold mb-6" migrated={true}>Chatbot Analytics</Typography>
-      <ChatAnalyticsDashboard analytics={analytics} />
+      <ChatAnalyticsDashboard analytics={analytics || {
+        totalConversations: 0,
+        openConversations: 0,
+        resolvedConversations: 0,
+        leadsCaptured: 0,
+        averageResponseTime: 0
+      }} />
     </div>
   );
 }

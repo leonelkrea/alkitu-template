@@ -23,7 +23,7 @@ export function BulkActions({ selectedUserIds, onBulkDelete, onBulkUpdateRole, o
         <DropdownMenuItem onClick={() => onBulkUpdateRole(selectedUserIds, UserRole.EMPLOYEE)}>Set as Employee</DropdownMenuItem>
         <DropdownMenuItem onClick={() => onBulkUpdateRole(selectedUserIds, UserRole.CLIENT)}>Set as Client</DropdownMenuItem>
         <DropdownMenuItem onClick={() => onBulkUpdateStatus(selectedUserIds, UserStatus.ACTIVE)}>Activate Selected</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onBulkUpdateStatus(selectedUserIds, UserStatus.INACTIVE)}>Deactivate Selected</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onBulkUpdateStatus(selectedUserIds, UserStatus.SUSPENDED)}>Deactivate Selected</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

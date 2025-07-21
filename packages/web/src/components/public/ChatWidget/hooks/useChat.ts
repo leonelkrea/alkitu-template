@@ -12,7 +12,7 @@ export function useChat() {
   const { data: messages = [], refetch: refetchMessages } = useQuery({
     queryKey: ['chatMessages', conversation?.id],
     queryFn: () =>
-      trpc.chat.getConversation.query({ conversationId: conversation.id }),
+      trpc.chat.getConversations.query({ conversationId: conversation.id }),
     enabled: !!conversation,
     select: (data) => data?.messages || [],
   });
@@ -29,7 +29,7 @@ export function useChat() {
       trpc.chat.sendMessage.mutate({
         conversationId: conversation.id,
         content,
-        sender: 'user',
+        isFromVisitor: true,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({

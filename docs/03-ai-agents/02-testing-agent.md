@@ -4,9 +4,10 @@
 
 ## 🎯 Role Definition
 
-**Primary Responsibility**: Implementar TDD (Red-Green-Refactor) y mutation testing con Stryker para garantizar calidad del código durante la migración SOLID.
+**Primary Responsibility**: Implementar TDD (Red-Green-Refactor) y mutation testing con Stryker para garantizar calidad del código durante la migración SOLID. **NEXT**: Support Frontend Agent with Design System testing infrastructure.
 
 **Duration**: Días 1-20 (paralelo a todo el proyecto)
+**Current Status**: ✅ **READY** - TDD framework operational, ready to support DESIGN-SYSTEM-001
 
 ---
 

@@ -33,7 +33,7 @@ export default function UnauthorizedPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-center">
-            <Typography variant="body" className="text-sm text-gray-500 dark:text-gray-400 mb-4" migrated={true}>
+            <Typography variant="p" className="text-sm text-gray-500 dark:text-gray-400 mb-4" migrated={true}>
               {t?.('unauthorized.message') ||
                 'Por favor, contacta con el administrador si crees que esto es un error.'}
             </Typography>

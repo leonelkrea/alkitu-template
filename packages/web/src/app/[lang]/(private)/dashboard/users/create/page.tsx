@@ -175,7 +175,7 @@ const CreateUserPage = () => {
             <User className="h-6 w-6" />
             Create New User
           </Typography>
-          <Typography variant="body" className="text-gray-600" migrated={true}>Add a new user to the system</Typography>
+          <Typography variant="p" className="text-gray-600" migrated={true}>Add a new user to the system</Typography>
         </div>
       </div>
 

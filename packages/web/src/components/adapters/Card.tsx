@@ -1,9 +1,9 @@
 /**
  * Card Adapter Component
- * 
+ *
  * Transition component that allows gradual migration from shadcn/ui Card
  * to Alkitu Design System Card while maintaining compatibility.
- * 
+ *
  * Usage:
  * - Set migrated={true} to use Design System Card
  * - Set migrated={false} or omit to use existing shadcn Card
@@ -11,15 +11,15 @@
  */
 
 import React from 'react';
-import { 
-  Card as ShadcnCard, 
+import {
+  Card as ShadcnCard,
   CardContent as ShadcnCardContent,
   CardDescription as ShadcnCardDescription,
   CardFooter as ShadcnCardFooter,
   CardHeader as ShadcnCardHeader,
-  CardTitle as ShadcnCardTitle
+  CardTitle as ShadcnCardTitle,
 } from '@/components/ui/card';
-import { Card as DSCard, type CardProps as DSCardProps } from '@alkitu/design-system/components/molecules/Card';
+import DSCard, { type CardProps as DSCardProps, } from '../molecules/Card';
 
 // Re-export types for compatibility
 export type CardProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -52,14 +52,19 @@ export type CardProps = React.HTMLAttributes<HTMLDivElement> & {
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ migrated = false, children, title, ...props }, ref) => {
     if (migrated && title) {
-      // Use Design System Card with structured props
+      // Use Design System Card with structured props (note: DSCard doesn't support ref)
       console.log('Using migrated Design System Card');
-      return <DSCard ref={ref} title={title} {...(props as DSCardProps)} />;
+      const { title: titleProp, ...dsProps } = props as any;
+      return <DSCard {...(dsProps as DSCardProps)} />;
     }
-    
+
     // Use existing shadcn Card (default behavior)
-    return <ShadcnCard ref={ref} {...props}>{children}</ShadcnCard>;
-  }
+    return (
+      <ShadcnCard ref={ref} {...props}>
+        {children}
+      </ShadcnCard>
+    );
+  },
 );
 
 Card.displayName = 'Card';

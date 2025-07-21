@@ -24,7 +24,7 @@ export default function ChatDashboardPage() {
         Chat Conversations
       </Typography>
       <ConversationFilters onApplyFilters={setFilters} />
-      <ConversationList conversations={conversations} />
+      <ConversationList conversations={conversations || []} />
     </div>
   );
 }

@@ -39,6 +39,32 @@ This project is built by a team of specialized AI agents. Each agent has a speci
 
 For a complete overview of best practices that apply to all agents, please see our **[Best Practices Guide](./BEST-PRACTICES.md)**.
 
+## 📊 **Agent Dependencies Matrix**
+
+### **Current Agent Status & Dependencies**
+
+- **🏗️ Architecture Agent**: ✅ **COMPLETED** - Available for consultation, all SOLID principles implemented
+- **🔧 Backend Agent**: ✅ **COMPLETED** - All backend services operational, available for consultation  
+- **🧪 Testing Agent**: ✅ **READY** - Supporting Frontend Agent with testing infrastructure
+- **🎨 Frontend Agent**: 🚨 **ACTIVE** - BLOCKED by Design System validation (self-contained work)
+- **📝 Documentation Agent**: ✅ **READY** - Documentation maintenance and updates
+
+### **Dependencies Flow**
+```
+Architecture Agent → Backend Agent → Frontend Agent
+                ↓
+            Testing Agent (supports all)
+                ↓
+        Documentation Agent (maintains all)
+```
+
+### **Critical Path**
+1. ✅ Architecture Agent → SOLID principles (COMPLETED)
+2. ✅ Backend Agent → Services implementation (COMPLETED)  
+3. 🚨 Frontend Agent → Design System validation (CRITICAL PRIORITY)
+4. 🔄 Frontend Agent → Feature implementation (AFTER Design System)
+5. 🧪 Testing Agent → Continuous support (ONGOING)
+
 ## ⚙️ Enhanced Workflow System
 
 All agents must follow our comprehensive workflow system that includes health checks, peer reviews, impact analysis, and knowledge sharing.

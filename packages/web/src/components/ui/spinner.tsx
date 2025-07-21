@@ -1,7 +1,7 @@
 // components/ui/spinner.tsx
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "./utils";
 
 const spinnerVariants = cva(
   "inline-block animate-spin rounded-full border-2 border-current border-t-transparent text-primary",

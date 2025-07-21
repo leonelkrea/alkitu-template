@@ -10,7 +10,7 @@ export default function Custom500() {
       <div className="text-center space-y-6 max-w-md">
         <Typography variant="h1" className="text-6xl font-bold text-muted-foreground" migrated={true}>500</Typography>
         <Typography variant="h1" className="text-2xl font-bold" migrated={true}>Server-side error occurred</Typography>
-        <Typography variant="body" className="text-muted-foreground" migrated={true}>We are sorry, but something went wrong on our end.</Typography>
+        <Typography variant="p" className="text-muted-foreground" migrated={true}>We are sorry, but something went wrong on our end.</Typography>
         <Button asChild migrated={true}>
           <Link href="/">Return Home</Link>
         </Button>

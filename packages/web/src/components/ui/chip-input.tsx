@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { X } from "lucide-react";
-import { Badge } from "./badge";
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import { Badge } from './badge';
 
 interface ChipInputProps {
   value: string[];
@@ -13,17 +13,17 @@ export const ChipInput: React.FC<ChipInputProps> = ({
   onChange,
   placeholder,
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && inputValue.trim()) {
+    if (e.key === 'Enter' && inputValue.trim()) {
       e.preventDefault();
       const newValue = inputValue.trim();
       if (!value.includes(newValue)) {
         onChange([...value, newValue]);
       }
-      setInputValue("");
-    } else if (e.key === "Backspace" && !inputValue && value.length > 0) {
+      setInputValue('');
+    } else if (e.key === 'Backspace' && !inputValue && value.length > 0) {
       onChange(value.slice(0, -1));
     }
   };
@@ -33,25 +33,25 @@ export const ChipInput: React.FC<ChipInputProps> = ({
   };
 
   return (
-    <div className='flex flex-wrap gap-2 p-2 border rounded-md'>
+    <div className="flex flex-wrap gap-2 p-2 border rounded-md">
       {value.map((chip) => (
-        <Badge key={chip} variant='secondary'>
+        <Badge key={chip} variant="secondary">
           {chip}
           <button
-            type='button'
+            type="button"
             onClick={() => handleRemoveChip(chip)}
-            className='ml-1 hover:text-destructive'
+            className="ml-1 hover:text-destructive"
           >
-            <X className='h-3 w-3' />
+            <X className="h-3 w-3" />
           </button>
         </Badge>
       ))}
       <input
-        type='text'
+        type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleInputKeyDown}
-        className='flex-grow outline-none'
+        className="flex-grow outline-none"
         placeholder={placeholder}
       />
     </div>

@@ -1,9 +1,9 @@
 /**
  * Badge Adapter Component
- * 
+ *
  * Transition component that allows gradual migration from shadcn/ui Badge
  * to Alkitu Design System Badge while maintaining compatibility.
- * 
+ *
  * Usage:
  * - Set migrated={true} to use Design System Badge
  * - Set migrated={false} or omit to use existing shadcn Badge
@@ -11,27 +11,35 @@
  */
 
 import React from 'react';
-import { Badge as ShadcnBadge, type BadgeProps as ShadcnBadgeProps } from '@/components/ui/badge';
-// Import DSBadge later when properly configured
-// import { Badge as DSBadge } from '@alkitu/design-system';
+import { Badge as ShadcnBadge, badgeVariants } from '@/components/ui/badge';
+import type { VariantProps } from 'class-variance-authority';
+import DSBadge, {
+  type BadgeProps as DSBadgeProps,
+} from '@/components/atoms/Badge';
+
+type ShadcnBadgeProps = React.ComponentProps<'span'> & 
+  VariantProps<typeof badgeVariants> & { 
+    asChild?: boolean; 
+  };
 
 // Re-export types for compatibility
-export type BadgeProps = ShadcnBadgeProps & {
+export type BadgeProps = (ShadcnBadgeProps | DSBadgeProps) & {
   migrated?: boolean;
   children: React.ReactNode;
 };
 
-export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
+export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ({ migrated = false, ...props }, ref) => {
     if (migrated) {
-      // TODO: Use Design System Badge when properly configured
-      // For now, use shadcn badge with a visual indicator
-      console.log('Using migrated badge (fallback to shadcn for now)');
+      // Use Design System Badge (note: DSBadge doesn't support ref)
+      console.log('Using migrated Design System Badge');
+      const { ref: _, ...dsProps } = props as any;
+      return <DSBadge {...(dsProps as DSBadgeProps)} />;
     }
-    
+
     // Use existing shadcn Badge
-    return <ShadcnBadge ref={ref} {...props} />;
-  }
+    return <ShadcnBadge ref={ref as any} {...(props as ShadcnBadgeProps)} />;
+  },
 );
 
 Badge.displayName = 'Badge';

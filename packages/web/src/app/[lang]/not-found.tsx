@@ -13,7 +13,7 @@ export default function NotFound() {
       <div className="text-center space-y-6 max-w-md">
         <Typography variant="h1" className="text-6xl font-bold text-muted-foreground" migrated={true}>404</Typography>
         <Typography variant="h1" className="text-2xl font-bold" migrated={true}>{t('NotFound.title')}</Typography>
-        <Typography variant="body" className="text-muted-foreground" migrated={true}>{t('NotFound.description')}</Typography>
+        <Typography variant="p" className="text-muted-foreground" migrated={true}>{t('NotFound.description')}</Typography>
         <Button asChild migrated={true}>
           <Link href="/">{t('Common.general.home')}</Link>
         </Button>
