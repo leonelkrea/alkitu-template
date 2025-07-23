@@ -8,6 +8,7 @@ export interface Theme {
   lightModeConfig: Record<string, string>;
   darkModeConfig?: Record<string, string>;
   isActive: boolean;
+  isDefault?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -126,24 +127,70 @@ function generateTokensFromTheme(theme: Theme, isDarkMode: boolean): Record<stri
 }
 
 function generateFallbackTokens(fallback: 'light' | 'dark'): Record<string, string> {
+  const isLight = fallback === 'light';
+  
   return {
-    primary: fallback === 'light' ? 'oklch(0.5634 0.1517 146.7438)' : 'oklch(0.6735 0.1851 146.7724)',
-    'primary-foreground': fallback === 'light' ? 'oklch(1 0 0)' : 'oklch(0.1 0 0)',
-    secondary: fallback === 'light' ? 'oklch(0.9683 0.0069 247.8956)' : 'oklch(0.2 0.01 247.8956)',
-    'secondary-foreground': fallback === 'light' ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.9 0.01 259.2010)',
-    background: fallback === 'light' ? 'oklch(1 0 0)' : 'oklch(0.09 0 0)',
-    foreground: fallback === 'light' ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
-    muted: fallback === 'light' ? 'oklch(0.96 0.01 247.8956)' : 'oklch(0.15 0.01 247.8956)',
-    'muted-foreground': fallback === 'light' ? 'oklch(0.45 0.01 247.8956)' : 'oklch(0.6 0.01 247.8956)',
-    accent: fallback === 'light' ? 'oklch(0.96 0.01 247.8956)' : 'oklch(0.15 0.01 247.8956)',
-    'accent-foreground': fallback === 'light' ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
-    destructive: 'oklch(0.627 0.22 29.2329)',
+    // Primary Colors
+    primary: isLight ? 'oklch(0.5634 0.1517 146.7438)' : 'oklch(0.6735 0.1851 146.7724)',
+    'primary-foreground': isLight ? 'oklch(1 0 0)' : 'oklch(0.1 0 0)',
+    
+    // Secondary Colors  
+    secondary: isLight ? 'oklch(0.9683 0.0069 247.8956)' : 'oklch(0.2 0.01 247.8956)',
+    'secondary-foreground': isLight ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.9 0.01 259.2010)',
+    
+    // Accent Colors
+    accent: isLight ? 'oklch(0.96 0.01 247.8956)' : 'oklch(0.15 0.01 247.8956)',
+    'accent-foreground': isLight ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
+    
+    // Base Colors
+    background: isLight ? 'oklch(1 0 0)' : 'oklch(0.09 0 0)',
+    foreground: isLight ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
+    
+    // Card Colors
+    card: isLight ? 'oklch(1 0 0)' : 'oklch(0.09 0 0)',
+    'card-foreground': isLight ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
+    
+    // Popover Colors
+    popover: isLight ? 'oklch(1 0 0)' : 'oklch(0.09 0 0)',
+    'popover-foreground': isLight ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
+    
+    // Muted Colors
+    muted: isLight ? 'oklch(0.96 0.01 247.8956)' : 'oklch(0.15 0.01 247.8956)',
+    'muted-foreground': isLight ? 'oklch(0.45 0.01 247.8956)' : 'oklch(0.6 0.01 247.8956)',
+    
+    // Status Colors
+    success: isLight ? 'oklch(0.65 0.15 160)' : 'oklch(0.7 0.17 160)',
+    'success-foreground': isLight ? 'oklch(1 0 0)' : 'oklch(0.1 0 0)',
+    warning: isLight ? 'oklch(0.75 0.15 85)' : 'oklch(0.8 0.17 85)',
+    'warning-foreground': isLight ? 'oklch(0.1 0 0)' : 'oklch(0.1 0 0)',
+    destructive: isLight ? 'oklch(0.627 0.22 29.2329)' : 'oklch(0.7 0.25 29.2329)',
     'destructive-foreground': 'oklch(1 0 0)',
-    border: fallback === 'light' ? 'oklch(0.9288 0.0126 255.5078)' : 'oklch(0.2 0.01 255.5078)',
-    input: fallback === 'light' ? 'oklch(0.9288 0.0126 255.5078)' : 'oklch(0.2 0.01 255.5078)',
+    
+    // Border & Input Colors
+    border: isLight ? 'oklch(0.9288 0.0126 255.5078)' : 'oklch(0.2 0.01 255.5078)',
+    input: isLight ? 'oklch(0.9288 0.0126 255.5078)' : 'oklch(0.2 0.01 255.5078)',
     ring: 'oklch(0.5634 0.1517 146.7438)',
+    
+    // Chart Colors
+    'chart-1': isLight ? 'oklch(0.55 0.15 250)' : 'oklch(0.65 0.18 250)',
+    'chart-2': isLight ? 'oklch(0.6 0.18 280)' : 'oklch(0.7 0.2 280)',
+    'chart-3': isLight ? 'oklch(0.75 0.15 85)' : 'oklch(0.8 0.17 85)',
+    'chart-4': isLight ? 'oklch(0.65 0.18 340)' : 'oklch(0.75 0.2 340)',
+    'chart-5': isLight ? 'oklch(0.7 0.15 120)' : 'oklch(0.8 0.17 120)',
+    
+    // Sidebar Colors
+    sidebar: isLight ? 'oklch(0.98 0.005 247.8956)' : 'oklch(0.12 0.005 247.8956)',
+    'sidebar-foreground': isLight ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
+    'sidebar-primary': isLight ? 'oklch(0.5634 0.1517 146.7438)' : 'oklch(0.6735 0.1851 146.7724)',
+    'sidebar-primary-foreground': isLight ? 'oklch(1 0 0)' : 'oklch(0.1 0 0)',
+    'sidebar-accent': isLight ? 'oklch(0.96 0.01 247.8956)' : 'oklch(0.15 0.01 247.8956)',
+    'sidebar-accent-foreground': isLight ? 'oklch(0.1363 0.0364 259.2010)' : 'oklch(0.95 0.01 259.2010)',
+    'sidebar-border': isLight ? 'oklch(0.9288 0.0126 255.5078)' : 'oklch(0.2 0.01 255.5078)',
+    'sidebar-ring': 'oklch(0.5634 0.1517 146.7438)',
+    
+    // Typography and Layout
     radius: '0.5rem',
-    'font-sans': 'Inter, system-ui, sans-serif',
+    'font-sans': 'Inter, system-ui, sans-serif', 
     'font-mono': 'ui-monospace, SFMono-Regular, monospace',
   };
 }

@@ -67,7 +67,7 @@ const variantClasses: Record<BrandVariant, string> = {
   compact: 'flex-row items-center',
 };
 
-const baseClasses = 'inline-flex transition-all duration-200 ease-in-out';
+const baseClasses = 'inline-flex';
 
 export const Brand: React.FC<BrandProps> = ({
   variant = 'horizontal',
@@ -87,13 +87,40 @@ export const Brand: React.FC<BrandProps> = ({
   monochromeMode = 'none',
   iconBackgroundColor,
   iconColor,
+  gap,
+  textGap,
+  iconSizeScale = 100,
+  animationConfig,
   ...props
 }) => {
 
   const sizeConfig = sizeClasses[size];
   const variantClass = variantClasses[variant];
   const isClickable = clickable || !!onClick;
-  const clickableClass = isClickable ? 'cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95' : '';
+  
+  // Apply animation and interaction classes
+  const getInteractionClasses = () => {
+    let classes = '';
+    
+    // Add animate.css classes if animation is enabled
+    if (animationConfig?.enabled && animationConfig.animationType) {
+      classes += `animate__animated ${animationConfig.animationType} `;
+    }
+    
+    // Add clickable styles if needed
+    if (isClickable) {
+      classes += 'cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 ';
+      
+      // Add transition for hover effects (only if not using animate.css)
+      if (!animationConfig?.enabled || !animationConfig.animationType) {
+        classes += 'transition-all duration-200 ease-out ';
+      }
+    }
+    
+    return classes.trim();
+  };
+  
+  const interactionClasses = getInteractionClasses();
 
   const handleClick = () => {
     if (onClick && !clickable) return;
@@ -130,6 +157,10 @@ export const Brand: React.FC<BrandProps> = ({
   const renderLogo = () => {
     if (variant === 'text-only') return null;
 
+    // Calculate scaled size
+    const scale = iconSizeScale / 100;
+    const scaledStyle = scale !== 1 ? { transform: `scale(${scale})` } : undefined;
+
     // Custom SVG upload has priority
     if (customSvg) {
       const filterId = monochromeMode === 'white' ? 'white-filter' : 
@@ -139,7 +170,7 @@ export const Brand: React.FC<BrandProps> = ({
         <div className={cn(
           sizeConfig.logo,
           'flex items-center justify-center relative overflow-visible'
-        )}>
+        )} style={scaledStyle}>
           <SVGFilters />
           <svg
             className="w-full h-full"
@@ -162,6 +193,7 @@ export const Brand: React.FC<BrandProps> = ({
           src={logoUrl}
           alt={`${brandName} logo`}
           className={cn(sizeConfig.logo, 'object-contain')}
+          style={scaledStyle}
         />
       );
     }
@@ -180,7 +212,7 @@ export const Brand: React.FC<BrandProps> = ({
           !iconBackgroundColor || useSystemColors ? 'bg-primary' : '',
           !iconColor || useSystemColors ? 'text-primary-foreground' : ''
         )}
-        style={backgroundStyle}
+        style={{ ...backgroundStyle, ...scaledStyle }}
       >
         <Icon 
           name="zap" 
@@ -264,7 +296,10 @@ export const Brand: React.FC<BrandProps> = ({
                 ? 'dark:[color:var(--brand-secondary-dark)]' 
                 : 'text-muted-foreground' // System muted-foreground that adapts to light/dark
             )}
-            style={getSecondaryStyle()}
+            style={{
+              ...getSecondaryStyle(),
+              marginTop: textGap ? (typeof textGap === 'number' ? `${textGap}px` : textGap) : undefined
+            }}
           >
             {tagline}
           </Typography>
@@ -275,16 +310,48 @@ export const Brand: React.FC<BrandProps> = ({
 
   const Component = isClickable ? 'button' : 'div';
 
+  // Generate animation styles for animate.css customization
+  const getAnimationStyles = () => {
+    const styles: React.CSSProperties = {};
+    
+    // Apply animate.css custom duration and timing function
+    if (animationConfig?.enabled && animationConfig.animationType) {
+      styles.animationDuration = `${animationConfig.duration}ms`;
+      styles.animationTimingFunction = animationConfig.timingFunction;
+    }
+    
+    // Add hover transition styles for non-animated clickable elements
+    if (isClickable && (!animationConfig?.enabled || !animationConfig.animationType)) {
+      styles.transition = 'all 200ms cubic-bezier(0.25, 0.1, 0.25, 1.0)';
+    }
+    
+    return styles;
+  };
+
+  // Combine custom styles with gap and animations
+  const combinedStyles = {
+    ...themeOverride,
+    ...(gap !== undefined && { gap: typeof gap === 'number' ? `${gap}px` : gap }),
+    ...getAnimationStyles(),
+    // Fix button alignment issues
+    ...(isClickable && {
+      border: 'none',
+      background: 'transparent',
+      font: 'inherit',
+      textAlign: 'inherit'
+    })
+  };
+
   return (
     <Component
       className={cn(
         baseClasses,
         variantClass,
         sizeConfig.container,
-        clickableClass,
+        interactionClasses,
         className
       )}
-      style={themeOverride}
+      style={combinedStyles}
       onClick={handleClick}
       {...(isClickable && { type: 'button' })}
       {...props}

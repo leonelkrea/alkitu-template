@@ -18,7 +18,6 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -166,9 +165,20 @@ function SVGCropper({
   );
 }
 
-// Brand Editor Component - Left Side
-function BrandEditor() {
-  const { config, updateConfig } = useBrandConfig();
+// Brand Editor Component - Left Side  
+function BrandEditor({ 
+  isDarkMode, 
+  darkColors, 
+  lightColors, 
+  getAllColorNames 
+}: {
+  isDarkMode: boolean;
+  darkColors: Record<string, string>;
+  lightColors: Record<string, string>;
+  getAllColorNames: () => string[];
+}) {
+  const { config, updateConfig, relinkToSystem } = useBrandConfig();
+  const currentColors = isDarkMode ? darkColors : lightColors;
   const [isDragOver, setIsDragOver] = React.useState(false);
   const [uploadStatus, setUploadStatus] = React.useState<
     'idle' | 'success' | 'error' | 'editing'
@@ -374,81 +384,77 @@ function BrandEditor() {
       <ControlSection title="Text Colors" expanded>
         <div className="space-y-4">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Primary Text Color</span>
-              {config.primaryTextColorLinked ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
-                    🔗 Linked to system foreground
-                  </span>
-                  <button
-                    onClick={() => updateConfig({ 
-                      primaryTextColor: '#000000', // Start with black as default
-                      primaryTextColorLinked: false 
-                    })}
-                    className="text-xs text-orange-600 hover:text-orange-800 underline"
-                  >
-                    🎨 Customize
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => updateConfig({ 
-                    primaryTextColor: '', 
-                    primaryTextColorLinked: true 
-                  })}
-                  className="text-xs text-blue-600 hover:text-blue-800 underline"
-                >
-                  🔗 Link to system
-                </button>
-              )}
+            <div className="mb-1.5 flex items-center justify-between">
+              <Label className="text-xs font-medium">Primary Text Color</Label>
+              <ColorLinkingControls
+                colorName="brand-primary-text"
+                isLinked={config.primaryTextColorLinked}
+                linkedTo={config.primaryTextColorLinked ? (config.primaryTextColorLinkedTo || 'foreground') : undefined}
+                onLinkTo={(targetColor) => {
+                  // Update brand config to link to the selected theme color
+                  const targetValue = (isDarkMode ? darkColors : lightColors)[targetColor];
+                  if (targetValue) {
+                    updateConfig({ 
+                      primaryTextColor: targetValue,
+                      primaryTextColorLinked: true,
+                      primaryTextColorLinkedTo: targetColor
+                    });
+                  }
+                }}
+                onUnlink={() => updateConfig({ 
+                  primaryTextColor: '#000000',
+                  primaryTextColorLinked: false,
+                  primaryTextColorLinkedTo: undefined
+                })}
+                availableColors={getAllColorNames()}
+                defaultLinkTarget="foreground"
+              />
             </div>
             {!config.primaryTextColorLinked && (
               <EnhancedColorPicker
                 name="brand-primary-text"
-                label="Custom Primary Color"
+                label=""
                 color={config.primaryTextColor}
                 onChange={(color) => updateConfig({ primaryTextColor: color })}
+                description="Color for the main brand text"
               />
             )}
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Secondary Text Color</span>
-              {config.secondaryTextColorLinked ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
-                    🔗 Linked to system muted-foreground
-                  </span>
-                  <button
-                    onClick={() => updateConfig({ 
-                      secondaryTextColor: '#666666', // Start with gray as default
-                      secondaryTextColorLinked: false 
-                    })}
-                    className="text-xs text-orange-600 hover:text-orange-800 underline"
-                  >
-                    🎨 Customize
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => updateConfig({ 
-                    secondaryTextColor: '', 
-                    secondaryTextColorLinked: true 
-                  })}
-                  className="text-xs text-blue-600 hover:text-blue-800 underline"
-                >
-                  🔗 Link to system
-                </button>
-              )}
+            <div className="mb-1.5 flex items-center justify-between">
+              <Label className="text-xs font-medium">Secondary Text Color</Label>
+              <ColorLinkingControls
+                colorName="brand-secondary-text"
+                isLinked={config.secondaryTextColorLinked}
+                linkedTo={config.secondaryTextColorLinked ? (config.secondaryTextColorLinkedTo || 'muted-foreground') : undefined}
+                onLinkTo={(targetColor) => {
+                  // Update brand config to link to the selected theme color
+                  const targetValue = (isDarkMode ? darkColors : lightColors)[targetColor];
+                  if (targetValue) {
+                    updateConfig({ 
+                      secondaryTextColor: targetValue,
+                      secondaryTextColorLinked: true,
+                      secondaryTextColorLinkedTo: targetColor
+                    });
+                  }
+                }}
+                onUnlink={() => updateConfig({ 
+                  secondaryTextColor: '#666666',
+                  secondaryTextColorLinked: false,
+                  secondaryTextColorLinkedTo: undefined
+                })}
+                availableColors={getAllColorNames()}
+                defaultLinkTarget="muted-foreground"
+              />
             </div>
             {!config.secondaryTextColorLinked && (
               <EnhancedColorPicker
                 name="brand-secondary-text"
-                label="Custom Secondary Color"
+                label=""
                 color={config.secondaryTextColor}
                 onChange={(color) => updateConfig({ secondaryTextColor: color })}
+                description="Color for the secondary brand text (tagline)"
               />
             )}
           </div>
@@ -466,81 +472,77 @@ function BrandEditor() {
       <ControlSection title="Icon Colors" expanded>
         <div className="space-y-4">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Icon Background Color</span>
-              {config.iconBackgroundColorLinked ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
-                    🔗 Linked to system primary
-                  </span>
-                  <button
-                    onClick={() => updateConfig({ 
-                      iconBackgroundColor: '#3b82f6', // Start with blue as default
-                      iconBackgroundColorLinked: false 
-                    })}
-                    className="text-xs text-orange-600 hover:text-orange-800 underline"
-                  >
-                    🎨 Customize
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => updateConfig({ 
-                    iconBackgroundColor: '', 
-                    iconBackgroundColorLinked: true 
-                  })}
-                  className="text-xs text-blue-600 hover:text-blue-800 underline"
-                >
-                  🔗 Link to system
-                </button>
-              )}
+            <div className="mb-1.5 flex items-center justify-between">
+              <Label className="text-xs font-medium">Icon Background Color</Label>
+              <ColorLinkingControls
+                colorName="brand-icon-background"
+                isLinked={config.iconBackgroundColorLinked}
+                linkedTo={config.iconBackgroundColorLinked ? (config.iconBackgroundColorLinkedTo || 'primary') : undefined}
+                onLinkTo={(targetColor) => {
+                  // Update brand config to link to the selected theme color
+                  const targetValue = (isDarkMode ? darkColors : lightColors)[targetColor];
+                  if (targetValue) {
+                    updateConfig({ 
+                      iconBackgroundColor: targetValue,
+                      iconBackgroundColorLinked: true,
+                      iconBackgroundColorLinkedTo: targetColor
+                    });
+                  }
+                }}
+                onUnlink={() => updateConfig({ 
+                  iconBackgroundColor: '#3b82f6',
+                  iconBackgroundColorLinked: false,
+                  iconBackgroundColorLinkedTo: undefined
+                })}
+                availableColors={getAllColorNames()}
+                defaultLinkTarget="primary"
+              />
             </div>
             {!config.iconBackgroundColorLinked && (
               <EnhancedColorPicker
                 name="brand-icon-background"
-                label="Custom Icon Background Color"
+                label=""
                 color={config.iconBackgroundColor}
                 onChange={(color) => updateConfig({ iconBackgroundColor: color })}
+                description="Background color for the icon"
               />
             )}
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Icon Color</span>
-              {config.iconColorLinked ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
-                    🔗 Linked to system primary-foreground
-                  </span>
-                  <button
-                    onClick={() => updateConfig({ 
-                      iconColor: '#ffffff', // Start with white as default
-                      iconColorLinked: false 
-                    })}
-                    className="text-xs text-orange-600 hover:text-orange-800 underline"
-                  >
-                    🎨 Customize
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => updateConfig({ 
-                    iconColor: '', 
-                    iconColorLinked: true 
-                  })}
-                  className="text-xs text-blue-600 hover:text-blue-800 underline"
-                >
-                  🔗 Link to system
-                </button>
-              )}
+            <div className="mb-1.5 flex items-center justify-between">
+              <Label className="text-xs font-medium">Icon Color</Label>
+              <ColorLinkingControls
+                colorName="brand-icon-color"
+                isLinked={config.iconColorLinked}
+                linkedTo={config.iconColorLinked ? (config.iconColorLinkedTo || 'primary-foreground') : undefined}
+                onLinkTo={(targetColor) => {
+                  // Update brand config to link to the selected theme color
+                  const targetValue = (isDarkMode ? darkColors : lightColors)[targetColor];
+                  if (targetValue) {
+                    updateConfig({ 
+                      iconColor: targetValue,
+                      iconColorLinked: true,
+                      iconColorLinkedTo: targetColor
+                    });
+                  }
+                }}
+                onUnlink={() => updateConfig({ 
+                  iconColor: '#ffffff',
+                  iconColorLinked: false,
+                  iconColorLinkedTo: undefined
+                })}
+                availableColors={getAllColorNames()}
+                defaultLinkTarget="primary-foreground"
+              />
             </div>
             {!config.iconColorLinked && (
               <EnhancedColorPicker
                 name="brand-icon-color"
-                label="Custom Icon Color"
+                label=""
                 color={config.iconColor}
                 onChange={(color) => updateConfig({ iconColor: color })}
+                description="Color for the icon itself"
               />
             )}
           </div>
@@ -571,6 +573,9 @@ interface ColorConfig {
   displayName: string;
   value: string;
   description: string;
+  linkedTo?: string; // Optional: name of color this is linked to
+  isLinked?: boolean; // Whether this color is currently linked
+  defaultLinkTarget?: string; // Default color to link to (e.g., 'primary' for 'primary-foreground')
 }
 
 // Type for color sections
@@ -597,6 +602,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Primary Foreground',
         value: '#000000',
         description: 'Text on primary background',
+        defaultLinkTarget: 'primary',
       },
     ],
   },
@@ -614,6 +620,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Secondary Foreground',
         value: '#374151',
         description: 'Text on secondary background',
+        defaultLinkTarget: 'secondary',
       },
     ],
   },
@@ -631,6 +638,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Accent Foreground',
         value: '#0c4a6e',
         description: 'Text on accent background',
+        defaultLinkTarget: 'accent',
       },
     ],
   },
@@ -665,6 +673,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Card Foreground',
         value: '#374151',
         description: 'Text on card background',
+        defaultLinkTarget: 'card',
       },
     ],
   },
@@ -682,6 +691,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Popover Foreground',
         value: '#374151',
         description: 'Text on popover background',
+        defaultLinkTarget: 'popover',
       },
     ],
   },
@@ -699,6 +709,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Muted Foreground',
         value: '#6b7280',
         description: 'Muted text color',
+        defaultLinkTarget: 'muted',
       },
     ],
   },
@@ -716,6 +727,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Success Foreground',
         value: '#ffffff',
         description: 'Text on success background',
+        defaultLinkTarget: 'success',
       },
       {
         name: 'warning',
@@ -728,6 +740,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Warning Foreground',
         value: '#1f2937',
         description: 'Text on warning background',
+        defaultLinkTarget: 'warning',
       },
       {
         name: 'info',
@@ -740,6 +753,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Info Foreground',
         value: '#ffffff',
         description: 'Text on info background',
+        defaultLinkTarget: 'info',
       },
       {
         name: 'destructive',
@@ -752,6 +766,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Destructive Foreground',
         value: '#ffffff',
         description: 'Text on error background',
+        defaultLinkTarget: 'destructive',
       },
     ],
   },
@@ -763,18 +778,21 @@ const colorSections: ColorSection[] = [
         displayName: 'Border',
         value: '#e5e7eb',
         description: 'Default border color',
+        defaultLinkTarget: 'primary',
       },
       {
         name: 'input',
         displayName: 'Input',
         value: '#e5e7eb',
         description: 'Input border color',
+        defaultLinkTarget: 'muted',
       },
       {
         name: 'ring',
         displayName: 'Ring',
         value: '#3b82f6',
         description: 'Focus ring color',
+        defaultLinkTarget: 'primary',
       },
     ],
   },
@@ -827,6 +845,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Sidebar Foreground',
         value: '#374151',
         description: 'Sidebar text color',
+        defaultLinkTarget: 'sidebar',
       },
       {
         name: 'sidebar-primary',
@@ -839,6 +858,7 @@ const colorSections: ColorSection[] = [
         displayName: 'Sidebar Primary Foreground',
         value: '#000000',
         description: 'Sidebar primary text color',
+        defaultLinkTarget: 'sidebar-primary',
       },
       {
         name: 'sidebar-accent',
@@ -851,18 +871,21 @@ const colorSections: ColorSection[] = [
         displayName: 'Sidebar Accent Foreground',
         value: '#0c4a6e',
         description: 'Sidebar accent text color',
+        defaultLinkTarget: 'sidebar-accent',
       },
       {
         name: 'sidebar-border',
         displayName: 'Sidebar Border',
         value: '#e5e7eb',
         description: 'Sidebar border color',
+        defaultLinkTarget: 'border',
       },
       {
         name: 'sidebar-ring',
         displayName: 'Sidebar Ring',
         value: '#3b82f6',
         description: 'Sidebar focus ring color',
+        defaultLinkTarget: 'ring',
       },
     ],
   },
@@ -992,12 +1015,98 @@ function EnhancedColorPicker({
   );
 }
 
+// Component for color linking controls
+interface ColorLinkingControlsProps {
+  colorName: string;
+  isLinked: boolean;
+  linkedTo?: string;
+  onLinkTo: (targetColor: string) => void;
+  onUnlink: () => void;
+  availableColors: string[];
+  defaultLinkTarget?: string;
+}
+
+
+function ColorLinkingControls({
+  colorName,
+  isLinked,
+  linkedTo,
+  onLinkTo,
+  onUnlink,
+  availableColors,
+  defaultLinkTarget,
+}: ColorLinkingControlsProps) {
+  const [showLinkMenu, setShowLinkMenu] = useState(false);
+
+  const handleLinkToColor = (targetColor: string) => {
+    onLinkTo(targetColor);
+    setShowLinkMenu(false);
+  };
+
+  if (isLinked && linkedTo) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-muted-foreground bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">
+          🔗 Linked to {linkedTo}
+        </span>
+        <button
+          onClick={onUnlink}
+          className="text-xs text-orange-600 hover:text-orange-800 underline"
+        >
+          🎨 Customize
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setShowLinkMenu(!showLinkMenu)}
+        className="text-xs text-blue-600 hover:text-blue-800 underline"
+      >
+        🔗 Link to color
+      </button>
+      
+      {showLinkMenu && (
+        <div className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10 min-w-[200px]">
+          <div className="p-2">
+            <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+              Link {colorName} to:
+            </div>
+            <div className="max-h-40 overflow-y-auto">
+              {defaultLinkTarget && (
+                <button
+                  onClick={() => handleLinkToColor(defaultLinkTarget)}
+                  className="block w-full text-left px-2 py-1 text-xs hover:bg-blue-100 dark:hover:bg-blue-800 rounded bg-blue-50 dark:bg-blue-900/20 font-medium text-blue-700 dark:text-blue-300 mb-1"
+                >
+                  {defaultLinkTarget} (recommended)
+                </button>
+              )}
+              {availableColors
+                .filter(color => color !== colorName && color !== defaultLinkTarget) // Don't allow self-linking or duplicate default
+                .map(color => (
+                  <button
+                    key={color}
+                    onClick={() => handleLinkToColor(color)}
+                    className="block w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                  >
+                    {color}
+                  </button>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function ThemeEditor() {
   const {
     theme,
     isDarkMode,
     toggleThemeMode,
-    applyTheme,
     refreshTheme,
     updateThemeColors,
   } = useCompanyTheme();
@@ -1006,6 +1115,7 @@ export function ThemeEditor() {
   >('colors');
   const [lightColors, setLightColors] = useState<Record<string, string>>({});
   const [darkColors, setDarkColors] = useState<Record<string, string>>({});
+  const [colorLinks, setColorLinks] = useState<Record<string, { linkedTo?: string; isLinked: boolean }>>({});
   const [previewMode, setPreviewMode] = useState(false);
   const [showCodePanel, setShowCodePanel] = useState(false);
   const [originalLightColors, setOriginalLightColors] = useState<
@@ -1044,10 +1154,19 @@ export function ThemeEditor() {
     );
 
     if (theme && theme.lightModeConfig) {
+      // Start with default colors from colorSections to ensure all colors are available
       const newLightColors: Record<string, string> = {};
       const newDarkColors: Record<string, string> = {};
+      
+      // First, populate with default values from colorSections
+      colorSections.forEach((section) => {
+        section.colors.forEach((color) => {
+          newLightColors[color.name] = color.value;
+          newDarkColors[color.name] = color.value;
+        });
+      });
 
-      // Load light mode colors from actual theme
+      // Then override with actual theme colors
       Object.entries(theme.lightModeConfig).forEach(([name, value]) => {
         newLightColors[name] = value as string;
       });
@@ -1123,7 +1242,15 @@ export function ThemeEditor() {
       const newLightColors: Record<string, string> = {};
       const newDarkColors: Record<string, string> = {};
 
-      // Load colors from the new theme
+      // First, populate with default values from colorSections
+      colorSections.forEach((section) => {
+        section.colors.forEach((color) => {
+          newLightColors[color.name] = color.value;
+          newDarkColors[color.name] = color.value;
+        });
+      });
+
+      // Then override with actual theme colors
       if (theme.lightModeConfig) {
         Object.entries(theme.lightModeConfig).forEach(([name, value]) => {
           newLightColors[name] = value as string;
@@ -1150,9 +1277,74 @@ export function ThemeEditor() {
     }
   }, [theme?.id, isInitialized]);
 
+  // Helper function to get all available colors for linking
+  const getAllColorNames = useCallback(() => {
+    const allColors: string[] = [];
+    colorSections.forEach(section => {
+      section.colors.forEach(color => {
+        allColors.push(color.name);
+      });
+    });
+    return allColors;
+  }, []);
+
+  // Function to link a color to another color
+  const linkColorTo = useCallback((colorName: string, targetColor: string) => {
+    setColorLinks(prev => ({
+      ...prev,
+      [colorName]: { linkedTo: targetColor, isLinked: true }
+    }));
+
+    // Update the color value to match the target color
+    const currentModeColors = isDarkMode ? darkColors : lightColors;
+    const targetValue = currentModeColors[targetColor];
+    
+    
+    if (targetValue) {
+      if (isDarkMode) {
+        setDarkColors(prev => ({ ...prev, [colorName]: targetValue }));
+      } else {
+        setLightColors(prev => ({ ...prev, [colorName]: targetValue }));
+      }
+      
+      // Apply the change immediately
+      updateThemeColors({ [colorName]: targetValue }, isDarkMode ? 'dark' : 'light');
+    }
+  }, [isDarkMode, darkColors, lightColors, updateThemeColors]);
+
+  // Function to unlink a color
+  const unlinkColor = useCallback((colorName: string) => {
+    setColorLinks(prev => ({
+      ...prev,
+      [colorName]: { isLinked: false }
+    }));
+    
+    // Apply the current color value immediately when unlinking
+    const currentModeColors = isDarkMode ? darkColors : lightColors;
+    const currentValue = currentModeColors[colorName];
+    if (currentValue) {
+      updateThemeColors({ [colorName]: currentValue }, isDarkMode ? 'dark' : 'light');
+    }
+  }, [isDarkMode, darkColors, lightColors, updateThemeColors]);
+
+  // Function to check if a color is linked
+  const isColorLinked = useCallback((colorName: string) => {
+    return colorLinks[colorName]?.isLinked || false;
+  }, [colorLinks]);
+
+  // Function to get what a color is linked to
+  const getColorLinkTarget = useCallback((colorName: string) => {
+    return colorLinks[colorName]?.linkedTo;
+  }, [colorLinks]);
+
   // Handle color changes with proper theme mode consideration
   const handleColorChange = useCallback(
     (colorName: string, newValue: string) => {
+      // Automatically unlink color when manually changed
+      if (isColorLinked(colorName)) {
+        unlinkColor(colorName);
+      }
+
       // Update the appropriate color state
       if (isDarkMode) {
         setDarkColors((prev) => ({ ...prev, [colorName]: newValue }));
@@ -1166,8 +1358,30 @@ export function ThemeEditor() {
         isDarkMode ? 'dark' : 'light',
       );
     },
-    [isDarkMode],
-  ); // Removed updateThemeColors from deps
+    [isDarkMode, isColorLinked, unlinkColor, updateThemeColors],
+  );
+
+  // Update linked colors when their target colors change
+  useEffect(() => {
+    Object.entries(colorLinks).forEach(([colorName, linkInfo]) => {
+      if (linkInfo.isLinked && linkInfo.linkedTo) {
+        const currentModeColors = isDarkMode ? darkColors : lightColors;
+        const targetValue = currentModeColors[linkInfo.linkedTo];
+        
+        if (targetValue && currentModeColors[colorName] !== targetValue) {
+          // Update the linked color to match its target
+          if (isDarkMode) {
+            setDarkColors(prev => ({ ...prev, [colorName]: targetValue }));
+          } else {
+            setLightColors(prev => ({ ...prev, [colorName]: targetValue }));
+          }
+          
+          // Apply the change immediately
+          updateThemeColors({ [colorName]: targetValue }, isDarkMode ? 'dark' : 'light');
+        }
+      }
+    });
+  }, [colorLinks, darkColors, lightColors, isDarkMode, updateThemeColors]);
 
   // Check if there are unsaved changes
   const hasUnsavedChanges = useMemo(() => {
@@ -1280,22 +1494,28 @@ export function ThemeEditor() {
       const themeName = prompt('Enter theme name:', theme?.name || 'New Theme');
       if (!themeName) return;
 
-      const createThemeMutation = trpc.theme.createTheme.useMutation(); // TODO: Implement this
+      // TODO: Implement theme saving functionality
+      // const createThemeMutation = trpc.theme.createTheme.useMutation();
+      // await createThemeMutation.mutateAsync({
+      //   name: themeName,
+      //   companyId: theme?.companyId,
+      //   createdById: 'default-user',
+      //   lightModeConfig: lightColors,
+      //   darkModeConfig: darkColors,
+      //   isDefault: false,
+      // });
 
-      await createThemeMutation.mutateAsync({
+      console.log('Theme would be saved:', {
         name: themeName,
-        companyId: theme.companyId,
-        createdById: 'default-user', // TODO: Get from auth
         lightModeConfig: lightColors,
         darkModeConfig: darkColors,
-        isDefault: false,
       });
 
       // Update original colors to reflect saved state
       setOriginalLightColors(lightColors);
       setOriginalDarkColors(darkColors);
 
-      toast.success('Theme saved successfully!');
+      toast.success('Theme export functionality coming soon!');
       await refreshTheme();
     } catch (error) {
       console.error('Failed to save theme:', error);
@@ -1387,16 +1607,36 @@ export function ThemeEditor() {
                             expanded={section.expanded}
                           >
                             {section.colors.map((color) => (
-                              <EnhancedColorPicker
-                                key={color.name}
-                                name={color.name}
-                                color={currentColors[color.name] || color.value}
-                                onChange={(newValue) =>
-                                  handleColorChange(color.name, newValue)
-                                }
-                                label={color.displayName}
-                                description={color.description}
-                              />
+                              <div key={color.name} className="mb-4">
+                                <div className="mb-1.5 flex items-center justify-between">
+                                  <Label className="text-xs font-medium">
+                                    {color.displayName}
+                                  </Label>
+                                  <ColorLinkingControls
+                                    colorName={color.name}
+                                    isLinked={isColorLinked(color.name)}
+                                    linkedTo={getColorLinkTarget(color.name)}
+                                    onLinkTo={(targetColor) => linkColorTo(color.name, targetColor)}
+                                    onUnlink={() => unlinkColor(color.name)}
+                                    availableColors={getAllColorNames()}
+                                    defaultLinkTarget={color.defaultLinkTarget}
+                                  />
+                                </div>
+                                {!isColorLinked(color.name) && (
+                                  <EnhancedColorPicker
+                                    name={color.name}
+                                    color={currentColors[color.name] || color.value}
+                                    onChange={(newValue) =>
+                                      handleColorChange(color.name, newValue)
+                                    }
+                                    label=""
+                                    description={color.description}
+                                  />
+                                )}
+                                {isColorLinked(color.name) && color.description && (
+                                  <p className="text-muted-foreground text-xs mt-1">{color.description}</p>
+                                )}
+                              </div>
                             ))}
                           </ControlSection>
                         ))}
@@ -1426,7 +1666,12 @@ export function ThemeEditor() {
                       className="mt-1 size-full overflow-hidden"
                     >
                         <ScrollArea className="h-[600px] px-4">
-                          <BrandEditor />
+                          <BrandEditor 
+                            isDarkMode={isDarkMode}
+                            darkColors={darkColors}
+                            lightColors={lightColors}
+                            getAllColorNames={getAllColorNames}
+                          />
                         </ScrollArea>
                     </TabsContent>
 

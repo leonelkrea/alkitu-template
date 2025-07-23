@@ -17,6 +17,7 @@ import {
 } from '@/components/atomic-design/atoms';
 import { Brand } from '@/components/atomic-design/atoms/brands';
 import { useBrandConfig } from './BrandContext';
+import { NewAdvancedBrandStudio } from './NewAdvancedBrandStudio';
 import { ServiceCard, RequestCard } from '@/components/atomic-design/molecules';
 import { cn } from '@/lib/utils';
 
@@ -71,7 +72,7 @@ const iconCategories = {
   ],
   content: [
     'folderIcon', 'folderOpenIcon', 'fileIcon', 'filesIcon', 'fileTextIcon', 'fileCodeIcon',
-    'imageIcon', 'videoIcon', 'musicIcon', 'bookOpenIcon', 'typeIcon', 'boldIcon', 'italicIcon',
+    'bookOpenIcon', 'typeIcon', 'boldIcon', 'italicIcon',
     'underlineIcon', 'alignLeftIcon', 'alignCenterIcon', 'alignRightIcon', 'alignJustifyIcon'
   ],
   communication: [
@@ -569,6 +570,13 @@ export const ThemePreviewContent: React.FC<ThemePreviewContentProps> = ({ classN
                   </div>
                 </div>
 
+                <Separator />
+
+                {/* Advanced Brand Studio - Responsive Interactive Playground */}
+                <div>
+                  <NewAdvancedBrandStudio />
+                </div>
+
               </CardContent>
             </Card>
             )}
@@ -709,9 +717,9 @@ export const ThemePreviewContent: React.FC<ThemePreviewContentProps> = ({ classN
 
                   <TabsContent value="all" className="mt-4">
                     <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3">
-                      {Object.values(iconCategories).flatMap((icons) =>
+                      {Object.entries(iconCategories).flatMap(([categoryKey, icons]) =>
                         icons.map((iconName) => (
-                          <div key={iconName} className="flex flex-col items-center p-2 rounded-md hover:bg-muted transition-colors group text-foreground">
+                          <div key={`${categoryKey}-${iconName}`} className="flex flex-col items-center p-2 rounded-md hover:bg-muted transition-colors group text-foreground">
                             <Icon name={iconName} size="md" className="mb-1" />
                             <Typography variant="caption" className="text-xs text-center opacity-0 group-hover:opacity-100 transition-opacity">
                               {iconName.replace('Icon', '')}
@@ -726,7 +734,7 @@ export const ThemePreviewContent: React.FC<ThemePreviewContentProps> = ({ classN
                     <TabsContent key={categoryKey} value={categoryKey} className="mt-4">
                       <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3">
                         {icons.map((iconName) => (
-                          <div key={iconName} className="flex flex-col items-center p-2 rounded-md hover:bg-muted transition-colors group text-foreground">
+                          <div key={`${categoryKey}-${iconName}`} className="flex flex-col items-center p-2 rounded-md hover:bg-muted transition-colors group text-foreground">
                             <Icon name={iconName} size="md" className="mb-1" />
                             <Typography variant="caption" className="text-xs text-center opacity-0 group-hover:opacity-100 transition-opacity">
                               {iconName.replace('Icon', '')}

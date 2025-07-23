@@ -93,4 +93,29 @@ export interface BrandProps {
    * Custom icon color (overrides system primary-foreground)
    */
   iconColor?: string;
+
+  /**
+   * Gap between icon and text container
+   */
+  gap?: string | number;
+  
+  /**
+   * Gap between primary and secondary text (margin-top on secondary)
+   */
+  textGap?: string | number;
+
+  /**
+   * Custom icon size scale (percentage, e.g., 150 for 150% of default size)
+   */
+  iconSizeScale?: number;
+
+  /**
+   * Animation configuration
+   */
+  animationConfig?: {
+    enabled: boolean;
+    duration: number;
+    timingFunction: string;
+    animationType: string; // animate.css class name
+  };
 }
