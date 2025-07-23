@@ -10,7 +10,7 @@ vi.mock('../use-websocket', () => ({
 }));
 
 vi.mock('@/lib/trpc', () => ({
-  trpcReact: {
+  trpc: {
     notification: {
       getUnreadCount: {
         useQuery: vi.fn(),
@@ -43,7 +43,7 @@ describe('useNotificationCount', () => {
     const trpcModule = await import('@/lib/trpc');
     const websocketModule = await import('../use-websocket');
     
-    (trpcModule.trpcReact.notification.getUnreadCount.useQuery as any) = mockUseQuery;
+    (trpcModule.trpc.notification.getUnreadCount.useQuery as any) = mockUseQuery;
     (websocketModule.useWebSocket as any).mockImplementation(mockUseWebSocket);
   });
 

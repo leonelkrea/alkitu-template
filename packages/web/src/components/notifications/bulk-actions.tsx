@@ -26,7 +26,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/components/ui/use-toast';
 import { Trash2, CheckCheck, Eye, BarChart3, Filter, X } from 'lucide-react';
-import { trpcReact } from '@/lib/trpc';
+import { trpc } from '@/lib/trpc';
 
 interface BulkActionsProps {
   userId: string;
@@ -54,22 +54,20 @@ export function BulkActions({
   const [showStats, setShowStats] = useState(false);
 
   // tRPC mutations
-  const markAllAsReadMutation =
-    trpcReact.notification.markAllAsRead.useMutation();
+  const markAllAsReadMutation = trpc.notification.markAllAsRead.useMutation(); // TODO: Implement this
   const deleteAllMutation =
-    trpcReact.notification.deleteAllNotifications.useMutation();
+    trpc.notification.deleteAllNotifications.useMutation(); // TODO: Implement this
   const deleteReadMutation =
-    trpcReact.notification.deleteReadNotifications.useMutation();
-  const bulkMarkAsReadMutation =
-    trpcReact.notification.bulkMarkAsRead.useMutation();
-  const bulkDeleteMutation = trpcReact.notification.bulkDelete.useMutation();
+    trpc.notification.deleteReadNotifications.useMutation(); // TODO: Implement this
+  const bulkMarkAsReadMutation = trpc.notification.bulkMarkAsRead.useMutation(); // TODO: Implement this
+  const bulkDeleteMutation = trpc.notification.bulkDelete.useMutation(); // TODO: Implement this
   const deleteByTypeMutation =
-    trpcReact.notification.deleteNotificationsByType.useMutation();
+    trpc.notification.deleteNotificationsByType.useMutation(); // TODO: Implement this
 
   // tRPC queries
   const { data: stats, refetch: refetchStats } =
-    trpcReact.notification.getNotificationStats.useQuery(
-      { userId },
+    trpc.notification.getNotificationStats.useQuery(
+      { userId }, // TODO: Implement this
       { enabled: showStats },
     );
 
@@ -527,12 +525,13 @@ export function BulkActions({
                 <div className="mt-4">
                   <h5 className="font-medium mb-2">By Type:</h5>
                   <div className="flex flex-wrap gap-2">
-                    {stats.byType.map((item: { type: string; count: number; }) => (
-                      <Badge key={item.type} variant="outline">
-                        {item.type}:{' '}
-                        {item.count}
-                      </Badge>
-                    ))}
+                    {stats.byType.map(
+                      (item: { type: string; count: number }) => (
+                        <Badge key={item.type} variant="outline">
+                          {item.type}: {item.count}
+                        </Badge>
+                      ),
+                    )}
                   </div>
                 </div>
               )}

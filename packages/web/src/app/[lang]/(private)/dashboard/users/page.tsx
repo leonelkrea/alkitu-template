@@ -1,13 +1,13 @@
 'use client';
 import React, { useState, useMemo } from 'react';
-import { trpcReact } from '@/lib/trpc';
+import { trpc } from '@/lib/trpc';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/adapters/Card';
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -16,8 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Input } from '@/components/adapters/Input';
-import { Button } from '@/components/adapters/Button';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/adapters/Badge';
+import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   SearchIcon,
@@ -123,13 +123,12 @@ const UsersPage = () => {
     isLoading,
     isError,
     refetch,
-  } = trpcReact.user.getFilteredUsers.useQuery(queryParams);
+  } = trpc.user.getFilteredUsers.useQuery(queryParams); // TODO: Implement this
 
   // Add mutations for bulk actions
-  const bulkUpdateStatusMutation =
-    trpcReact.user.bulkUpdateStatus.useMutation();
-  const bulkDeleteUsersMutation = trpcReact.user.bulkDeleteUsers.useMutation();
-  const bulkUpdateRoleMutation = trpcReact.user.bulkUpdateRole.useMutation();
+  const bulkUpdateStatusMutation = trpc.user.bulkUpdateStatus.useMutation(); // TODO: Implement this
+  const bulkDeleteUsersMutation = trpc.user.bulkDeleteUsers.useMutation(); // TODO: Implement this
+  const bulkUpdateRoleMutation = trpc.user.bulkUpdateRole.useMutation(); // TODO: Implement this
 
   const handleFilterChange = (key: keyof UserFilters, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value, page: 1 })); // Reset to page 1 when filtering
@@ -293,7 +292,7 @@ const UsersPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card migrated={false}>
+      <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -307,12 +306,11 @@ const UsersPage = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
-                migrated={true}
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filters
               </Button>
-              <Button onClick={handleAddUser} migrated={true}>
+              <Button onClick={handleAddUser}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add User
               </Button>
@@ -329,7 +327,6 @@ const UsersPage = () => {
                 <Input
                   placeholder="Search users..."
                   value={filters.search}
-                  migrated={true}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                   className="pl-10"
                 />
@@ -384,7 +381,7 @@ const UsersPage = () => {
 
       {/* Bulk Actions */}
       {selectedUsers.length > 0 && (
-        <Card migrated={false}>
+        <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">
@@ -395,7 +392,6 @@ const UsersPage = () => {
                   variant="outline"
                   size="sm"
                   onClick={handleBulkActivate}
-                  migrated={true}
                   disabled={bulkUpdateStatusMutation.isPending}
                 >
                   <UserCheck className="h-4 w-4 mr-2" />
@@ -405,7 +401,6 @@ const UsersPage = () => {
                   variant="outline"
                   size="sm"
                   onClick={handleBulkDeactivate}
-                  migrated={true}
                   disabled={bulkUpdateStatusMutation.isPending}
                 >
                   <UserX className="h-4 w-4 mr-2" />
@@ -415,7 +410,6 @@ const UsersPage = () => {
                   variant="destructive"
                   size="sm"
                   onClick={handleBulkDelete}
-                  migrated={true}
                   disabled={bulkDeleteUsersMutation.isPending}
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
@@ -428,7 +422,7 @@ const UsersPage = () => {
       )}
 
       {/* Users Table */}
-      <Card migrated={false}>
+      <Card>
         <CardContent className="pt-6">
           <Table>
             <TableHeader>
@@ -546,7 +540,6 @@ const UsersPage = () => {
                   size="sm"
                   disabled={!pagination.hasPrev}
                   onClick={() => handlePageChange(pagination.page - 1)}
-                  migrated={true}
                 >
                   Previous
                 </Button>
@@ -558,7 +551,6 @@ const UsersPage = () => {
                   size="sm"
                   disabled={!pagination.hasNext}
                   onClick={() => handlePageChange(pagination.page + 1)}
-                  migrated={true}
                 >
                   Next
                 </Button>

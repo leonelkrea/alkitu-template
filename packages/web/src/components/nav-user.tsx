@@ -141,7 +141,7 @@ export function NavUser({ user }: { user: User }) {
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/notifications" className="relative">
                   <div className="relative">
-                    <Bell />
+                    <Bell className="h-4 w-4" />
                     <NotificationBadge count={unreadCount} />
                   </div>
                   {t('notifications')}

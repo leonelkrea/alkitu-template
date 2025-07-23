@@ -15,10 +15,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/adapters/Card';
-import { Badge } from '@/components/adapters/Badge';
-import { Button } from '@/components/adapters/Button';
-import { Typography } from '@/components/adapters/Typography';
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Typography } from '@/components/atomic-design/atoms/typography';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import {
@@ -118,7 +118,6 @@ const NotificationCard = React.memo(function NotificationCard({
 
   return (
     <Card
-      migrated={true}
       className={`transition-all duration-200 ${!notification.read ? 'border-l-4 border-l-blue-500 bg-blue-50/30 dark:bg-blue-950/20' : 'hover:shadow-md'}`}
     >
       <CardHeader className="pb-3">
@@ -136,7 +135,6 @@ const NotificationCard = React.memo(function NotificationCard({
             <Badge
               className={getTypeColor(notification.type)}
               variant="secondary"
-              migrated={true}
             >
               {notification.type}
             </Badge>
@@ -151,7 +149,6 @@ const NotificationCard = React.memo(function NotificationCard({
                 size="sm"
                 onClick={() => onMarkAsRead(notification.id)}
                 className="h-8 px-2"
-                migrated={true}
               >
                 <Check className="w-4 h-4" />
               </Button>
@@ -216,8 +213,12 @@ const NotificationHeader = React.memo(function NotificationHeader({
   return (
     <div className="flex items-center justify-between mb-6">
       <div>
-        <Typography variant="h1" className="text-3xl font-bold" migrated={true}>{t('title')}</Typography>
-        <Typography variant="p" className="text-muted-foreground mt-1" migrated={true}>{t('subtitle')}</Typography>
+        <Typography variant="h1" className="text-3xl font-bold">
+          {t('title')}
+        </Typography>
+        <Typography variant="p" className="text-muted-foreground mt-1">
+          {t('subtitle')}
+        </Typography>
         {totalCount > 0 && (
           <p className="text-sm text-muted-foreground mt-1">
             {isFilteredFetch ? t('filteredResults') : t('allNotifications')} •
@@ -750,6 +751,7 @@ export default function NotificationsPage() {
             onClick={handleExport}
             disabled={!totalCount || currentLoading}
             className="flex items-center gap-1"
+            title="Exportar notificaciones en formato CSV"
           >
             <Download className="w-4 h-4" />
             {t('exportCsv')}
@@ -764,13 +766,43 @@ export default function NotificationsPage() {
             </Link>
           </Button>
           {unreadCount > 0 && (
-            <Button onClick={markAllAsRead} variant="outline" size="sm">
+            <Button
+              onClick={markAllAsRead}
+              variant="outline"
+              size="sm"
+              title="Marcar todas las notificaciones como leídas"
+            >
               <Check className="w-4 h-4 mr-1" />
               {infiniteScrollEnabled
                 ? t('markLoadedAsRead')
                 : t('markPageAsRead')}
             </Button>
           )}
+          <Button
+            onClick={() => {
+              // Marcar notificaciones no leídas
+              const unreadNotifications = currentNotifications.filter(
+                (n) => n.read,
+              );
+              unreadNotifications.forEach((n) => {
+                setNotifications((prev) =>
+                  prev.map((notification) =>
+                    notification.id === n.id
+                      ? { ...notification, read: false }
+                      : notification,
+                  ),
+                );
+              });
+            }}
+            variant="outline"
+            size="sm"
+            disabled={unreadCount === currentNotifications.length}
+            title="Marcar notificaciones como no leídas"
+            className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+          >
+            <Bell className="w-4 h-4 mr-1" />
+            Marcar como no leídas
+          </Button>
         </div>
       </div>
 

@@ -4,16 +4,16 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { trpcReact } from '@/lib/trpc';
+import { trpc } from '@/lib/trpc';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/adapters/Card';
-import { Button } from '@/components/adapters/Button';
-import { Typography } from '@/components/adapters/Typography';
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Typography } from '@/components/atomic-design/atoms/typography';
 import {
   Form,
   FormControl,
@@ -31,9 +31,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/adapters/Input';
+import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/adapters/Badge';
+import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from '@/context/TranslationContext';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
@@ -125,12 +125,12 @@ export default function NotificationPreferencesPage() {
     data: preferences,
     isLoading: loading,
     refetch,
-  } = trpcReact.notification.getUserPreferences.useQuery({
+  } = trpc.notification.getUserPreferences.useQuery({ // TODO: Implement this
     userId: TEST_USER_ID,
   });
 
   const updatePreferences =
-    trpcReact.notification.createOrUpdatePreferences.useMutation({
+    trpc.notification.createOrUpdatePreferences.useMutation({ // TODO: Implement this
       onSuccess: () => {
         toast.success(t('preferences.successUpdate'));
         refetch();
@@ -141,17 +141,16 @@ export default function NotificationPreferencesPage() {
       },
     });
 
-  const deletePreferences =
-    trpcReact.notification.deletePreferences.useMutation({
-      onSuccess: () => {
-        toast.success(t('preferences.successReset'));
-        refetch();
-      },
-      onError: (error) => {
-        console.error('Error resetting preferences:', error);
-        toast.error(t('preferences.errorReset'));
-      },
-    });
+  const deletePreferences = trpc.notification.deletePreferences.useMutation({ // TODO: Implement this
+    onSuccess: () => {
+      toast.success(t('preferences.successReset'));
+      refetch();
+    },
+    onError: (error) => { // TODO: Implement this
+      console.error('Error resetting preferences:', error);
+      toast.error(t('preferences.errorReset'));
+    },
+  });
 
   const form = useForm<PreferencesFormData>({
     resolver: zodResolver(preferencesSchema),

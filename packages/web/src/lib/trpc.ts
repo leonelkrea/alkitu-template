@@ -1,15 +1,19 @@
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
-import type { AppRouter } from '@/types/trpc';
 
-// Regular proxy client for server-side or non-React usage
-export const trpc = createTRPCProxyClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: 'http://localhost:3001/trpc',
-    }),
-  ],
-});
+// Definir el tipo de AppRouter basado en la estructura real del backend
+export type AppRouter = {
+  hello: {
+    input: { name: string };
+    output: { greeting: string };
+  };
+  chat: any; // Por ahora any para debugging
+  notification: any;
+  billing: any;
+  user: any;
+  chatbotConfig: any;
+  theme: any;
+  company: any;
+};
 
-// React Query client for components
-export const trpcReact = createTRPCReact<AppRouter>();
+// Solo necesitamos el React Query client para componentes
+export const trpc = createTRPCReact<AppRouter>();

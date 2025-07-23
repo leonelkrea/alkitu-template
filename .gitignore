@@ -115,3 +115,5 @@ pnpm-lock.yaml
 # Logs específicos
 api.log
 *.log
+*storybook.log
+storybook-static

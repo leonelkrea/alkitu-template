@@ -1,6 +1,6 @@
 'use client';
 
-import { trpcReact } from '@/lib/trpc';
+import { trpc } from '@/lib/trpc';
 import { useEffect, useState } from 'react';
 import { useWebSocket } from './use-websocket';
 
@@ -32,7 +32,7 @@ export function useNotificationCount({
   });
 
   const { data, isLoading, error, refetch } =
-    trpcReact.notification.getUnreadCount.useQuery(
+    trpc.notification.getUnreadCount.useQuery(
       { userId },
       {
         enabled: enabled && !!userId,

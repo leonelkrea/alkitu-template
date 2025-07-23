@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/adapters/Button';
-import { Input } from '@/components/adapters/Input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslations } from '@/context/TranslationContext';
 import { FormError } from '@/components/shared/messages/form-error';
@@ -60,7 +60,11 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4" suppressHydrationWarning>
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4"
+      suppressHydrationWarning
+    >
       <div className="space-y-2" suppressHydrationWarning>
         <Label htmlFor="email">{t('auth.login.email')}</Label>
         <Input
@@ -71,7 +75,6 @@ export const LoginForm = () => {
           placeholder={t('auth.login.email')}
           required
           disabled={isLoading}
-          migrated={true}
         />
       </div>
 
@@ -85,14 +88,13 @@ export const LoginForm = () => {
           placeholder={t('auth.login.password')}
           required
           disabled={isLoading}
-          migrated={true}
         />
       </div>
 
       <FormError message={error} />
       <FormSuccess message={success} />
 
-      <Button type="submit" className="w-full" disabled={isLoading} migrated={true}>
+      <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? t('Common.general.loading') : t('auth.login.submit')}
       </Button>
     </form>

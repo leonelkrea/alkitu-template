@@ -1,0 +1,59 @@
+/* Theme Utilities Layer */
+@layer utilities {
+  /* Ensure border color inheritance */
+  * {
+    border-color: var(--border);
+  }
+
+  /* Body styles */
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: var(--letter-spacing, 0);
+  }
+
+  /* Button cursor styles */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Smooth theme transitions */
+  .theme-transition {
+    transition: background-color 200ms ease-in-out, 
+                color 200ms ease-in-out, 
+                border-color 200ms ease-in-out,
+                box-shadow 200ms ease-in-out;
+  }
+
+  /* Apply theme transition to all theme-aware elements */
+  [class*="bg-"],
+  [class*="text-"],
+  [class*="border-"],
+  [class*="ring-"],
+  [class*="from-"],
+  [class*="to-"] {
+    @apply theme-transition;
+  }
+}
+
+/* Fix for color-mix support in browsers */
+@supports not (background-color: color-mix(in srgb, red 50%, blue)) {
+  .bg-primary\/10 { background-color: rgba(var(--primary-rgb), 0.1); }
+  .bg-primary\/20 { background-color: rgba(var(--primary-rgb), 0.2); }
+  .bg-primary\/50 { background-color: rgba(var(--primary-rgb), 0.5); }
+  .bg-primary\/90 { background-color: rgba(var(--primary-rgb), 0.9); }
+  
+  .bg-success\/10 { background-color: rgba(var(--success-rgb), 0.1); }
+  .bg-success\/20 { background-color: rgba(var(--success-rgb), 0.2); }
+  
+  .bg-warning\/10 { background-color: rgba(var(--warning-rgb), 0.1); }
+  .bg-warning\/20 { background-color: rgba(var(--warning-rgb), 0.2); }
+  
+  .bg-info\/10 { background-color: rgba(var(--info-rgb), 0.1); }
+  .bg-info\/20 { background-color: rgba(var(--info-rgb), 0.2); }
+  
+  .bg-destructive\/10 { background-color: rgba(var(--destructive-rgb), 0.1); }
+  .bg-destructive\/20 { background-color: rgba(var(--destructive-rgb), 0.2); }
+}

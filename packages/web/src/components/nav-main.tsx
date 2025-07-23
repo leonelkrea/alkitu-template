@@ -34,11 +34,32 @@ export function NavMain({ items }: { items: NavItem[] }) {
     }));
   }, []);
 
+  // Agrupar items por sección
+  const groupedItems = items.reduce((acc, item) => {
+    const section = (item as any).section || 'general';
+    if (!acc[section]) acc[section] = [];
+    acc[section].push(item);
+    return acc;
+  }, {} as Record<string, NavItem[]>);
+
+  const sectionLabels = {
+    overview: '📊 RESUMEN',
+    management: '👥 GESTIÓN',
+    communication: '💬 COMUNICACIÓN',
+    analytics: '📈 ANALÍTICAS',
+    settings: '⚙️ CONFIGURACIÓN',
+    general: 'GENERAL'
+  };
+
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => {
+    <>
+      {Object.entries(groupedItems).map(([sectionKey, sectionItems]) => (
+        <SidebarGroup key={sectionKey}>
+          <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+            {sectionLabels[sectionKey as keyof typeof sectionLabels] || sectionKey}
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            {sectionItems.map((item) => {
           // Check if item has subitems to determine if it should be a dropdown
           const hasSubItems = item.items && item.items.length > 0;
 
@@ -98,9 +119,13 @@ export function NavMain({ items }: { items: NavItem[] }) {
               </SidebarMenuItem>
             </Collapsible>
           );
-        })}
-      </SidebarMenu>
-      <LanguageSwitcherNavbar />
-    </SidebarGroup>
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
+      ))}
+      <SidebarGroup>
+        <LanguageSwitcherNavbar />
+      </SidebarGroup>
+    </>
   );
 }

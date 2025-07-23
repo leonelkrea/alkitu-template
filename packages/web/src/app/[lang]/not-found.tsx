@@ -1,8 +1,8 @@
 'use client';
 
 import { useTranslations } from '@/context/TranslationContext';
-import { Button } from '@/components/adapters/Button';
-import { Typography } from '@/components/adapters/Typography';
+import { Button } from '@/components/ui/button';
+import { Typography } from '@/components/atomic-design/atoms/typography';
 import Link from 'next/link';
 
 export default function NotFound() {
@@ -11,10 +11,19 @@ export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center space-y-6 max-w-md">
-        <Typography variant="h1" className="text-6xl font-bold text-muted-foreground" migrated={true}>404</Typography>
-        <Typography variant="h1" className="text-2xl font-bold" migrated={true}>{t('NotFound.title')}</Typography>
-        <Typography variant="p" className="text-muted-foreground" migrated={true}>{t('NotFound.description')}</Typography>
-        <Button asChild migrated={true}>
+        <Typography
+          variant="h1"
+          className="text-6xl font-bold text-muted-foreground"
+        >
+          404
+        </Typography>
+        <Typography variant="h1" className="text-2xl font-bold">
+          {t('NotFound.title')}
+        </Typography>
+        <Typography variant="p" className="text-muted-foreground">
+          {t('NotFound.description')}
+        </Typography>
+        <Button asChild>
           <Link href="/">{t('Common.general.home')}</Link>
         </Button>
       </div>

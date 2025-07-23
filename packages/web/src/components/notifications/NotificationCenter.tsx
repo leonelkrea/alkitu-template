@@ -7,13 +7,11 @@ import { Bell } from 'lucide-react';
 
 export function NotificationCenter() {
   const queryClient = useQueryClient();
-  const { data: notifications = [] } = useQuery({
-    queryKey: ['notifications'],
-    queryFn: () => trpc.notification.getNotifications.query({ userId: 'current-user' }),
-  });
+  const { data: notifications = [] } = trpc.notification.getNotifications.useQuery(
+    { userId: 'current-user' }
+  );
 
-  const markAsReadMutation = useMutation({
-    mutationFn: (notificationId: string) => trpc.notification.markAsRead.mutate({ notificationId }),
+  const markAsReadMutation = trpc.notification.markAsRead.useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },

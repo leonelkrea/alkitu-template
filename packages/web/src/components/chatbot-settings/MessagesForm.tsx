@@ -34,7 +34,7 @@ export function MessagesForm({ initialConfig }: MessagesFormProps) {
   });
 
   const updateConfigMutation = useMutation({
-    mutationFn: (data: Partial<MessagesFormData>) => trpc.chatbotConfig.update.mutate(data),
+    mutationFn: (data: Partial<MessagesFormData>) => trpc.chatbotConfig.update.mutate(data), // TODO: Implement this
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chatbotConfig'] });
       toast({

@@ -9,6 +9,13 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/setupTests.ts"],
+    deps: {
+      optimizer: {
+        web: {
+          include: ["@testing-library/react", "@testing-library/jest-dom"],
+        },
+      },
+    },
   },
   resolve: {
     alias: {

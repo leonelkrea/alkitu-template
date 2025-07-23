@@ -1,0 +1,26 @@
+FROM node:20-alpine
+
+# Instalar dependencias del sistema
+RUN apk add --no-cache curl
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar package.json y package-lock.json
+COPY package*.json ./
+COPY packages/web/package*.json ./packages/web/
+COPY packages/shared/package*.json ./packages/shared/
+
+# Instalar dependencias
+RUN npm ci
+
+# Copiar código fuente
+COPY packages/web ./packages/web
+COPY packages/shared ./packages/shared
+
+# Exponer puerto de Storybook
+EXPOSE 6006
+
+# Comando para ejecutar Storybook (sin abrir browser)
+WORKDIR /app/packages/web
+CMD ["npm", "run", "storybook"]

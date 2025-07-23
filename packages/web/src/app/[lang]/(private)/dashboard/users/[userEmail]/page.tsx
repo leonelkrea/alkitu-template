@@ -1,18 +1,18 @@
 'use client';
 import React, { useState, useCallback } from 'react';
-import { trpcReact } from '@/lib/trpc';
+import { trpc } from '@/lib/trpc';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/adapters/Card';
-import { Input } from '@/components/adapters/Input';
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/adapters/Button';
-import { Badge } from '@/components/adapters/Badge';
-import { Typography } from '@/components/adapters/Typography';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Typography } from '@/components/atomic-design/atoms/typography';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
@@ -93,17 +93,21 @@ const isPasswordValid = (validation: PasswordValidation): boolean => {
   return Object.values(validation).every(Boolean);
 };
 
-const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) => {
+const UserDetailPage = ({
+  params,
+}: {
+  params: Promise<{ userEmail: string }>;
+}) => {
   // Use React.use() to unwrap the params Promise
   const resolvedParams = React.use(params);
   const { userEmail } = resolvedParams;
-  
+
   // Decode the email parameter properly - handle double encoding
   const decodedEmail = decodeURIComponent(decodeURIComponent(userEmail));
-  
+
   const { lang } = useParams();
   const router = useRouter();
-  
+
   // Form states
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
@@ -111,7 +115,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
     lastName: '',
     email: '',
     contactNumber: '',
-    role: 'CLIENT' as keyof typeof UserRole
+    role: 'CLIENT' as keyof typeof UserRole,
   });
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -119,7 +123,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
   const [messageText, setMessageText] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
-  
+
   // Dialog states
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
@@ -138,21 +142,20 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
     data: user,
     isLoading,
     isError,
-    refetch
-  } = trpcReact.user.getUserByEmail.useQuery({ email: decodedEmail });
+    refetch,
+  } = trpc.user.getUserByEmail.useQuery({ email: decodedEmail }); // TODO: Implement this
 
   // Add mutations
-  const updateProfileMutation = trpcReact.user.updateProfile.useMutation();
-  const resetPasswordMutation = trpcReact.user.resetUserPassword.useMutation();
-  const bulkUpdateStatusMutation =
-    trpcReact.user.bulkUpdateStatus.useMutation();
-  const bulkDeleteUsersMutation = trpcReact.user.bulkDeleteUsers.useMutation();
+  const updateProfileMutation = trpc.user.updateProfile.useMutation(); // TODO: Implement this
+  const resetPasswordMutation = trpc.user.resetUserPassword.useMutation(); // TODO: Implement this
+  const bulkUpdateStatusMutation = trpc.user.bulkUpdateStatus.useMutation(); // TODO: Implement this
+  const bulkDeleteUsersMutation = trpc.user.bulkDeleteUsers.useMutation(); // TODO: Implement this
   const adminChangePasswordMutation =
-    trpcReact.user.adminChangePassword.useMutation();
-  const sendMessageMutation = trpcReact.user.sendMessageToUser.useMutation();
-  const anonymizeUserMutation = trpcReact.user.anonymizeUser.useMutation();
+    trpc.user.adminChangePassword.useMutation(); // TODO: Implement this
+  const sendMessageMutation = trpc.user.sendMessageToUser.useMutation(); // TODO: Implement this
+  const anonymizeUserMutation = trpc.user.anonymizeUser.useMutation(); // TODO: Implement this
   const createImpersonationTokenMutation =
-    trpcReact.user.createImpersonationToken.useMutation();
+    trpc.user.createImpersonationToken.useMutation(); // TODO: Implement this
 
   // Initialize form data when user loads
   React.useEffect(() => {
@@ -366,25 +369,29 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href={`/${lang}/dashboard/users`}>
-            <Button variant="ghost" size="sm" migrated={true}>
+            <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Users
             </Button>
           </Link>
           <div>
-            <Typography variant="h1" className="text-2xl font-bold flex items-center gap-2" migrated={true}>
+            <Typography
+              variant="h1"
+              className="text-2xl font-bold flex items-center gap-2"
+            >
               <User className="h-6 w-6" />
               {user.name || user.email}
             </Typography>
-            <Typography variant="p" className="text-gray-600" migrated={true}>{user.email}</Typography>
+            <Typography variant="p" className="text-gray-600">
+              {user.email}
+            </Typography>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant={getRoleBadgeVariant(user.role)} migrated={true}>{user.role}</Badge>
+          <Badge variant={getRoleBadgeVariant(user.role)}>{user.role}</Badge>
           <Button
             variant={editMode ? 'default' : 'outline'}
             onClick={() => setEditMode(!editMode)}
-            migrated={true}
           >
             <Edit className="h-4 w-4 mr-2" />
             {editMode ? 'Cancel Edit' : 'Edit Profile'}
@@ -403,7 +410,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="space-y-6">
-          <Card migrated={true}>
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -427,7 +434,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                     update the user&apos;s profile.
                   </p>
                   <div className="flex gap-2 mt-3">
-                    <Button onClick={handleSaveProfile} size="sm" migrated={true}>
+                    <Button onClick={handleSaveProfile} size="sm">
                       <Save className="h-4 w-4 mr-2" />
                       Save Changes
                     </Button>
@@ -435,7 +442,6 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       variant="outline"
                       onClick={() => setEditMode(false)}
                       size="sm"
-                      migrated={true}
                     >
                       Cancel
                     </Button>
@@ -452,7 +458,6 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                     value={formData.email}
                     disabled
                     className="bg-gray-50"
-                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -464,7 +469,6 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       setFormData({ ...formData, name: e.target.value })
                     }
                     disabled={!editMode}
-                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -476,7 +480,6 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       setFormData({ ...formData, lastName: e.target.value })
                     }
                     disabled={!editMode}
-                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -491,7 +494,6 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                       })
                     }
                     disabled={!editMode}
-                    migrated={true}
                   />
                 </div>
                 <div className="space-y-2">
@@ -520,7 +522,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
                 <div className="space-y-2">
                   <Label>Account Status</Label>
                   <div className="flex items-center gap-2">
-                    <Badge variant={user.terms ? 'default' : 'destructive'} migrated={true}>
+                    <Badge variant={user.terms ? 'default' : 'destructive'}>
                       {user.terms ? 'Active' : 'Inactive'}
                     </Badge>
                     <span className="text-sm text-gray-600">
@@ -572,7 +574,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Security Tab */}
         <TabsContent value="security" className="space-y-6">
-          <Card migrated={true}>
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
@@ -752,7 +754,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Products Tab */}
         <TabsContent value="products" className="space-y-6">
-          <Card migrated={true}>
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Package className="h-5 w-5" />
@@ -777,7 +779,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Groups Tab */}
         <TabsContent value="groups" className="space-y-6">
-          <Card migrated={true}>
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
@@ -802,7 +804,7 @@ const UserDetailPage = ({ params }: { params: Promise<{ userEmail: string }> }) 
 
         {/* Actions Tab */}
         <TabsContent value="actions" className="space-y-6">
-          <Card migrated={true}>
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5" />

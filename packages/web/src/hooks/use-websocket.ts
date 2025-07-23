@@ -39,6 +39,24 @@ export function useWebSocket({
 
   const socketRef = useRef<Socket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Use refs to avoid recreating connect function when callbacks change
+  const onNewNotificationRef = useRef(onNewNotification);
+  const onCountUpdateRef = useRef(onCountUpdate);
+  const onConnectionChangeRef = useRef(onConnectionChange);
+  
+  // Update refs when callbacks change
+  useEffect(() => {
+    onNewNotificationRef.current = onNewNotification;
+  }, [onNewNotification]);
+  
+  useEffect(() => {
+    onCountUpdateRef.current = onCountUpdate;
+  }, [onCountUpdate]);
+  
+  useEffect(() => {
+    onConnectionChangeRef.current = onConnectionChange;
+  }, [onConnectionChange]);
 
   const connect = useCallback(() => {
     if (!enabled || !userId || socketRef.current?.connected) {
@@ -75,7 +93,7 @@ export function useWebSocket({
         error: null,
         reconnectAttempts: 0,
       }));
-      onConnectionChange?.(true);
+      onConnectionChangeRef.current?.(true);
     });
 
     socket.on('disconnect', (reason) => {
@@ -85,7 +103,7 @@ export function useWebSocket({
         connected: false,
         error: `Disconnected: ${reason}`,
       }));
-      onConnectionChange?.(false);
+      onConnectionChangeRef.current?.(false);
     });
 
     socket.on('connect_error', (error) => {
@@ -101,18 +119,18 @@ export function useWebSocket({
     // Notification events
     socket.on('notification:new', (notification) => {
       console.log('New notification received:', notification);
-      onNewNotification?.(notification);
-      onCountUpdate?.();
+      onNewNotificationRef.current?.(notification);
+      onCountUpdateRef.current?.();
     });
 
     socket.on('notification:count_updated', () => {
       console.log('Notification count updated');
-      onCountUpdate?.();
+      onCountUpdateRef.current?.();
     });
 
     socket.on('notification_read', () => {
       console.log('Notification marked as read');
-      onCountUpdate?.();
+      onCountUpdateRef.current?.();
     });
 
     socket.on('connection:confirmed', (data) => {
@@ -123,14 +141,7 @@ export function useWebSocket({
     socket.emit('notification:subscribe');
 
     setState((prev) => ({ ...prev, socket }));
-  }, [
-    enabled,
-    userId,
-    token,
-    onNewNotification,
-    onCountUpdate,
-    onConnectionChange,
-  ]);
+  }, [enabled, userId, token]);
 
   const disconnect = useCallback(() => {
     if (socketRef.current) {
@@ -144,12 +155,13 @@ export function useWebSocket({
       reconnectTimeoutRef.current = null;
     }
 
-    setState({
+    setState(prevState => ({
+      ...prevState,
       connected: false,
       socket: null,
       error: null,
       reconnectAttempts: 0,
-    });
+    }));
   }, []);
 
   const reconnect = () => {
@@ -174,7 +186,7 @@ export function useWebSocket({
     return () => {
       disconnect();
     };
-  }, [enabled, userId, token, connect, disconnect]);
+  }, [enabled, userId, token, connect]);
 
   // Cleanup on unmount only
   useEffect(() => {

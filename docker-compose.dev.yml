@@ -127,6 +127,32 @@ services:
       timeout: 10s
       retries: 3
 
+  # Storybook para documentación de componentes
+  storybook:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile.storybook
+    container_name: alkitu-storybook-dev
+    restart: unless-stopped
+    ports:
+      - "6006:6006"
+    volumes:
+      - ./packages/web:/app/packages/web
+      - ./packages/shared:/app/packages/shared
+      - web_node_modules:/app/packages/web/node_modules
+      - storybook_cache:/app/packages/web/.storybook-cache
+    networks:
+      - alkitu-network
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - web
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6006"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   mongodb_dev_data:
     driver: local
@@ -137,6 +163,8 @@ volumes:
   shared_node_modules:
     driver: local
   web_node_modules:
+    driver: local
+  storybook_cache:
     driver: local
 
 networks:

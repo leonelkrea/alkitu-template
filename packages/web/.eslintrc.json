@@ -1,8 +1,14 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:storybook/recommended"
+  ],
   "overrides": [
     {
-      "files": ["src/design-system/**/*.tsx", "src/design-system/**/*.ts"],
+      "files": [
+        "src/design-system/**/*.tsx",
+        "src/design-system/**/*.ts"
+      ],
       "rules": {
         "react/no-unescaped-entities": "off"
       }

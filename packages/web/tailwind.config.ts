@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss";
 const { nextui } = require("@nextui-org/react");
 
 const config = {
-  darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -21,54 +20,80 @@ const config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        inside: {
-          DEFAULT: "#CEFF66",
-          foreground: "hsl(var(--primary-foreground))",
+        // CSS variable-based color system
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+        success: {
+          DEFAULT: "var(--success)",
+          foreground: "var(--success-foreground)",
+        },
+        warning: {
+          DEFAULT: "var(--warning)",
+          foreground: "var(--warning-foreground)",
+        },
+        info: {
+          DEFAULT: "var(--info)",
+          foreground: "var(--info-foreground)",
         },
         sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+          DEFAULT: "var(--sidebar)",
+          foreground: "var(--sidebar-foreground)",
+          primary: "var(--sidebar-primary)",
+          "primary-foreground": "var(--sidebar-primary-foreground)",
+          accent: "var(--sidebar-accent)",
+          "accent-foreground": "var(--sidebar-accent-foreground)",
+          border: "var(--sidebar-border)",
+          ring: "var(--sidebar-ring)",
         },
+        // Legacy support for existing components
+        inside: {
+          DEFAULT: "#CEFF66",
+          foreground: "var(--primary-foreground)",
+        },
+        "design-primary": "#F2AB27",
+        "design-secondary": "#F2921D",
+        "primary-dark": "#4A4A4A",
+        error: "#dc2626",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       keyframes: {
         "accordion-down": {
@@ -101,17 +126,79 @@ const config = {
           },
           to: { height: "0", opacity: "0" },
         },
+        "theme-transition": {
+          "0%": { opacity: "0.8" },
+          "100%": { opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "collapsible-down": "collapsible-down 0.2s ease-out",
         "collapsible-up": "collapsible-up 0.2s ease-out",
+        "theme-transition": "theme-transition 200ms ease-in-out",
       },
-      fontFamily: {},
     },
   },
-  plugins: [require("tailwindcss-animate"), nextui(), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"), 
+    nextui(), 
+    require("@tailwindcss/typography"),
+    // Custom plugin for theme-aware utilities
+    function ({ addUtilities }: any) {
+      const newUtilities = {
+        '.theme-transition': {
+          transition: 'background-color 200ms, color 200ms, border-color 200ms',
+        },
+        '.bg-primary\\/10': {
+          backgroundColor: 'color-mix(in oklch, var(--primary) 10%, transparent)',
+        },
+        '.bg-primary\\/20': {
+          backgroundColor: 'color-mix(in oklch, var(--primary) 20%, transparent)',
+        },
+        '.bg-primary\\/50': {
+          backgroundColor: 'color-mix(in oklch, var(--primary) 50%, transparent)',
+        },
+        '.bg-primary\\/90': {
+          backgroundColor: 'color-mix(in oklch, var(--primary) 90%, transparent)',
+        },
+        '.bg-success\\/10': {
+          backgroundColor: 'color-mix(in oklch, var(--success) 10%, transparent)',
+        },
+        '.bg-success\\/20': {
+          backgroundColor: 'color-mix(in oklch, var(--success) 20%, transparent)',
+        },
+        '.bg-warning\\/10': {
+          backgroundColor: 'color-mix(in oklch, var(--warning) 10%, transparent)',
+        },
+        '.bg-warning\\/20': {
+          backgroundColor: 'color-mix(in oklch, var(--warning) 20%, transparent)',
+        },
+        '.bg-info\\/10': {
+          backgroundColor: 'color-mix(in oklch, var(--info) 10%, transparent)',
+        },
+        '.bg-info\\/20': {
+          backgroundColor: 'color-mix(in oklch, var(--info) 20%, transparent)',
+        },
+        '.bg-destructive\\/10': {
+          backgroundColor: 'color-mix(in oklch, var(--destructive) 10%, transparent)',
+        },
+        '.bg-destructive\\/20': {
+          backgroundColor: 'color-mix(in oklch, var(--destructive) 20%, transparent)',
+        },
+        '.from-primary\\/10': {
+          '--tw-gradient-from': 'color-mix(in oklch, var(--primary) 10%, transparent)',
+        },
+        '.from-primary\\/5': {
+          '--tw-gradient-from': 'color-mix(in oklch, var(--primary) 5%, transparent)',
+        },
+        '.to-primary\\/5': {
+          '--tw-gradient-to': 'color-mix(in oklch, var(--primary) 5%, transparent)',
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 } satisfies Config;
 
 export default config;

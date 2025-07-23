@@ -1,16 +1,29 @@
 import { useState } from 'react';
-import { Input } from '@/components/adapters/Input';
-import { Button } from '@/components/adapters/Button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ConversationStatus } from '@prisma/client';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  ConversationStatus,
+  ConversationFilters as ChatFilters,
+} from '@/types/chat';
 
 interface ConversationFiltersProps {
-  onApplyFilters: (filters: any) => void;
+  onApplyFilters: (filters: ChatFilters) => void;
 }
 
-export function ConversationFilters({ onApplyFilters }: ConversationFiltersProps) {
+export function ConversationFilters({
+  onApplyFilters,
+}: ConversationFiltersProps) {
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState<ConversationStatus | '' | undefined>(undefined);
+  const [status, setStatus] = useState<ConversationStatus | '' | undefined>(
+    undefined,
+  );
 
   const handleApply = () => {
     onApplyFilters({
@@ -26,20 +39,28 @@ export function ConversationFilters({ onApplyFilters }: ConversationFiltersProps
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="flex-1"
-        migrated={true}
       />
-      <Select onValueChange={(value: ConversationStatus | '') => setStatus(value === '' ? undefined : value)} value={status || ''}>
+      <Select
+        onValueChange={(value: ConversationStatus | 'all') =>
+          setStatus(value === 'all' ? undefined : value)
+        }
+        value={status || 'all'}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Filter by Status" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="">All Statuses</SelectItem>
-          {Object.values(ConversationStatus).map(s => (
-            <SelectItem key={s} value={s}>{s}</SelectItem>
-          ))}
+          <SelectItem value="all">All Statuses</SelectItem>
+          <SelectItem value="OPEN">🟢 Open</SelectItem>
+          <SelectItem value="IN_PROGRESS">🟡 In Progress</SelectItem>
+          <SelectItem value="WAITING_CUSTOMER">⏳ Waiting Customer</SelectItem>
+          <SelectItem value="RESOLVED">✅ Resolved</SelectItem>
+          <SelectItem value="CLOSED">🔴 Closed</SelectItem>
         </SelectContent>
       </Select>
-      <Button onClick={handleApply} migrated={true}>Apply Filters</Button>
+      <Button onClick={handleApply}>
+        Apply Filters
+      </Button>
     </div>
   );
 }

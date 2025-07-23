@@ -1,18 +1,18 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { trpcReact } from '@/lib/trpc';
+import { trpc } from '@/lib/trpc';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/adapters/Card';
-import { Input } from '@/components/adapters/Input';
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/adapters/Button';
-import { Typography } from '@/components/adapters/Typography';
+import { Button } from '@/components/ui/button';
+import { Typography } from '@/components/atomic-design/atoms/typography';
 import {
   Select,
   SelectContent,
@@ -82,12 +82,14 @@ const CreateUserPage = () => {
   const [errors, setErrors] = useState<CreateUserFormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
 
-  const registerMutation = trpcReact.user.register.useMutation({
+  const registerMutation = trpc.user.register.useMutation({
+    // TODO: Implement this
     onSuccess: () => {
       toast.success('User created successfully!');
       router.push(`/${lang}/dashboard/users`);
     },
     onError: (error) => {
+      // TODO: Implement this
       toast.error(`Failed to create user: ${error.message}`);
     },
   });
@@ -165,22 +167,27 @@ const CreateUserPage = () => {
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href={`/${lang}/dashboard/users`}>
-          <Button variant="ghost" size="sm" migrated={true}>
+          <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Users
           </Button>
         </Link>
         <div>
-          <Typography variant="h1" className="text-2xl font-bold flex items-center gap-2" migrated={true}>
+          <Typography
+            variant="h1"
+            className="text-2xl font-bold flex items-center gap-2"
+          >
             <User className="h-6 w-6" />
             Create New User
           </Typography>
-          <Typography variant="p" className="text-gray-600" migrated={true}>Add a new user to the system</Typography>
+          <Typography variant="p" className="text-gray-600">
+            Add a new user to the system
+          </Typography>
         </div>
       </div>
 
       {/* Form */}
-      <Card migrated={true}>
+      <Card>
         <CardHeader>
           <CardTitle>User Information</CardTitle>
           <CardDescription>
@@ -199,7 +206,6 @@ const CreateUserPage = () => {
                   onChange={(e) => handleInputChange('name', e.target.value)}
                   className={errors.name ? 'border-red-500' : ''}
                   placeholder="Enter first name"
-                  migrated={true}
                 />
                 {errors.name && (
                   <p className="text-sm text-red-500">{errors.name}</p>
@@ -216,7 +222,6 @@ const CreateUserPage = () => {
                   }
                   className={errors.lastName ? 'border-red-500' : ''}
                   placeholder="Enter last name"
-                  migrated={true}
                 />
                 {errors.lastName && (
                   <p className="text-sm text-red-500">{errors.lastName}</p>
@@ -232,7 +237,6 @@ const CreateUserPage = () => {
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   className={errors.email ? 'border-red-500' : ''}
                   placeholder="user@example.com"
-                  migrated={true}
                 />
                 {errors.email && (
                   <p className="text-sm text-red-500">{errors.email}</p>
@@ -248,7 +252,6 @@ const CreateUserPage = () => {
                     handleInputChange('contactNumber', e.target.value)
                   }
                   placeholder="+1 (555) 123-4567"
-                  migrated={true}
                 />
               </div>
 
@@ -263,7 +266,6 @@ const CreateUserPage = () => {
                   }
                   className={errors.password ? 'border-red-500' : ''}
                   placeholder="Enter password"
-                  migrated={true}
                 />
                 {errors.password && (
                   <p className="text-sm text-red-500">{errors.password}</p>
@@ -285,7 +287,6 @@ const CreateUserPage = () => {
                   }
                   className={errors.confirmPassword ? 'border-red-500' : ''}
                   placeholder="Confirm password"
-                  migrated={true}
                 />
                 {errors.confirmPassword && (
                   <p className="text-sm text-red-500">
@@ -336,13 +337,12 @@ const CreateUserPage = () => {
                 type="submit"
                 disabled={registerMutation.isPending}
                 className="min-w-[120px]"
-                migrated={true}
               >
                 <Save className="h-4 w-4 mr-2" />
                 {registerMutation.isPending ? 'Creating...' : 'Create User'}
               </Button>
               <Link href={`/${lang}/dashboard/users`}>
-                <Button variant="outline" type="button" migrated={true}>
+                <Button variant="outline" type="button">
                   Cancel
                 </Button>
               </Link>

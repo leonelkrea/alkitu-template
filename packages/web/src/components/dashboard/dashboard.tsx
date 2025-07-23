@@ -11,6 +11,9 @@ import {
   Bell,
   Calendar,
   Activity,
+  MessageCircle,
+  CreditCard,
+  Building2,
 } from 'lucide-react';
 import { AppSidebar } from '../app-sidebar';
 import Header from '../layout/header';
@@ -21,44 +24,106 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../adapters/Card';
-import { Badge } from '../adapters/Badge';
-import { Button } from '../adapters/Button';
+} from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Progress } from '../ui/progress';
 import { useTranslations } from '@/context/TranslationContext';
 
-// Navigation structure with translations support
+// Navigation structure with improved UX/UI organization
 const getTransformedData = (t: any) => ({
   navMain: [
+    // RESUMEN SECTION
     {
-      title: t?.('nav.overview') || 'Dashboard',
+      title: t?.('nav.dashboard') || 'Dashboard',
       url: '/dashboard',
       icon: Home,
       items: [],
+      section: 'overview',
     },
+
+    // GESTIÓN SECTION
     {
-      title: t?.('nav.users') || 'Users',
+      title: t?.('nav.users') || 'Usuarios',
       url: '/dashboard/users',
       icon: Users,
+      section: 'management',
       items: [
         {
-          title: t?.('nav.userList') || 'User List',
+          title: t?.('nav.userList') || 'Lista de Usuarios',
           url: '/dashboard/users',
         },
         {
-          title: t?.('nav.createUser') || 'Create User',
+          title: t?.('nav.createUser') || 'Crear Usuario',
           url: '/dashboard/users/create',
         },
       ],
     },
     {
-      title: t?.('nav.analytics') || 'Analytics',
-      url: '/dashboard/analytics',
-      icon: BarChart,
+      title: t?.('nav.companies') || 'Empresas',
+      url: '/dashboard/companies',
+      icon: Building2,
+      section: 'management',
       items: [
         {
-          title: t?.('nav.reports') || 'Reports',
+          title: t?.('nav.companiesList') || 'Todas las Empresas',
+          url: '/dashboard/companies',
+        },
+        {
+          title: t?.('nav.createCompany') || 'Nueva Empresa',
+          url: '/dashboard/companies/create',
+        },
+      ],
+    },
+
+    // COMUNICACIÓN SECTION
+    {
+      title: t?.('nav.chat') || 'Chat',
+      url: '/dashboard/chat',
+      icon: MessageCircle,
+      section: 'communication',
+      items: [
+        {
+          title: t?.('nav.conversations') || 'Conversaciones',
+          url: '/dashboard/chat',
+        },
+        {
+          title: t?.('nav.chatAnalytics') || 'Analíticas Chat',
+          url: '/dashboard/chat/analytics',
+        },
+      ],
+    },
+    {
+      title: t?.('nav.notifications') || 'Notificaciones',
+      url: '/dashboard/notifications',
+      icon: Bell,
+      section: 'communication',
+      items: [
+        {
+          title: t?.('nav.allNotifications') || 'Todas las Notificaciones',
+          url: '/dashboard/notifications',
+        },
+        {
+          title: t?.('nav.notificationAnalytics') || 'Analíticas',
+          url: '/dashboard/notifications/analytics',
+        },
+        {
+          title: t?.('nav.notificationPreferences') || 'Preferencias',
+          url: '/dashboard/notifications/preferences',
+        },
+      ],
+    },
+
+    // ANALÍTICAS SECTION
+    {
+      title: t?.('nav.analytics') || 'Analíticas',
+      url: '/dashboard/analytics',
+      icon: BarChart,
+      section: 'analytics',
+      items: [
+        {
+          title: t?.('nav.reports') || 'Reportes',
           url: '/dashboard/analytics/reports',
         },
         {
@@ -67,33 +132,29 @@ const getTransformedData = (t: any) => ({
         },
       ],
     },
+
+    // CONFIGURACIÓN SECTION
     {
-      title: t?.('nav.projects') || 'Projects',
-      url: '/dashboard/projects',
-      icon: FileText,
-      items: [
-        {
-          title: t?.('nav.activeProjects') || 'Active Projects',
-          url: '/dashboard/projects/active',
-        },
-        {
-          title: t?.('nav.archived') || 'Archived',
-          url: '/dashboard/projects/archived',
-        },
-      ],
-    },
-    {
-      title: t?.('nav.settings') || 'Settings',
+      title: t?.('nav.settings') || 'Configuración',
       url: '/dashboard/settings',
       icon: Settings,
+      section: 'settings',
       items: [
         {
-          title: t?.('nav.profile') || 'Profile',
-          url: '/dashboard/settings/profile',
+          title: t?.('nav.themes') || 'Temas y Apariencia',
+          url: '/dashboard/settings/themes',
         },
         {
-          title: t?.('nav.preferences') || 'Preferences',
-          url: '/dashboard/settings/preferences',
+          title: t?.('nav.chatbot') || 'Chatbot',
+          url: '/dashboard/settings/chatbot',
+        },
+        {
+          title: t?.('nav.billing') || 'Facturación',
+          url: '/dashboard/billing',
+        },
+        {
+          title: t?.('nav.profile') || 'Mi Perfil',
+          url: '/dashboard/settings/profile',
         },
       ],
     },
@@ -153,7 +214,7 @@ function Dashboard({ children, showWelcome = false }: DashboardProps) {
     <SidebarProvider>
       <AppSidebar {...transformedData} />
 
-      <SidebarInset>
+      <SidebarInset className="flex flex-col min-h-screen overflow-hidden">
         <div className="flex sticky top-0 bg-background h-16 shrink-0 items-center gap-2 border-b px-4 w-full">
           <SidebarTrigger className="-ml-1" />
           <div className="w-full col-start-1 col-end-full ">
@@ -166,12 +227,14 @@ function Dashboard({ children, showWelcome = false }: DashboardProps) {
           </div>
         </div>
 
-        <TailwindGrid maxWidth="2xl" padding="md" className="py-6">
-          {showWelcome && <DashboardWelcome />}
-          <div className="col-span-4 md:col-span-8 lg:col-span-12">
-            {children || <DashboardOverview />}
-          </div>
-        </TailwindGrid>
+        <div className="flex-1 overflow-auto">
+          <TailwindGrid fullSize={true} padding="lg" className="py-6">
+            {showWelcome && <DashboardWelcome />}
+            <div className="col-span-4 md:col-span-8 lg:col-span-12">
+              {children || <DashboardOverview />}
+            </div>
+          </TailwindGrid>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
@@ -183,30 +246,22 @@ function DashboardWelcome() {
 
   return (
     <div className="col-span-4 md:col-span-8 lg:col-span-12 mb-6">
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800" migrated={false}>
+      <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+          <CardTitle className="text-2xl font-bold text-foreground">
             {t?.('welcome.title') || 'Welcome to Alkitu Dashboard'}
           </CardTitle>
-          <CardDescription className="text-blue-700 dark:text-blue-300">
+          <CardDescription className="text-muted-foreground">
             {t?.('welcome.description') ||
               'Manage your projects, users, and analytics from one place.'}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            <Badge
-              variant="secondary"
-              className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-              migrated={true}
-            >
+            <Badge variant="secondary">
               {t?.('welcome.status') || 'System Online'}
             </Badge>
-            <Badge
-              variant="outline"
-              className="border-green-200 text-green-700 dark:border-green-800 dark:text-green-300"
-              migrated={true}
-            >
+            <Badge variant="default">
               {t?.('welcome.version') || 'v1.0.0'}
             </Badge>
           </div>
@@ -224,7 +279,7 @@ function DashboardOverview() {
     <>
       {/* Quick Stats */}
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card migrated={false}>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.totalUsers') || 'Total Users'}
@@ -241,7 +296,7 @@ function DashboardOverview() {
       </div>
 
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card migrated={false}>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.activeProjects') || 'Active Projects'}
@@ -258,7 +313,7 @@ function DashboardOverview() {
       </div>
 
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card migrated={false}>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.revenue') || 'Revenue'}
@@ -275,7 +330,7 @@ function DashboardOverview() {
       </div>
 
       <div className="col-span-4 md:col-span-2 lg:col-span-3">
-        <Card migrated={false}>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t?.('stats.notifications') || 'Notifications'}
@@ -293,7 +348,7 @@ function DashboardOverview() {
 
       {/* Recent Activity */}
       <div className="col-span-4 md:col-span-4 lg:col-span-8">
-        <Card migrated={false}>
+        <Card>
           <CardHeader>
             <CardTitle>
               {t?.('recentActivity.title') || 'Recent Activity'}
@@ -346,7 +401,7 @@ function DashboardOverview() {
 
       {/* Progress Overview */}
       <div className="col-span-4 md:col-span-4 lg:col-span-4">
-        <Card migrated={false}>
+        <Card>
           <CardHeader>
             <CardTitle>{t?.('progress.title') || 'Project Progress'}</CardTitle>
             <CardDescription>
@@ -377,7 +432,7 @@ function DashboardOverview() {
               <Progress value={92} className="h-2" />
             </div>
             <Separator />
-            <Button variant="outline" className="w-full" migrated={true}>
+            <Button variant="outline" className="w-full">
               {t?.('progress.viewAll') || 'View All Projects'}
             </Button>
           </CardContent>

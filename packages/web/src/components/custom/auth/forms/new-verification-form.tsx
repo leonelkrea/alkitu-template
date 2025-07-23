@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, usePathname } from 'next/navigation';
-import { Button } from '@/components/adapters/Button';
+import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/context/TranslationContext';
 import { FormError } from '@/components/shared/messages/form-error';
 import { FormSuccess } from '@/components/shared/messages/form-success';
@@ -109,7 +109,6 @@ export const NewVerificationForm = () => {
           onClick={handleResendVerification}
           className="w-full"
           disabled={isLoading}
-          migrated={true}
         >
           {isLoading
             ? t('Common.general.loading')

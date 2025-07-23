@@ -1,20 +1,20 @@
 // Design System Main Exports (Internalized)
 
 // Atoms
-export * from './atoms';
+export * from './atomic-design/atoms';
 
-// Molecules  
-export * from './molecules';
+// Molecules
+export * from './atomic-design/molecules';
 
 // Organisms
-export * from './organisms';
+export * from './atomic-design/organisms';
 
 // Templates
-export * from './templates';
+export * from './atomic-design/templates';
 
 // System
-export * from './system/ComponentDemo';
-export * from './system/ComponentSpecs';
+export * from './atomic-design/system/ComponentDemo';
+export * from './atomic-design/system/ComponentSpecs';
 
 // Contexts
 export { BrandingProvider } from '../context/BrandingContext';

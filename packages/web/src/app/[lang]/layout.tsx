@@ -20,10 +20,18 @@ export default async function RootLayout({ children, params }: LayoutProps) {
   console.log('layout.tsx - Server Side Locale:', locale);
   console.log('layout.tsx - Server Side Translations:', translations);
 
+  // TODO: Get companyId from session/auth context when available
+  // For testing, use a valid 24-character MongoDB ObjectID format
+  const companyId = '507f1f77bcf86cd799439011';
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning={true}>
-        <Providers initialLocale={locale} initialTranslations={translations}>
+        <Providers 
+          initialLocale={locale} 
+          initialTranslations={translations}
+          companyId={companyId}
+        >
           <main
             className={cn(
               'min-h-screen bg-background font-sans antialiased w-full flex flex-col overflow-x-hidden',

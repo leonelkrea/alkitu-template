@@ -16,7 +16,7 @@ export function ChatWidget() {
 
   const { data: config } = useQuery({
     queryKey: ['chatbotConfig'],
-    queryFn: () => trpc.chatbotConfig.get.query(),
+    queryFn: () => trpc.chatbotConfig.get.query(), // TODO: Implement this
   });
 
   const { conversation, messages, isLoading, sendMessage, startConversation } =
@@ -30,7 +30,7 @@ export function ChatWidget() {
   if (!isOpen) {
     return (
       <div
-        className="fixed z-50"
+        className="fixed z-40"
         style={{
           bottom: config?.position === 'bottom-left' ? '1rem' : '1rem',
           right: config?.position === 'bottom-right' ? '1rem' : 'auto',
@@ -53,7 +53,7 @@ export function ChatWidget() {
 
   return (
     <div
-      className="fixed z-50 w-80 h-96"
+      className="fixed z-40 w-80 h-96"
       style={{
         bottom: config?.position === 'bottom-left' ? '1rem' : '1rem',
         right: config?.position === 'bottom-right' ? '1rem' : 'auto',

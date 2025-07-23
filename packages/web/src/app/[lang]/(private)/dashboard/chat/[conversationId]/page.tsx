@@ -10,7 +10,7 @@ import { io } from 'socket.io-client';
 import { AssignmentSelect } from '@/components/chat/AssignmentSelect';
 import { StatusSelect } from '@/components/chat/StatusSelect';
 import { InternalNotes } from '@/components/chat/InternalNotes';
-import { Typography } from '@/components/adapters/Typography';
+import { Typography } from '@/components/atomic-design/atoms/typography';
 
 export default function ConversationDetailPage() {
   const params = useParams();
@@ -28,8 +28,10 @@ export default function ConversationDetailPage() {
   });
 
   // Find the specific conversation from the list
-  const conversation = conversationsData?.find(conv => conv.id === conversationId);
-  
+  const conversation = conversationsData?.find(
+    (conv) => conv.id === conversationId,
+  );
+
   // Get messages from the conversation (this will need to be handled differently since messages aren't in the conversation object)
   const messages: any[] = []; // Placeholder - messages should be fetched separately
 
@@ -99,9 +101,12 @@ export default function ConversationDetailPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <Typography variant="h1" className="text-3xl font-bold mb-6" migrated={true}>
-        Conversation with{' '}
-        {conversationId}
+      <Typography
+        variant="h1"
+        className="text-3xl font-bold mb-6"
+        migrated={true}
+      >
+        Conversation with {conversationId}
       </Typography>
       <div className="flex space-x-4 mb-4">
         <AssignmentSelect

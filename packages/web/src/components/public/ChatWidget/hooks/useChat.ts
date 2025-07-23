@@ -12,7 +12,7 @@ export function useChat() {
   const { data: messages = [], refetch: refetchMessages } = useQuery({
     queryKey: ['chatMessages', conversation?.id],
     queryFn: () =>
-      trpc.chat.getConversations.query({ conversationId: conversation.id }),
+      trpc.chat.getConversations.query({ conversationId: conversation.id }), // TODO: Implement this
     enabled: !!conversation,
     select: (data) => data?.messages || [],
   });
