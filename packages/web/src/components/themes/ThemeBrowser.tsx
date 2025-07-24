@@ -44,7 +44,7 @@ export function ThemeBrowser() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
-  const { theme: currentTheme, refreshTheme, isDarkMode, toggleThemeMode, setThemeMode, applyTheme } = useCompanyTheme();
+  const { theme: currentTheme, refreshTheme, isDarkMode, toggleThemeMode, setThemeMode, applyTheme, updateThemeColors } = useCompanyTheme();
 
   // Fetch company themes from backend
   const companyId = currentTheme?.companyId;
@@ -130,22 +130,30 @@ export function ThemeBrowser() {
     const randomTheme = filteredThemes[randomIndex];
     if (randomTheme) {
       setSelectedTheme(randomTheme.id);
-      applyThemePreview(randomTheme);
+      const config = isDarkMode ? randomTheme.darkModeConfig : randomTheme.lightModeConfig;
+      const colorsToApply = config || randomTheme.colors;
+      
+      if (updateThemeColors) {
+        updateThemeColors(colorsToApply, isDarkMode ? 'dark' : 'light');
+      } else {
+        console.warn('updateThemeColors not available yet');
+      }
     }
   };
 
-  // Apply theme preview to CSS variables (temporary)
+  // Apply theme preview using DynamicThemeProvider's updateThemeColors method
   const applyThemePreview = (themePreview: ThemePreview) => {
-    const root = document.documentElement;
     const config = isDarkMode ? themePreview.darkModeConfig : themePreview.lightModeConfig;
     
     // Apply colors based on mode
     const colorsToApply = config || themePreview.colors;
     
-    Object.entries(colorsToApply).forEach(([key, value]) => {
-      // HEX colors from tweakcn format - apply directly
-      root.style.setProperty(`--${key}`, value);
-    });
+    // Use the theme context's updateThemeColors method instead of direct DOM manipulation
+    if (updateThemeColors) {
+      updateThemeColors(colorsToApply, isDarkMode ? 'dark' : 'light');
+    } else {
+      console.warn('updateThemeColors not available yet');
+    }
   };
 
   // Save theme to company

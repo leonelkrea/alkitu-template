@@ -1,7 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,16 +22,19 @@ interface ThemeCodePanelProps {
   themeName?: string;
 }
 
-export function ThemeCodePanel({ 
-  open, 
-  onOpenChange, 
-  lightColors, 
-  darkColors, 
-  themeName = 'Custom Theme' 
+export function ThemeCodePanel({
+  open,
+  onOpenChange,
+  lightColors,
+  darkColors,
+  themeName = 'Custom Theme',
 }: ThemeCodePanelProps) {
   const [copiedTab, setCopiedTab] = useState<string | null>(null);
 
-  const generateCSSVariables = (colors: Record<string, string>, mode: 'light' | 'dark') => {
+  const generateCSSVariables = (
+    colors: Record<string, string>,
+    mode: 'light' | 'dark',
+  ) => {
     const selector = mode === 'dark' ? '.dark' : ':root';
     const cssVars = Object.entries(colors)
       .map(([key, value]) => `  --${key}: ${value};`)
@@ -88,7 +96,7 @@ module.exports = {
         darkModeConfig: darkColors,
       },
       null,
-      2
+      2,
     );
   };
 
@@ -115,14 +123,14 @@ module.exports = {
         <DialogHeader>
           <DialogTitle>Theme Code</DialogTitle>
         </DialogHeader>
-        
+
         <Tabs defaultValue="css" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="css">CSS Variables</TabsTrigger>
             <TabsTrigger value="tailwind">Tailwind Config</TabsTrigger>
             <TabsTrigger value="json">JSON Export</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="css" className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium">CSS Custom Properties</h3>
@@ -145,10 +153,12 @@ module.exports = {
               </pre>
             </ScrollArea>
           </TabsContent>
-          
+
           <TabsContent value="tailwind" className="mt-4">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium">Tailwind CSS Configuration</h3>
+              <h3 className="text-sm font-medium">
+                Tailwind CSS Configuration
+              </h3>
               <Button
                 variant="outline"
                 size="sm"
@@ -168,7 +178,7 @@ module.exports = {
               </pre>
             </ScrollArea>
           </TabsContent>
-          
+
           <TabsContent value="json" className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium">JSON Theme Export</h3>

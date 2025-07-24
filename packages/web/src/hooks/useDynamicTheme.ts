@@ -1,4 +1,5 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback } from 'react';
+import { useCompanyTheme } from '@/components/providers/DynamicThemeProvider';
 
 export interface ThemeEditorContextValue {
   applyTheme: (themeColors: Record<string, string>) => void;
@@ -7,83 +8,31 @@ export interface ThemeEditorContextValue {
 }
 
 export function useDynamicTheme(): ThemeEditorContextValue {
-  const [currentTheme, setCurrentTheme] = useState<Record<string, string> | null>(null);
+  const { updateThemeColors, isDarkMode, tokens, refreshTheme } = useCompanyTheme();
   
   const applyTheme = useCallback((themeColors: Record<string, string>) => {
-    // Apply CSS variables directly to document root
-    const root = document.documentElement;
-    
-    Object.entries(themeColors).forEach(([key, value]) => {
-      if (value && value.trim()) {
-        // Convert OKLCH values to CSS custom properties
-        const cssValue = value.includes('oklch') ? value : `oklch(${value})`;
-        root.style.setProperty(`--${key}`, cssValue);
-        
-        // Also set foreground variants for better contrast
-        if (key.includes('primary') || key.includes('secondary') || key.includes('accent')) {
-          const foregroundKey = `${key}-foreground`;
-          // For now, use a simple contrast rule
-          const lightness = parseFloat(value.split(' ')[2]?.replace('%', '') || '50');
-          const foregroundValue = lightness > 60 ? 'oklch(0 0 0)' : 'oklch(100% 0 0)';
-          root.style.setProperty(`--${foregroundKey}`, foregroundValue);
-        }
-      }
-    });
-    
-    // Update current theme state
-    setCurrentTheme(themeColors);
-  }, []);
+    // Use the DynamicThemeProvider's updateThemeColors method instead of direct DOM manipulation
+    if (updateThemeColors) {
+      updateThemeColors(themeColors, isDarkMode ? 'dark' : 'light');
+    } else {
+      console.warn('updateThemeColors not available yet');
+    }
+  }, [updateThemeColors, isDarkMode]);
 
-  const resetTheme = useCallback(() => {
-    // Reset to default theme by removing custom properties
-    const root = document.documentElement;
-    const properties = [
-      'primary', 'primary-foreground',
-      'secondary', 'secondary-foreground', 
-      'accent', 'accent-foreground',
-      'background', 'foreground',
-      'muted', 'muted-foreground',
-      'destructive', 'destructive-foreground',
-      'border', 'input', 'ring'
-    ];
+  const resetTheme = useCallback(async () => {
+    // Reset to default theme by refreshing the theme from the provider
+    await refreshTheme();
     
-    properties.forEach(prop => {
-      root.style.removeProperty(`--${prop}`);
-    });
-    
-    setCurrentTheme(null);
-  }, []);
-
-  // Initialize current theme from DOM on mount
-  useEffect(() => {
-    const getCurrentThemeFromDOM = (): Record<string, string> | null => {
-      if (typeof window === 'undefined') return null;
-      
-      const root = document.documentElement;
-      const theme: Record<string, string> = {};
-      
-      const properties = [
-        'primary', 'secondary', 'accent', 'background', 
-        'foreground', 'muted', 'muted-foreground',
-        'destructive', 'border', 'input', 'ring'
-      ];
-      
-      properties.forEach(prop => {
-        const value = root.style.getPropertyValue(`--${prop}`);
-        if (value) {
-          theme[prop] = value.replace('oklch(', '').replace(')', '');
-        }
-      });
-      
-      return Object.keys(theme).length > 0 ? theme : null;
-    };
-
-    setCurrentTheme(getCurrentThemeFromDOM());
-  }, []);
+    // Also remove any preview styles that might be applied
+    const previewElement = document.getElementById('theme-preview-vars');
+    if (previewElement) {
+      previewElement.remove();
+    }
+  }, [refreshTheme]);
 
   return {
     applyTheme,
     resetTheme,
-    currentTheme,
+    currentTheme: tokens, // Return the current tokens from the provider
   };
 }

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { trpc } from '@/lib/trpc';
+import type { ThemeTypography } from '@/types/typography';
+import { DEFAULT_TYPOGRAPHY } from '@/types/typography';
 
 export interface Theme {
   id: string;
@@ -7,6 +9,7 @@ export interface Theme {
   name: string;
   lightModeConfig: Record<string, string>;
   darkModeConfig?: Record<string, string>;
+  typography?: ThemeTypography;
   isActive: boolean;
   isDefault?: boolean;
   createdAt: Date;
@@ -28,16 +31,19 @@ interface ThemeContextValue {
   loading: boolean;
   error: string | null;
   tokens: Record<string, string>;
+  typography: ThemeTypography;
   themeMode: ThemeMode;
   isDarkMode: boolean;
   setThemeMode: (mode: ThemeMode) => void;
   toggleThemeMode: () => void;
   updateTheme: (themeData: Partial<Theme>) => Promise<void>;
+  updateTypography: (typography: ThemeTypography) => Promise<void>;
   applyThemeRule: (rule: ThemeRule) => void;
   applyTheme: (themeId: string, companyId?: string) => Promise<void>;
   refreshTheme: () => Promise<void>;
   setCurrentTheme: (theme: Theme) => void;
   updateThemeColors: (colors: Record<string, string>, mode: 'light' | 'dark') => void;
+  clearPreviewTokens: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -81,6 +87,116 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
   } : { r: 0, g: 0, b: 0 };
 }
 
+// Convert hex color to OKLCH format
+function hexToOklch(hex: string): string {
+  if (!hex || !hex.startsWith('#')) return 'oklch(0.5 0.1 250)';
+  
+  const rgb = hexToRgb(hex);
+  
+  // Convert RGB to linear RGB
+  const toLinear = (c: number) => {
+    c = c / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  };
+  
+  const r = toLinear(rgb.r);
+  const g = toLinear(rgb.g);
+  const b = toLinear(rgb.b);
+  
+  // Convert to XYZ
+  const x = 0.4124564 * r + 0.3575761 * g + 0.1804375 * b;
+  const y = 0.2126729 * r + 0.7151522 * g + 0.0721750 * b;
+  const z = 0.0193339 * r + 0.1191920 * g + 0.9503041 * b;
+  
+  // Convert to LAB
+  const fx = x > 0.008856 ? Math.pow(x, 1/3) : (903.3 * x + 16) / 116;
+  const fy = y > 0.008856 ? Math.pow(y, 1/3) : (903.3 * y + 16) / 116;
+  const fz = z > 0.008856 ? Math.pow(z, 1/3) : (903.3 * z + 16) / 116;
+  
+  const L = 116 * fy - 16;
+  const a = 500 * (fx - fy);
+  const bLab = 200 * (fy - fz);
+  
+  // Convert LAB to OKLCH (simplified approximation)
+  const lightness = Math.max(0, Math.min(1, L / 100));
+  const chroma = Math.sqrt(a * a + bLab * bLab) / 150; // Normalized chroma
+  let hue = Math.atan2(bLab, a) * 180 / Math.PI;
+  if (hue < 0) hue += 360;
+  
+  return `oklch(${lightness.toFixed(4)} ${Math.min(0.4, chroma).toFixed(4)} ${hue.toFixed(1)})`;
+}
+
+// Define which properties are colors vs other CSS properties
+function isColorProperty(key: string): boolean {
+  const colorProperties = new Set([
+    // Base colors
+    'background', 'foreground', 'card', 'card-foreground', 'popover', 'popover-foreground',
+    // Primary colors
+    'primary', 'primary-foreground',
+    // Secondary colors  
+    'secondary', 'secondary-foreground',
+    // Muted colors
+    'muted', 'muted-foreground',
+    // Accent colors
+    'accent', 'accent-foreground',
+    // Destructive colors
+    'destructive', 'destructive-foreground',
+    // Status colors
+    'success', 'success-foreground', 'warning', 'warning-foreground',
+    // Border and input
+    'border', 'input', 'ring',
+    // Chart colors
+    'chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5',
+    // Sidebar colors
+    'sidebar', 'sidebar-foreground', 'sidebar-primary', 'sidebar-primary-foreground',
+    'sidebar-accent', 'sidebar-accent-foreground', 'sidebar-border', 'sidebar-ring',
+    // Shadow color (but not other shadow properties)
+    'shadow-color'
+  ]);
+
+  return colorProperties.has(key);
+}
+
+// Normalize color value to consistent format
+function normalizeColorValue(color: string): string {
+  if (!color) return 'oklch(0.5 0.1 250)';
+  
+  // Already in oklch format
+  if (color.includes('oklch(')) return color;
+  
+  // Convert hex to oklch
+  if (color.startsWith('#')) {
+    return hexToOklch(color);
+  }
+  
+  // Handle RGB values
+  if (color.startsWith('rgb(')) {
+    // Extract RGB values and convert to hex first
+    const matches = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (matches) {
+      const r = parseInt(matches[1]);
+      const g = parseInt(matches[2]);
+      const b = parseInt(matches[3]);
+      const hex = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+      return hexToOklch(hex);
+    }
+  }
+  
+  // Handle HSL values (basic conversion)
+  if (color.startsWith('hsl(')) {
+    // For now, return a safe fallback - in production you'd want full HSL to OKLCH conversion
+    return 'oklch(0.5 0.1 250)';
+  }
+  
+  // If it's already a raw oklch value (like "0.5 0.1 250")
+  if (/^[\d.]+\s+[\d.]+\s+[\d.]+$/.test(color.trim())) {
+    return `oklch(${color})`;
+  }
+  
+  // Default fallback
+  return 'oklch(0.5 0.1 250)';
+}
+
 function generateCSSFromRule(rule: ThemeRule): string {
   const selector = rule.selector || ':root';
   const properties = Object.entries(rule.properties || {})
@@ -103,12 +219,21 @@ function generateTokensFromTheme(theme: Theme, isDarkMode: boolean): Record<stri
   
   if (config) {
     Object.entries(config).forEach(([key, value]) => {
-      tokens[key] = value;
+      // Normalize color values to ensure consistency
+      if (isColorProperty(key) && typeof value === 'string') {
+        tokens[key] = normalizeColorValue(value);
+      } else {
+        tokens[key] = value;
+      }
     });
   } else if (theme.lightModeConfig) {
     // Fallback to light mode if dark mode not available
     Object.entries(theme.lightModeConfig).forEach(([key, value]) => {
-      tokens[key] = value;
+      if (isColorProperty(key) && typeof value === 'string') {
+        tokens[key] = normalizeColorValue(value);
+      } else {
+        tokens[key] = value;
+      }
     });
   }
 
@@ -204,6 +329,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<Theme | null>(themeData || null);
+  const [typography, setTypography] = useState<ThemeTypography>(theme?.typography || DEFAULT_TYPOGRAPHY);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [themeMode, setThemeModeState] = useState<ThemeMode>(defaultMode);
@@ -234,10 +360,25 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
     return systemPrefersDark; // system mode
   }, [themeMode, systemPrefersDark]);
 
-  const tokens = useMemo(() => {
+  // Base tokens from theme
+  const baseTokens = useMemo(() => {
     if (!theme) return generateFallbackTokens(isDarkMode ? 'dark' : 'light');
     return generateTokensFromTheme(theme, isDarkMode);
   }, [theme, isDarkMode]);
+
+  // Preview tokens for dynamic updates (can be overridden)
+  const [previewTokens, setPreviewTokens] = useState<Record<string, string>>({});
+
+  // Combined tokens (base + preview overrides)
+  const tokens = useMemo(() => ({
+    ...baseTokens,
+    ...previewTokens
+  }), [baseTokens, previewTokens]);
+
+  // Clear preview tokens when base theme changes
+  useEffect(() => {
+    setPreviewTokens({});
+  }, [theme?.id, isDarkMode]);
 
   // System theme preference detection
   useEffect(() => {
@@ -265,6 +406,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
     if (fetchedTheme) {
       console.log('🎯 Setting theme from fetchedTheme:', fetchedTheme.name);
       setTheme(fetchedTheme as Theme);
+      setTypography(fetchedTheme.typography || DEFAULT_TYPOGRAPHY);
     } else if (companyThemes && companyThemes.length > 0) {
       // Find the default theme first (marked as isDefault)
       const defaultTheme = companyThemes.find(t => t.isDefault);
@@ -272,6 +414,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
       if (defaultTheme) {
         console.log('🎯 Found DEFAULT theme:', defaultTheme.name, 'isDefault:', defaultTheme.isDefault);
         setTheme(defaultTheme as Theme);
+        setTypography(defaultTheme.typography || DEFAULT_TYPOGRAPHY);
       } else {
         // If no default theme exists, create a basic default theme
         console.log('🎯 No default theme found. Creating default theme...');
@@ -332,6 +475,11 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
 
     const updatedTheme = { ...theme, ...themeData };
     setTheme(updatedTheme);
+    
+    // Update typography if included
+    if (themeData.typography) {
+      setTypography(themeData.typography);
+    }
 
     try {
       await updateThemeMutation.mutateAsync({
@@ -342,6 +490,11 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
     } catch (err) {
       console.error('Failed to persist theme update:', err);
     }
+  };
+
+  const updateTypography = async (newTypography: ThemeTypography): Promise<void> => {
+    setTypography(newTypography);
+    await updateTheme({ typography: newTypography });
   };
 
   const applyThemeRule = (rule: ThemeRule): void => {
@@ -412,61 +565,91 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
   };
 
   const updateThemeColors = (colors: Record<string, string>, mode: 'light' | 'dark') => {
-    if (!theme) return;
-    
-    // Only apply colors to DOM immediately, don't update theme state to avoid loops
-    // The theme state will be updated when saving
+    // Update preview tokens for dynamic color changes
+    // This ensures consistency with the DynamicThemeProvider's token management
     if ((mode === 'light' && !isDarkMode) || (mode === 'dark' && isDarkMode)) {
-      const root = document.documentElement;
-      Object.entries(colors).forEach(([colorName, colorValue]) => {
-        if (colorValue) {
-          root.style.setProperty(`--${colorName}`, colorValue);
+      // Normalize all color values to ensure consistent OKLCH format
+      const normalizedColors: Record<string, string> = {};
+      
+      Object.entries(colors).forEach(([key, value]) => {
+        // Check if this is a color property (not typography, radius, etc.)
+        if (isColorProperty(key) && typeof value === 'string') {
+          normalizedColors[key] = normalizeColorValue(value);
+        } else {
+          normalizedColors[key] = value;
         }
       });
+      
+      setPreviewTokens(prevTokens => ({
+        ...prevTokens,
+        ...normalizedColors
+      }));
     }
+  };
+
+  // Clear preview tokens to return to base theme
+  const clearPreviewTokens = () => {
+    setPreviewTokens({});
   };
 
   // Initial theme data is handled by tRPC queries above
 
   // Apply theme tokens and manage dark class
   useEffect(() => {
-    const styleId = 'dynamic-theme-vars';
-    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
-    
-    if (!styleElement) {
-      styleElement = document.createElement('style');
-      styleElement.id = styleId;
-      document.head.appendChild(styleElement);
-    }
-
-    const cssVariables = Object.entries(tokens)
-      .map(([key, value]) => {
-        // Don't double-wrap values that are already formatted
-        let formattedValue = value;
-        if (!value.includes('oklch') && !value.includes('hsl') && !value.includes('rgb') && !value.startsWith('#')) {
-          // Only wrap raw numeric values
-          formattedValue = `oklch(${value})`;
-        }
-        return `  --${key}: ${formattedValue};`;
-      })
-      .join('\n');
-
-    styleElement.textContent = `
-      :root {
-        ${cssVariables}
-      }
+    try {
+      const styleId = 'dynamic-theme-vars';
+      let styleElement = document.getElementById(styleId) as HTMLStyleElement;
       
-      .theme-transition * {
-        transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+      if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = styleId;
+        document.head.appendChild(styleElement);
       }
-    `;
 
-    return () => {
-      const element = document.getElementById(styleId);
-      if (element) {
-        element.remove();
-      }
-    };
+      const cssVariables = Object.entries(tokens)
+        .map(([key, value]) => {
+          try {
+            // Ensure proper CSS variable formatting
+            let formattedValue = value;
+            
+            // Check if this is a color property
+            if (isColorProperty(key) && typeof value === 'string') {
+              // Normalize color values to ensure consistency
+              formattedValue = normalizeColorValue(value);
+            }
+            
+            return `  --${key}: ${formattedValue};`;
+          } catch (err) {
+            console.warn(`Failed to process token ${key}:`, err);
+            return `  --${key}: oklch(0.5 0.1 250);`; // Safe fallback
+          }
+        })
+        .join('\n');
+
+      styleElement.textContent = `
+        :root {
+          ${cssVariables}
+        }
+        
+        /* Ensure theme variables override default CSS */
+        html:root {
+          ${cssVariables}
+        }
+        
+        .theme-transition * {
+          transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+        }
+      `;
+
+      return () => {
+        const element = document.getElementById(styleId);
+        if (element) {
+          element.remove();
+        }
+      };
+    } catch (err) {
+      console.error('Failed to apply theme tokens:', err);
+    }
   }, [tokens]);
 
   // Manage dark class on document element
@@ -479,21 +662,82 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
     }
   }, [isDarkMode]);
 
+  // Apply typography styles
+  useEffect(() => {
+    const styleId = 'dynamic-typography-vars';
+    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+    
+    if (!styleElement) {
+      styleElement = document.createElement('style');
+      styleElement.id = styleId;
+      document.head.appendChild(styleElement);
+    }
+
+    // Generate CSS for typography
+    const generateTypographyStyles = (selector: string, style: import('@/types/typography').TypographyStyle) => {
+      const fontUrl = style.fontFamily !== 'inherit' && !['Arial', 'Helvetica', 'Georgia', 'Times New Roman'].includes(style.fontFamily)
+        ? `@import url('https://fonts.googleapis.com/css2?family=${style.fontFamily.replace(/\s+/g, '+')}:wght@100;200;300;400;500;600;700;800;900&display=swap');\n`
+        : '';
+      
+      return `${fontUrl}${selector} {
+        font-family: '${style.fontFamily}', sans-serif;
+        font-size: ${style.fontSize}px;
+        font-weight: ${style.fontWeight};
+        font-style: ${style.fontStyle};
+        text-transform: ${style.textTransform};
+        text-decoration: ${style.textDecoration};
+        line-height: ${style.lineHeight};
+        letter-spacing: ${style.letterSpacing}em;
+        word-spacing: ${style.wordSpacing}em;
+      }`;
+    };
+
+    const styles = `
+      /* Base typography */
+      ${generateTypographyStyles('body, p', typography.base)}
+      
+      /* Accent typography */
+      ${generateTypographyStyles('.text-accent, strong, b, em', typography.accent)}
+      
+      /* Quote typography */
+      ${generateTypographyStyles('blockquote, .quote', typography.quote)}
+      
+      /* Headings */
+      ${generateTypographyStyles('h1, .text-h1', typography.h1)}
+      ${generateTypographyStyles('h2, .text-h2', typography.h2)}
+      ${generateTypographyStyles('h3, .text-h3', typography.h3)}
+      ${generateTypographyStyles('h4, .text-h4', typography.h4)}
+      ${generateTypographyStyles('h5, .text-h5', typography.h5)}
+    `;
+
+    styleElement.textContent = styles;
+
+    return () => {
+      const element = document.getElementById(styleId);
+      if (element) {
+        element.remove();
+      }
+    };
+  }, [typography]);
+
   const contextValue: ThemeContextValue = {
     theme,
     loading,
     error,
     tokens,
+    typography,
     themeMode,
     isDarkMode,
     setThemeMode,
     toggleThemeMode,
     updateTheme,
+    updateTypography,
     applyThemeRule,
     applyTheme,
     refreshTheme,
     setCurrentTheme,
     updateThemeColors,
+    clearPreviewTokens,
   };
 
   return (

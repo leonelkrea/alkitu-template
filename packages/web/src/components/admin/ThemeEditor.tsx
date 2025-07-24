@@ -23,7 +23,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from '@/components/ui/resizable';
-import { Palette, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import { Palette, ChevronDown, ChevronUp } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 import { useCompanyTheme } from '@/components/providers/DynamicThemeProvider';
 import { ThemePresetSelectorWithArrows } from '@/components/themes/ThemePresetSelectorWithArrows';
@@ -32,6 +32,7 @@ import { ColorSelectorPopover } from '@/components/ui/color-selector-popover';
 import { ThemeActionBar } from './theme-action-bar';
 import { ThemeCodePanel } from './theme-code-panel';
 import { ThemePreviewContent } from './theme-preview-content';
+import { ColorEditor } from './ColorEditor';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import {
@@ -45,6 +46,10 @@ import { Input } from '@/components/ui/input';
 import { Upload, Crop, Check, X } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import { BrandProvider, useBrandConfig } from './BrandContext';
+import { TypographyEditor } from './TypographyEditor';
+import { ShadowEditor } from './ShadowEditor';
+import { RadiusSpacingEditor } from './RadiusSpacingEditor';
+import { MultiFormatColorInput } from '@/components/ui/multi-format-color-input';
 
 // SVG Cropper Component using react-easy-crop
 function SVGCropper({
@@ -938,7 +943,7 @@ function ControlSection({
   );
 }
 
-// Enhanced color picker component
+// Enhanced color picker component using multi-format input
 interface EnhancedColorPickerProps {
   name: string;
   color: string;
@@ -954,63 +959,28 @@ function EnhancedColorPicker({
   label,
   description,
 }: EnhancedColorPickerProps) {
-  const [inputValue, setInputValue] = useState(color);
-
-  useEffect(() => {
-    setInputValue(color);
-  }, [color]);
-
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = e.target.value;
-      console.log('EnhancedColorPicker handleInputChange:', { name, newValue });
-      setInputValue(newValue);
+  const handleChange = useCallback(
+    (newValue: string) => {
+      console.log('EnhancedColorPicker multi-format change:', { name, newValue });
       onChange(newValue);
-    },
-    [onChange, name],
-  );
-
-  const handleColorChange = useCallback(
-    (newColor: string) => {
-      console.log('EnhancedColorPicker handleColorChange:', { name, newColor });
-      setInputValue(newColor);
-      onChange(newColor);
     },
     [onChange, name],
   );
 
   return (
     <div className="mb-3">
-      <div className="mb-1.5 flex items-center justify-between">
-        <Label htmlFor={`color-${name}`} className="text-xs font-medium">
-          {label}
-        </Label>
-      </div>
-      <div className="relative flex items-center gap-1">
-        <div
-          className="relative flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded border"
-          style={{ backgroundColor: color }}
-        >
-          <input
-            type="color"
-            id={`color-${name}`}
-            value={color}
-            onChange={(e) => handleColorChange(e.target.value)}
-            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-          />
-        </div>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="bg-input/25 border-border/20 h-8 flex-1 rounded border px-2 text-sm"
-          placeholder="Enter color (hex)"
-        />
+      <MultiFormatColorInput
+        name={name}
+        color={color}
+        onChange={handleChange}
+        label={label}
+        description={description}
+        defaultFormat="oklch"
+        className="mb-0"
+      />
+      <div className="mt-2 flex items-center gap-2">
         <ColorSelectorPopover currentColor={color} onChange={onChange} />
       </div>
-      {description && (
-        <p className="text-muted-foreground text-xs mt-1">{description}</p>
-      )}
     </div>
   );
 }
@@ -1105,13 +1075,15 @@ function ColorLinkingControls({
 export function ThemeEditor() {
   const {
     theme,
+    typography,
     isDarkMode,
     toggleThemeMode,
     refreshTheme,
     updateThemeColors,
+    updateTypography,
   } = useCompanyTheme();
   const [activeTab, setActiveTab] = useState<
-    'colors' | 'typography' | 'brand' | 'other'
+    'colors' | 'typography' | 'brand' | 'shadow' | 'border' | 'spacing'
   >('colors');
   const [lightColors, setLightColors] = useState<Record<string, string>>({});
   const [darkColors, setDarkColors] = useState<Record<string, string>>({});
@@ -1125,6 +1097,10 @@ export function ThemeEditor() {
     Record<string, string>
   >({});
   const [isInitialized, setIsInitialized] = useState(false);
+  
+  // Material Design color selection state
+  const [selectedShadcnColorForMaterial, setSelectedShadcnColorForMaterial] = useState<string | null>(null);
+  const [colorSubTab, setColorSubTab] = useState<'shadcn-current' | 'material-design' | 'code'>('shadcn-current');
 
   // Get current colors based on mode
   const currentColors = useMemo(() => {
@@ -1561,7 +1537,7 @@ export function ThemeEditor() {
                     value={activeTab}
                     onValueChange={(value) =>
                       setActiveTab(
-                        value as 'colors' | 'typography' | 'brand' | 'other',
+                        value as 'colors' | 'typography' | 'brand' | 'shadow' | 'border' | 'spacing',
                       )
                     }
                     className="flex min-h-0 w-full flex-1 flex-col"
@@ -1587,10 +1563,22 @@ export function ThemeEditor() {
                           Brand
                         </TabsTrigger>
                         <TabsTrigger
-                          value="other"
+                          value="shadow"
                           className="rounded-full px-4 py-1"
                         >
-                          Other
+                          Shadow
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="border"
+                          className="rounded-full px-4 py-1"
+                        >
+                          Border
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="spacing"
+                          className="rounded-full px-4 py-1"
+                        >
+                          Spacing
                         </TabsTrigger>
                       </TabsList>
                     </div>
@@ -1599,48 +1587,124 @@ export function ThemeEditor() {
                       value="colors"
                       className="mt-1 size-full overflow-hidden"
                     >
-                      <ScrollArea className="h-[600px] px-4">
-                        {colorSections.map((section) => (
-                          <ControlSection
-                            key={section.title}
-                            title={section.title}
-                            expanded={section.expanded}
-                          >
-                            {section.colors.map((color) => (
-                              <div key={color.name} className="mb-4">
-                                <div className="mb-1.5 flex items-center justify-between">
-                                  <Label className="text-xs font-medium">
-                                    {color.displayName}
-                                  </Label>
-                                  <ColorLinkingControls
-                                    colorName={color.name}
-                                    isLinked={isColorLinked(color.name)}
-                                    linkedTo={getColorLinkTarget(color.name)}
-                                    onLinkTo={(targetColor) => linkColorTo(color.name, targetColor)}
-                                    onUnlink={() => unlinkColor(color.name)}
-                                    availableColors={getAllColorNames()}
-                                    defaultLinkTarget={color.defaultLinkTarget}
-                                  />
-                                </div>
-                                {!isColorLinked(color.name) && (
-                                  <EnhancedColorPicker
-                                    name={color.name}
-                                    color={currentColors[color.name] || color.value}
-                                    onChange={(newValue) =>
-                                      handleColorChange(color.name, newValue)
-                                    }
-                                    label=""
-                                    description={color.description}
-                                  />
-                                )}
-                                {isColorLinked(color.name) && color.description && (
-                                  <p className="text-muted-foreground text-xs mt-1">{color.description}</p>
-                                )}
-                              </div>
+                      {/* Tabs principales para Colors */}
+                      <Tabs value={colorSubTab} onValueChange={(value) => setColorSubTab(value as 'shadcn-current' | 'material-design' | 'code')} className="flex flex-col h-full">
+                        <div className="px-4 pb-2">
+                          <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="shadcn-current" className="text-xs">
+                              ShadCN + TailwindCSS v4
+                            </TabsTrigger>
+                            <TabsTrigger value="material-design" className="text-xs">
+                              Material Design v3
+                            </TabsTrigger>
+                            <TabsTrigger value="code" className="text-xs">
+                              Code
+                            </TabsTrigger>
+                          </TabsList>
+                        </div>
+
+                        {/* Tab ShadCN Actual */}
+                        <TabsContent value="shadcn-current" className="flex-1 overflow-hidden">
+                          <ScrollArea className="h-[550px] px-4">
+                            {colorSections.map((section) => (
+                              <ControlSection
+                                key={section.title}
+                                title={section.title}
+                                expanded={section.expanded}
+                              >
+                                {section.colors.map((color) => (
+                                  <div key={color.name} className="mb-4">
+                                    <div className="mb-1.5 flex items-center justify-between">
+                                      <Label className="text-xs font-medium">
+                                        {color.displayName}
+                                      </Label>
+                                      <div className="flex items-center gap-2">
+                                        <ColorLinkingControls
+                                          colorName={color.name}
+                                          isLinked={isColorLinked(color.name)}
+                                          linkedTo={getColorLinkTarget(color.name)}
+                                          onLinkTo={(targetColor) => linkColorTo(color.name, targetColor)}
+                                          onUnlink={() => unlinkColor(color.name)}
+                                          availableColors={getAllColorNames()}
+                                          defaultLinkTarget={color.defaultLinkTarget}
+                                        />
+                                        <Button
+                                          variant="outline"
+                                          size="sm"
+                                          className="h-6 px-2 text-xs"
+                                          onClick={() => {
+                                            setSelectedShadcnColorForMaterial(color.name);
+                                            setActiveTab('colors'); // Ensure we're on colors tab
+                                            setColorSubTab('material-design'); // Switch to Material Design tab
+                                          }}
+                                          title="Link to Material Design 3 color"
+                                        >
+                                          <Palette className="w-3 h-3 mr-1" />
+                                          MD3
+                                        </Button>
+                                      </div>
+                                    </div>
+                                    {!isColorLinked(color.name) && (
+                                      <EnhancedColorPicker
+                                        name={color.name}
+                                        color={currentColors[color.name] || color.value}
+                                        onChange={(newValue) =>
+                                          handleColorChange(color.name, newValue)
+                                        }
+                                        label=""
+                                        description={color.description}
+                                      />
+                                    )}
+                                    {isColorLinked(color.name) && color.description && (
+                                      <p className="text-muted-foreground text-xs mt-1">{color.description}</p>
+                                    )}
+                                  </div>
+                                ))}
+                              </ControlSection>
                             ))}
-                          </ControlSection>
-                        ))}
-                      </ScrollArea>
+                          </ScrollArea>
+                        </TabsContent>
+
+                        {/* Tab Material Design v3 */}
+                        <TabsContent value="material-design" className="flex-1 overflow-hidden">
+                          <ScrollArea className="h-[550px]">
+                            <ColorEditor 
+                              onChange={(mapping: any) => {
+                                console.log('Color mapping changed:', mapping);
+                                // TODO: Integrar con el sistema de theme existente
+                              }}
+                              onSave={(mapping: any) => {
+                                console.log('Color mapping saved:', mapping);
+                                // TODO: Implementar guardado en el sistema de theme
+                              }}
+                              onColorChange={handleColorChange}
+                              selectedShadcnColor={selectedShadcnColorForMaterial as any}
+                              onSelectShadcnColor={setSelectedShadcnColorForMaterial as any}
+                              currentThemeColors={currentColors}
+                              forceActiveSystem="material"
+                            />
+                          </ScrollArea>
+                        </TabsContent>
+
+                        {/* Tab Code */}
+                        <TabsContent value="code" className="flex-1 overflow-hidden">
+                          <ScrollArea className="h-[550px]">
+                            <ColorEditor 
+                              onChange={(mapping: any) => {
+                                console.log('Color mapping changed:', mapping);
+                              }}
+                              onSave={(mapping: any) => {
+                                console.log('Color mapping saved:', mapping);
+                              }}
+                              onColorChange={handleColorChange}
+                              selectedShadcnColor={selectedShadcnColorForMaterial as any}
+                              onSelectShadcnColor={setSelectedShadcnColorForMaterial as any}
+                              currentThemeColors={currentColors}
+                              forceActiveSystem="code"
+                            />
+                          </ScrollArea>
+                        </TabsContent>
+                      </Tabs>
                     </TabsContent>
 
                     <TabsContent
@@ -1648,16 +1712,11 @@ export function ThemeEditor() {
                       className="mt-1 size-full overflow-hidden"
                     >
                       <ScrollArea className="h-[600px] px-4">
-                        <div className="bg-muted/50 mb-4 flex items-start gap-2.5 rounded-md border p-3">
-                          <AlertCircle className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0" />
-                          <div className="text-muted-foreground text-sm">
-                            <p>
-                              Typography controls coming soon. Font family,
-                              letter spacing, and other typography settings will
-                              be available here.
-                            </p>
-                          </div>
-                        </div>
+                        <TypographyEditor
+                          typography={typography}
+                          onChange={updateTypography}
+                          className="pb-4"
+                        />
                       </ScrollArea>
                     </TabsContent>
 
@@ -1676,17 +1735,33 @@ export function ThemeEditor() {
                     </TabsContent>
 
                     <TabsContent
-                      value="other"
+                      value="shadow"
                       className="mt-1 size-full overflow-hidden"
                     >
                       <ScrollArea className="h-[600px] px-4">
-                        <div className="bg-muted/50 mb-4 flex items-start gap-2.5 rounded-md border p-3">
-                          <AlertCircle className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0" />
-                          <div className="text-muted-foreground text-sm">
-                            <p>
-                              Other controls coming soon. Border radius,
-                              spacing, shadows, and other design controls will
-                              be available here.
+                        <ShadowEditor />
+                      </ScrollArea>
+                    </TabsContent>
+
+                    <TabsContent
+                      value="border"
+                      className="mt-1 size-full overflow-hidden"
+                    >
+                      <ScrollArea className="h-[600px] px-4">
+                        <RadiusSpacingEditor />
+                      </ScrollArea>
+                    </TabsContent>
+
+                    <TabsContent
+                      value="spacing"
+                      className="mt-1 size-full overflow-hidden"
+                    >
+                      <ScrollArea className="h-[600px] px-4">
+                        <div className="py-4">
+                          <div>
+                            <h2 className="text-2xl font-bold">Sistema de Espaciado</h2>
+                            <p className="text-muted-foreground">
+                              Sistema de espaciado próximamente
                             </p>
                           </div>
                         </div>

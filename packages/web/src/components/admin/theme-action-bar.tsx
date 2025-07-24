@@ -3,27 +3,31 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { 
-  Heart, 
-  Braces, 
-  RotateCcw, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
+  Heart,
+  Braces,
+  RotateCcw,
   Upload,
-  Download, 
+  Download,
   MoreHorizontal,
   Sun,
   Moon,
   Undo2,
   Redo2,
   Loader2,
-  Settings
+  Settings,
 } from 'lucide-react';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { useCompanyTheme } from '@/components/providers/DynamicThemeProvider';
 import { trpc } from '@/lib/trpc';
@@ -56,11 +60,10 @@ export function ThemeActionBar({
   onShowCode,
   hasUnsavedChanges,
   previewMode = false,
-  onTogglePreview
+  onTogglePreview,
 }: ThemeActionBarProps) {
   const { theme } = useCompanyTheme();
   const [showContrast, setShowContrast] = useState(false);
-
 
   return (
     <div className="border-b">
@@ -96,9 +99,7 @@ export function ThemeActionBar({
                 <DropdownMenuSeparator />
               </>
             )}
-            <DropdownMenuItem>
-              View History
-            </DropdownMenuItem>
+            <DropdownMenuItem>View History</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -108,10 +109,16 @@ export function ThemeActionBar({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="sm" onClick={onToggleMode}>
-              {isDarkMode ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />}
+              {isDarkMode ? (
+                <Sun className="size-3.5" />
+              ) : (
+                <Moon className="size-3.5" />
+              )}
             </Button>
           </TooltipTrigger>
-          <TooltipContent>{isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</TooltipContent>
+          <TooltipContent>
+            {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          </TooltipContent>
         </Tooltip>
 
         <Separator orientation="vertical" className="mx-1 h-8" />
@@ -140,9 +147,9 @@ export function ThemeActionBar({
         {/* Reset Button */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={onReset}
               disabled={!hasUnsavedChanges}
             >
@@ -164,13 +171,12 @@ export function ThemeActionBar({
           <TooltipContent>Import theme</TooltipContent>
         </Tooltip>
 
-
         {/* Save Button */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={onSave}
               disabled={!hasUnsavedChanges}
             >
@@ -192,14 +198,14 @@ export function ThemeActionBar({
           <TooltipContent>View theme code</TooltipContent>
         </Tooltip>
       </div>
-      
+
       {/* Contrast Checker Panel */}
       {showContrast && (
         <div className="border-t bg-muted/50 p-4">
           <div className="text-sm font-medium mb-2">Contrast Checker</div>
           <div className="text-xs text-muted-foreground">
-            Check color contrast ratios for accessibility compliance.
-            Feature coming soon...
+            Check color contrast ratios for accessibility compliance. Feature
+            coming soon...
           </div>
         </div>
       )}

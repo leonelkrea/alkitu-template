@@ -63,7 +63,7 @@ const ThemePresetCycleControls: React.FC<ThemePresetCycleControlsProps> = ({
   onThemeSelect,
   ...props
 }) => {
-  const { isDarkMode, applyTheme, setCurrentTheme } = useCompanyTheme();
+  const { isDarkMode, applyTheme, setCurrentTheme, updateThemeColors } = useCompanyTheme();
 
   // Get current theme index
   const currentIndex = useMemo(() => {
@@ -117,16 +117,19 @@ const ThemePresetCycleControls: React.FC<ThemePresetCycleControlsProps> = ({
       if (!selectedTheme) return;
 
       try {
-        // Apply preview first
-        const root = document.documentElement;
+        if (!updateThemeColors) {
+          console.warn('updateThemeColors not available yet');
+          return;
+        }
+
+        // Apply preview first using DynamicThemeProvider's updateThemeColors method
         const config = isDarkMode
           ? selectedTheme.darkModeConfig
           : selectedTheme.lightModeConfig;
         const colorsToApply = config || selectedTheme.colors;
 
-        Object.entries(colorsToApply).forEach(([key, value]) => {
-          root.style.setProperty(`--${key}`, value as string);
-        });
+        // Use the theme context's updateThemeColors method instead of direct DOM manipulation
+        updateThemeColors(colorsToApply, isDarkMode ? 'dark' : 'light');
 
         // If it's a built-in theme, save it to company first
         let themeToApply = selectedTheme;
@@ -173,6 +176,7 @@ const ThemePresetCycleControls: React.FC<ThemePresetCycleControlsProps> = ({
       createThemeMutation,
       onThemeSelect,
       setCurrentTheme,
+      updateThemeColors,
     ],
   );
 

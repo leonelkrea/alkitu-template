@@ -1,7 +1,13 @@
 export interface PredefinedTheme {
   id: string;
   name: string;
-  category: 'popular' | 'nature' | 'corporate' | 'creative' | 'monochrome' | 'specialty';
+  category:
+    | 'popular'
+    | 'nature'
+    | 'corporate'
+    | 'creative'
+    | 'monochrome'
+    | 'specialty';
   colors: {
     primary: string;
     secondary: string;
@@ -9,9 +15,213 @@ export interface PredefinedTheme {
     background: string;
     foreground: string;
   };
-  lightModeConfig: Record<string, string>;
-  darkModeConfig: Record<string, string>;
+  lightModeConfig: {
+    // Base colors
+    background: string;
+    foreground: string;
+    card: string;
+    'card-foreground': string;
+    popover: string;
+    'popover-foreground': string;
+
+    // Primary colors
+    primary: string;
+    'primary-foreground': string;
+
+    // Secondary colors
+    secondary: string;
+    'secondary-foreground': string;
+
+    // Muted colors
+    muted: string;
+    'muted-foreground': string;
+
+    // Accent colors
+    accent: string;
+    'accent-foreground': string;
+
+    // Destructive colors
+    destructive: string;
+    'destructive-foreground': string;
+
+    // Border and input
+    border: string;
+    input: string;
+    ring: string;
+
+    // Chart colors
+    'chart-1': string;
+    'chart-2': string;
+    'chart-3': string;
+    'chart-4': string;
+    'chart-5': string;
+
+    // Sidebar colors
+    sidebar: string;
+    'sidebar-foreground': string;
+    'sidebar-primary': string;
+    'sidebar-primary-foreground': string;
+    'sidebar-accent': string;
+    'sidebar-accent-foreground': string;
+    'sidebar-border': string;
+    'sidebar-ring': string;
+
+    // Typography
+    'font-sans': string;
+    'font-serif': string;
+    'font-mono': string;
+    'letter-spacing': string;
+
+    // Border radius
+    radius: string;
+
+    // Shadow system
+    'shadow-color': string;
+    'shadow-opacity': string;
+    'shadow-blur': string;
+    'shadow-spread': string;
+    'shadow-offset-x': string;
+    'shadow-offset-y': string;
+  };
+  darkModeConfig: {
+    // Same structure as lightModeConfig
+    background: string;
+    foreground: string;
+    card: string;
+    'card-foreground': string;
+    popover: string;
+    'popover-foreground': string;
+    primary: string;
+    'primary-foreground': string;
+    secondary: string;
+    'secondary-foreground': string;
+    muted: string;
+    'muted-foreground': string;
+    accent: string;
+    'accent-foreground': string;
+    destructive: string;
+    'destructive-foreground': string;
+    border: string;
+    input: string;
+    ring: string;
+    'chart-1': string;
+    'chart-2': string;
+    'chart-3': string;
+    'chart-4': string;
+    'chart-5': string;
+    sidebar: string;
+    'sidebar-foreground': string;
+    'sidebar-primary': string;
+    'sidebar-primary-foreground': string;
+    'sidebar-accent': string;
+    'sidebar-accent-foreground': string;
+    'sidebar-border': string;
+    'sidebar-ring': string;
+    'font-sans': string;
+    'font-serif': string;
+    'font-mono': string;
+    'letter-spacing': string;
+    radius: string;
+    'shadow-color': string;
+    'shadow-opacity': string;
+    'shadow-blur': string;
+    'shadow-spread': string;
+    'shadow-offset-x': string;
+    'shadow-offset-y': string;
+  };
 }
+
+// Helper function to generate complete theme config with all required properties using tweakcn defaults
+const generateCompleteThemeConfig = (baseConfig: Record<string, string>) => {
+  // Define defaults first
+  const defaults = {
+    // All base colors - using tweakcn defaults
+    background: 'oklch(1 0 0)',
+    foreground: 'oklch(0.145 0 0)',
+    card: 'oklch(1 0 0)',
+    'card-foreground': 'oklch(0.145 0 0)',
+    popover: 'oklch(1 0 0)',
+    'popover-foreground': 'oklch(0.145 0 0)',
+    primary: 'oklch(0.205 0 0)',
+    'primary-foreground': 'oklch(0.985 0 0)',
+    secondary: 'oklch(0.97 0 0)',
+    'secondary-foreground': 'oklch(0.205 0 0)',
+    muted: 'oklch(0.97 0 0)',
+    'muted-foreground': 'oklch(0.556 0 0)',
+    accent: 'oklch(0.97 0 0)',
+    'accent-foreground': 'oklch(0.205 0 0)',
+    destructive: 'oklch(0.577 0.245 27.325)',
+    'destructive-foreground': 'oklch(1 0 0)',
+    border: 'oklch(0.922 0 0)',
+    input: 'oklch(0.922 0 0)',
+    ring: 'oklch(0.708 0 0)',
+
+    // Chart colors - using defaults from tweakcn
+    'chart-1': 'oklch(0.81 0.10 252)',
+    'chart-2': 'oklch(0.62 0.19 260)',
+    'chart-3': 'oklch(0.55 0.22 263)',
+    'chart-4': 'oklch(0.49 0.22 264)',
+    'chart-5': 'oklch(0.42 0.18 266)',
+
+    // Sidebar colors - using defaults from tweakcn
+    sidebar: 'oklch(0.985 0 0)',
+    'sidebar-foreground': 'oklch(0.145 0 0)',
+    'sidebar-primary': 'oklch(0.205 0 0)',
+    'sidebar-primary-foreground': 'oklch(0.985 0 0)',
+    'sidebar-accent': 'oklch(0.97 0 0)',
+    'sidebar-accent-foreground': 'oklch(0.205 0 0)',
+    'sidebar-border': 'oklch(0.922 0 0)',
+    'sidebar-ring': 'oklch(0.708 0 0)',
+
+    // Typography - using defaults from tweakcn
+    'font-sans':
+      'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    'font-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+    'font-mono':
+      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    'letter-spacing': '0em',
+
+    // Other properties - using defaults from tweakcn
+    radius: '0.625rem',
+    spacing: '0.25rem',
+
+    // Shadow system - using defaults from tweakcn
+    'shadow-color': 'oklch(0 0 0)',
+    'shadow-opacity': '0.1',
+    'shadow-blur': '3px',
+    'shadow-spread': '0px',
+    'shadow-offset-x': '0',
+    'shadow-offset-y': '1px',
+  };
+
+  // Start with defaults, then override with user values
+  const result = { ...defaults, ...baseConfig };
+
+  // Apply intelligent fallbacks for related colors
+  if (baseConfig.primary && !baseConfig['sidebar-primary']) {
+    result['sidebar-primary'] = baseConfig.primary;
+  }
+  if (
+    baseConfig['primary-foreground'] &&
+    !baseConfig['sidebar-primary-foreground']
+  ) {
+    result['sidebar-primary-foreground'] = baseConfig['primary-foreground'];
+  }
+  if (baseConfig.background && !baseConfig.card) {
+    result.card = baseConfig.background;
+  }
+  if (baseConfig.foreground && !baseConfig['card-foreground']) {
+    result['card-foreground'] = baseConfig.foreground;
+  }
+  if (result.card && !baseConfig.popover) {
+    result.popover = result.card;
+  }
+  if (result['card-foreground'] && !baseConfig['popover-foreground']) {
+    result['popover-foreground'] = result['card-foreground'];
+  }
+
+  return result;
+};
 
 // Complete TweakCN Theme Collection - 40 Themes
 export const PREDEFINED_THEMES: PredefinedTheme[] = [
@@ -20,2063 +230,4066 @@ export const PREDEFINED_THEMES: PredefinedTheme[] = [
     name: 'Modern Minimal',
     category: 'popular',
     colors: {
-      primary: '#3b82f6',
-      secondary: '#f3f4f6',
-      accent: '#e0f2fe',
-      background: '#ffffff',
-      foreground: '#333333'
+      primary: 'oklch(0.62 0.19 259.81)',
+      secondary: 'oklch(0.97 0.00 264.54)',
+      accent: 'oklch(0.95 0.03 236.82)',
+      background: 'oklch(1.00 0 0)',
+      foreground: 'oklch(0.32 0 0)',
     },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#333333',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#3b82f6',
-      'primary-foreground': '#ffffff',
-      secondary: '#f3f4f6',
-      'secondary-foreground': '#0f172a',
-      muted: '#f9fafb',
-      'muted-foreground': '#64748b',
-      accent: '#e0f2fe',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e5e7eb',
-      input: '#e5e7eb',
-      ring: '#3b82f6'
-    },
-    darkModeConfig: {
-      background: '#171717',
-      foreground: '#e5e5e5',
-      card: '#262626',
-      'card-foreground': '#f8fafc',
-      popover: '#262626',
-      'popover-foreground': '#f8fafc',
-      primary: '#3b82f6',
-      'primary-foreground': '#ffffff',
-      secondary: '#262626',
-      'secondary-foreground': '#f8fafc',
-      muted: '#262626',
-      'muted-foreground': '#94a3b8',
-      accent: '#1e3a8a',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#404040',
-      input: '#404040',
-      ring: '#3b82f6'
-    }
-  },
-  {
-    id: 'violet-bloom',
-    name: 'Violet Bloom',
-    category: 'creative',
-    colors: {
-      primary: '#7033ff',
-      secondary: '#edf0f4',
-      accent: '#e2ebff',
-      background: '#fdfdfd',
-      foreground: '#000000'
-    },
-    lightModeConfig: {
-      background: '#fdfdfd',
-      foreground: '#000000',
-      card: '#fdfdfd',
-      'card-foreground': '#000000',
-      popover: '#fcfcfc',
-      'popover-foreground': '#000000',
-      primary: '#7033ff',
-      'primary-foreground': '#ffffff',
-      secondary: '#edf0f4',
-      'secondary-foreground': '#0f172a',
-      muted: '#f5f5f5',
-      'muted-foreground': '#64748b',
-      accent: '#e2ebff',
-      'accent-foreground': '#0f172a',
-      destructive: '#e54b4f',
-      'destructive-foreground': '#ffffff',
-      border: '#e7e7ee',
-      input: '#ebebeb',
-      ring: '#000000'
-    },
-    darkModeConfig: {
-      background: '#1a1b1e',
-      foreground: '#f0f0f0',
-      card: '#222327',
-      'card-foreground': '#f8fafc',
-      popover: '#222327',
-      'popover-foreground': '#f8fafc',
-      primary: '#8c5cff',
-      'primary-foreground': '#ffffff',
-      secondary: '#2a2c33',
-      'secondary-foreground': '#f8fafc',
-      muted: '#2a2c33',
-      'muted-foreground': '#94a3b8',
-      accent: '#1e293b',
-      'accent-foreground': '#f8fafc',
-      destructive: '#f87171',
-      'destructive-foreground': '#ffffff',
-      border: '#33353a',
-      input: '#33353a',
-      ring: '#8c5cff'
-    }
-  },
-  {
+    lightModeConfig: generateCompleteThemeConfig({
+      // Exact values from tweakcn Modern Minimal theme
+      background: 'oklch(1.00 0 0)',
+      foreground: 'oklch(0.32 0 0)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.32 0 0)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.32 0 0)',
+      primary: 'oklch(0.62 0.19 259.81)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+      secondary: 'oklch(0.97 0.00 264.54)',
+      'secondary-foreground': 'oklch(0.45 0.03 256.80)',
+      muted: 'oklch(0.98 0.00 247.84)',
+      'muted-foreground': 'oklch(0.55 0.02 264.36)',
+      accent: 'oklch(0.95 0.03 236.82)',
+      'accent-foreground': 'oklch(0.38 0.14 265.52)',
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+      border: 'oklch(0.93 0.01 264.53)',
+      input: 'oklch(0.93 0.01 264.53)',
+      ring: 'oklch(0.62 0.19 259.81)',
+      // Chart colors from tweakcn
+      'chart-1': 'oklch(0.62 0.19 259.81)',
+      'chart-2': 'oklch(0.55 0.22 262.88)',
+      'chart-3': 'oklch(0.49 0.22 264.38)',
+      'chart-4': 'oklch(0.42 0.18 265.64)',
+      'chart-5': 'oklch(0.38 0.14 265.52)',
+      // Sidebar colors from tweakcn
+      sidebar: 'oklch(0.98 0.00 247.84)',
+      'sidebar-foreground': 'oklch(0.32 0 0)',
+      'sidebar-primary': 'oklch(0.62 0.19 259.81)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.95 0.03 236.82)',
+      'sidebar-accent-foreground': 'oklch(0.38 0.14 265.52)',
+      'sidebar-border': 'oklch(0.93 0.01 264.53)',
+      'sidebar-ring': 'oklch(0.62 0.19 259.81)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      // Dark mode values extrapolated from light mode values
+      background: 'oklch(0.08 0 0)',
+      foreground: 'oklch(0.90 0 0)',
+      card: 'oklch(0.12 0 0)',
+      'card-foreground': 'oklch(0.90 0 0)',
+      popover: 'oklch(0.12 0 0)',
+      'popover-foreground': 'oklch(0.90 0 0)',
+      primary: 'oklch(0.65 0.19 259.81)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+      secondary: 'oklch(0.15 0.00 264.54)',
+      'secondary-foreground': 'oklch(0.85 0.03 256.80)',
+      muted: 'oklch(0.12 0.00 247.84)',
+      'muted-foreground': 'oklch(0.60 0.02 264.36)',
+      accent: 'oklch(0.18 0.03 236.82)',
+      'accent-foreground': 'oklch(0.75 0.14 265.52)',
+      destructive: 'oklch(0.68 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+      border: 'oklch(0.25 0.01 264.53)',
+      input: 'oklch(0.25 0.01 264.53)',
+      ring: 'oklch(0.65 0.19 259.81)',
+    }),
+  },{
     id: 'starry-night',
     name: 'Starry Night',
     category: 'nature',
     colors: {
-      primary: '#3a5ba0',
-      secondary: '#f7c873',
-      accent: '#6ea3c1',
-      background: '#f5f7fa',
-      foreground: '#1a2238'
+      primary: 'oklch(0.48 0.118 263)',
+      secondary: 'oklch(0.86 0.116 81)',
+      accent: 'oklch(0.69 0.071 234)',
+      background: 'oklch(0.98 0.005 258)',
+      foreground: 'oklch(0.26 0.043 268)',
     },
-    lightModeConfig: {
-      background: '#f5f7fa',
-      foreground: '#1a2238',
-      card: '#e3eaf2',
-      'card-foreground': '#000000',
-      popover: '#fffbe6',
-      'popover-foreground': '#000000',
-      primary: '#3a5ba0',
-      'primary-foreground': '#ffffff',
-      secondary: '#f7c873',
-      'secondary-foreground': '#0f172a',
-      muted: '#e5e5df',
-      'muted-foreground': '#64748b',
-      accent: '#6ea3c1',
-      'accent-foreground': '#0f172a',
-      destructive: '#2d1e2f',
-      'destructive-foreground': '#ffffff',
-      border: '#b0b8c1',
-      input: '#6ea3c1',
-      ring: '#f7c873'
-    },
-    darkModeConfig: {
-      background: '#181a24',
-      foreground: '#e6eaf3',
-      card: '#23243a',
-      'card-foreground': '#f8fafc',
-      popover: '#23243a',
-      'popover-foreground': '#f8fafc',
-      primary: '#3a5ba0',
-      'primary-foreground': '#ffffff',
-      secondary: '#ffe066',
-      'secondary-foreground': '#f8fafc',
-      muted: '#23243a',
-      'muted-foreground': '#94a3b8',
-      accent: '#bccdf0',
-      'accent-foreground': '#f8fafc',
-      destructive: '#a04a6c',
-      'destructive-foreground': '#ffffff',
-      border: '#2d2e3e',
-      input: '#3a5ba0',
-      ring: '#ffe066'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.98 0.005 258)',
+      foreground: 'oklch(0.26 0.043 268)',
+      card: 'oklch(0.93 0.013 252)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(0.99 0.028 98)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.48 0.118 263)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.86 0.116 81)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.92 0.008 107)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.69 0.071 234)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.26 0.038 323)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.78 0.016 251)',
+      input: 'oklch(0.69 0.071 234)',
+      ring: 'oklch(0.86 0.116 81)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.22 0.020 276)',
+      foreground: 'oklch(0.94 0.013 267)',
+      card: 'oklch(0.27 0.041 281)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.27 0.041 281)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.48 0.118 263)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.91 0.144 95)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.27 0.041 281)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.85 0.052 265)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.53 0.120 357)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.31 0.029 282)',
+      input: 'oklch(0.48 0.118 263)',
+      ring: 'oklch(0.91 0.144 95)',
+    }),
   },
   {
     id: 'sunset-horizon',
     name: 'Sunset Horizon',
     category: 'nature',
     colors: {
-      primary: '#ff7e5f',
-      secondary: '#ffedea',
-      accent: '#feb47b',
-      background: '#fff9f5',
-      foreground: '#3d3436'
+      primary: 'oklch(0.74 0.164 35)',
+      secondary: 'oklch(0.96 0.020 29)',
+      accent: 'oklch(0.83 0.113 58)',
+      background: 'oklch(0.99 0.008 56)',
+      foreground: 'oklch(0.34 0.013 3)',
     },
-    lightModeConfig: {
-      background: '#fff9f5',
-      foreground: '#3d3436',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#ff7e5f',
-      'primary-foreground': '#ffffff',
-      secondary: '#ffedea',
-      'secondary-foreground': '#0f172a',
-      muted: '#fff0eb',
-      'muted-foreground': '#64748b',
-      accent: '#feb47b',
-      'accent-foreground': '#0f172a',
-      destructive: '#e63946',
-      'destructive-foreground': '#ffffff',
-      border: '#ffe0d6',
-      input: '#ffe0d6',
-      ring: '#ff7e5f'
-    },
-    darkModeConfig: {
-      background: '#2a2024',
-      foreground: '#f2e9e4',
-      card: '#392f35',
-      'card-foreground': '#f8fafc',
-      popover: '#392f35',
-      'popover-foreground': '#f8fafc',
-      primary: '#ff7e5f',
-      'primary-foreground': '#ffffff',
-      secondary: '#463a41',
-      'secondary-foreground': '#f8fafc',
-      muted: '#392f35',
-      'muted-foreground': '#94a3b8',
-      accent: '#feb47b',
-      'accent-foreground': '#f8fafc',
-      destructive: '#e63946',
-      'destructive-foreground': '#ffffff',
-      border: '#463a41',
-      input: '#463a41',
-      ring: '#ff7e5f'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.99 0.008 56)',
+      foreground: 'oklch(0.34 0.013 3)',
+      card: 'oklch(1.00 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.74 0.164 35)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.96 0.020 29)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.97 0.018 39)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.83 0.113 58)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.61 0.208 22)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.93 0.037 39)',
+      input: 'oklch(0.93 0.037 39)',
+      ring: 'oklch(0.74 0.164 35)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.26 0.017 352)',
+      foreground: 'oklch(0.94 0.012 51)',
+      card: 'oklch(0.32 0.018 341)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.32 0.018 341)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.74 0.164 35)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.36 0.020 342)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.32 0.018 341)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.83 0.113 58)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.61 0.208 22)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.36 0.020 342)',
+      input: 'oklch(0.36 0.020 342)',
+      ring: 'oklch(0.74 0.164 35)',
+    }),
   },
   {
     id: 'ocean-breeze',
     name: 'Ocean Breeze',
     category: 'nature',
     colors: {
-      primary: '#22c55e',
-      secondary: '#e0f2fe',
-      accent: '#d1fae5',
-      background: '#f0f8ff',
-      foreground: '#374151'
+      primary: 'oklch(0.72 0.192 150)',
+      secondary: 'oklch(0.95 0.025 237)',
+      accent: 'oklch(0.95 0.051 163)',
+      background: 'oklch(0.98 0.013 244)',
+      foreground: 'oklch(0.37 0.031 260)',
     },
-    lightModeConfig: {
-      background: '#f0f8ff',
-      foreground: '#374151',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#22c55e',
-      'primary-foreground': '#ffffff',
-      secondary: '#e0f2fe',
-      'secondary-foreground': '#0f172a',
-      muted: '#f3f4f6',
-      'muted-foreground': '#64748b',
-      accent: '#d1fae5',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e5e7eb',
-      input: '#e5e7eb',
-      ring: '#22c55e'
-    },
-    darkModeConfig: {
-      background: '#0f172a',
-      foreground: '#d1d5db',
-      card: '#1e293b',
-      'card-foreground': '#f8fafc',
-      popover: '#1e293b',
-      'popover-foreground': '#f8fafc',
-      primary: '#34d399',
-      'primary-foreground': '#ffffff',
-      secondary: '#2d3748',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1e293b',
-      'muted-foreground': '#94a3b8',
-      accent: '#374151',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#4b5563',
-      input: '#4b5563',
-      ring: '#34d399'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.98 0.013 244)',
+      foreground: 'oklch(0.37 0.031 260)',
+      card: 'oklch(1.00 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.72 0.192 150)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.95 0.025 237)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.97 0.003 265)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.95 0.051 163)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.64 0.208 25)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.93 0.006 265)',
+      input: 'oklch(0.93 0.006 265)',
+      ring: 'oklch(0.72 0.192 150)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.21 0.040 266)',
+      foreground: 'oklch(0.87 0.009 258)',
+      card: 'oklch(0.28 0.037 260)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.28 0.037 260)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.77 0.153 163)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.34 0.033 261)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.28 0.037 260)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.37 0.031 260)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.64 0.208 25)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.45 0.026 257)',
+      input: 'oklch(0.45 0.026 257)',
+      ring: 'oklch(0.77 0.153 163)',
+    }),
   },
   {
     id: 'twitter',
     name: 'Twitter',
     category: 'popular',
     colors: {
-      primary: '#1e9df1',
-      secondary: '#0f1419',
-      accent: '#E3ECF6',
-      background: '#ffffff',
-      foreground: '#0f1419'
+      primary: 'oklch(0.67 0.161 245)',
+      secondary: 'oklch(0.19 0.013 249)',
+      accent: 'oklch(0.94 0.017 251)',
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.19 0.013 249)',
     },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#0f1419',
-      card: '#f7f8f8',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#1e9df1',
-      'primary-foreground': '#ffffff',
-      secondary: '#0f1419',
-      'secondary-foreground': '#0f172a',
-      muted: '#E5E5E6',
-      'muted-foreground': '#64748b',
-      accent: '#E3ECF6',
-      'accent-foreground': '#0f172a',
-      destructive: '#f4212e',
-      'destructive-foreground': '#ffffff',
-      border: '#e1eaef',
-      input: '#f7f9fa',
-      ring: '#1da1f2'
-    },
-    darkModeConfig: {
-      background: '#000000',
-      foreground: '#e7e9ea',
-      card: '#17181c',
-      'card-foreground': '#f8fafc',
-      popover: '#000000',
-      'popover-foreground': '#f8fafc',
-      primary: '#1c9cf0',
-      'primary-foreground': '#ffffff',
-      secondary: '#f0f3f4',
-      'secondary-foreground': '#f8fafc',
-      muted: '#181818',
-      'muted-foreground': '#94a3b8',
-      accent: '#061622',
-      'accent-foreground': '#f8fafc',
-      destructive: '#f4212e',
-      'destructive-foreground': '#ffffff',
-      border: '#242628',
-      input: '#22303c',
-      ring: '#1da1f2'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.19 0.013 249)',
+      card: 'oklch(0.98 0.001 197)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.67 0.161 245)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.19 0.013 249)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.92 0.001 286)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.94 0.017 251)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.62 0.238 26)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.93 0.012 232)',
+      input: 'oklch(0.98 0.003 229)',
+      ring: 'oklch(0.68 0.158 243)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.00 0.000 0)',
+      foreground: 'oklch(0.93 0.003 229)',
+      card: 'oklch(0.21 0.008 275)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.00 0.000 0)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.67 0.161 245)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.96 0.003 220)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.21 0.000 90)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.19 0.033 243)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.62 0.238 26)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.27 0.005 248)',
+      input: 'oklch(0.30 0.029 245)',
+      ring: 'oklch(0.68 0.158 243)',
+    }),
   },
   {
     id: 'vercel',
     name: 'Vercel',
     category: 'popular',
     colors: {
-      primary: '#3b82f6',
-      secondary: '#f1f5f9',
-      accent: '#f1f5f9',
-      background: '#ffffff',
-      foreground: '#000000'
+      primary: 'oklch(0.62 0.188 260)',
+      secondary: 'oklch(0.97 0.007 248)',
+      accent: 'oklch(0.97 0.007 248)',
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.00 0.000 0)',
     },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#000000',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#3b82f6',
-      'primary-foreground': '#ffffff',
-      secondary: '#f1f5f9',
-      'secondary-foreground': '#0f172a',
-      muted: '#f1f5f9',
-      'muted-foreground': '#64748b',
-      accent: '#f1f5f9',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e2e8f0',
-      input: '#e2e8f0',
-      ring: '#3b82f6'
-    },
-    darkModeConfig: {
-      background: '#0f172a',
-      foreground: '#f8fafc',
-      card: '#1e293b',
-      'card-foreground': '#f8fafc',
-      popover: '#1e293b',
-      'popover-foreground': '#f8fafc',
-      primary: '#3b82f6',
-      'primary-foreground': '#ffffff',
-      secondary: '#1e293b',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1e293b',
-      'muted-foreground': '#94a3b8',
-      accent: '#1e293b',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#334155',
-      input: '#334155',
-      ring: '#3b82f6'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.00 0.000 0)',
+      card: 'oklch(1.00 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.62 0.188 260)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.97 0.007 248)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.97 0.007 248)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.97 0.007 248)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.64 0.208 25)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.93 0.013 256)',
+      input: 'oklch(0.93 0.013 256)',
+      ring: 'oklch(0.62 0.188 260)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.21 0.040 266)',
+      foreground: 'oklch(0.98 0.003 248)',
+      card: 'oklch(0.28 0.037 260)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.28 0.037 260)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.62 0.188 260)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.28 0.037 260)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.28 0.037 260)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.28 0.037 260)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.64 0.208 25)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.37 0.039 257)',
+      input: 'oklch(0.37 0.039 257)',
+      ring: 'oklch(0.62 0.188 260)',
+    }),
   },
   {
     id: 'claude',
     name: 'Claude',
     category: 'popular',
     colors: {
-      primary: '#c96442',
-      secondary: '#e9e6dc',
-      accent: '#e9e6dc',
-      background: '#faf9f5',
-      foreground: '#3d3929'
+      primary: 'oklch(0.62 0.138 39)',
+      secondary: 'oklch(0.92 0.014 93)',
+      accent: 'oklch(0.92 0.014 93)',
+      background: 'oklch(0.98 0.005 95)',
+      foreground: 'oklch(0.34 0.027 96)',
     },
-    lightModeConfig: {
-      background: '#faf9f5',
-      foreground: '#3d3929',
-      card: '#faf9f5',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#c96442',
-      'primary-foreground': '#ffffff',
-      secondary: '#e9e6dc',
-      'secondary-foreground': '#0f172a',
-      muted: '#ede9de',
-      'muted-foreground': '#64748b',
-      accent: '#e9e6dc',
-      'accent-foreground': '#0f172a',
-      destructive: '#141413',
-      'destructive-foreground': '#ffffff',
-      border: '#dad9d4',
-      input: '#b4b2a7',
-      ring: '#c96442'
-    },
-    darkModeConfig: {
-      background: '#262624',
-      foreground: '#c3c0b6',
-      card: '#262624',
-      'card-foreground': '#f8fafc',
-      popover: '#30302e',
-      'popover-foreground': '#f8fafc',
-      primary: '#d97757',
-      'primary-foreground': '#ffffff',
-      secondary: '#faf9f5',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1b1b19',
-      'muted-foreground': '#94a3b8',
-      accent: '#1a1915',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#3e3e38',
-      input: '#52514a',
-      ring: '#d97757'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.98 0.005 95)',
+      foreground: 'oklch(0.34 0.027 96)',
+      card: 'oklch(0.98 0.005 95)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.62 0.138 39)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.92 0.014 93)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.93 0.015 90)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.92 0.014 93)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.19 0.002 107)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.88 0.007 97)',
+      input: 'oklch(0.76 0.016 98)',
+      ring: 'oklch(0.62 0.138 39)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.27 0.004 107)',
+      foreground: 'oklch(0.81 0.014 93)',
+      card: 'oklch(0.27 0.004 107)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.31 0.004 107)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.67 0.131 39)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.98 0.005 95)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.22 0.004 107)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.21 0.008 95)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.64 0.208 25)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.36 0.010 107)',
+      input: 'oklch(0.43 0.011 100)',
+      ring: 'oklch(0.67 0.131 39)',
+    }),
   },
   {
     id: 'supabase',
     name: 'Supabase',
     category: 'popular',
     colors: {
-      primary: '#72e3ad',
-      secondary: '#fdfdfd',
-      accent: '#ededed',
-      background: '#fcfcfc',
-      foreground: '#171717'
+      primary: 'oklch(0.83 0.130 161)',
+      secondary: 'oklch(0.99 0.000 90)',
+      accent: 'oklch(0.95 0.000 90)',
+      background: 'oklch(0.99 0.000 90)',
+      foreground: 'oklch(0.20 0.000 90)',
     },
-    lightModeConfig: {
-      background: '#fcfcfc',
-      foreground: '#171717',
-      card: '#fcfcfc',
-      'card-foreground': '#000000',
-      popover: '#fcfcfc',
-      'popover-foreground': '#000000',
-      primary: '#72e3ad',
-      'primary-foreground': '#ffffff',
-      secondary: '#fdfdfd',
-      'secondary-foreground': '#0f172a',
-      muted: '#ededed',
-      'muted-foreground': '#64748b',
-      accent: '#ededed',
-      'accent-foreground': '#0f172a',
-      destructive: '#ca3214',
-      'destructive-foreground': '#ffffff',
-      border: '#dfdfdf',
-      input: '#f6f6f6',
-      ring: '#72e3ad'
-    },
-    darkModeConfig: {
-      background: '#121212',
-      foreground: '#e2e8f0',
-      card: '#171717',
-      'card-foreground': '#f8fafc',
-      popover: '#242424',
-      'popover-foreground': '#f8fafc',
-      primary: '#006239',
-      'primary-foreground': '#ffffff',
-      secondary: '#242424',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1f1f1f',
-      'muted-foreground': '#94a3b8',
-      accent: '#313131',
-      'accent-foreground': '#f8fafc',
-      destructive: '#541c15',
-      'destructive-foreground': '#ffffff',
-      border: '#292929',
-      input: '#242424',
-      ring: '#4ade80'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.99 0.000 90)',
+      foreground: 'oklch(0.20 0.000 90)',
+      card: 'oklch(0.99 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(0.99 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.83 0.130 161)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.99 0.000 90)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.95 0.000 90)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.95 0.000 90)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.55 0.193 33)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.90 0.000 90)',
+      input: 'oklch(0.97 0.000 90)',
+      ring: 'oklch(0.83 0.130 161)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.18 0.000 90)',
+      foreground: 'oklch(0.93 0.013 256)',
+      card: 'oklch(0.20 0.000 90)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.26 0.000 90)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.44 0.104 157)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.26 0.000 90)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.24 0.000 90)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.31 0.000 90)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.31 0.085 30)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.28 0.000 90)',
+      input: 'oklch(0.26 0.000 90)',
+      ring: 'oklch(0.80 0.182 152)',
+    }),
   },
   {
     id: 'cyberpunk',
     name: 'Cyberpunk',
     category: 'creative',
     colors: {
-      primary: '#ff00c8',
-      secondary: '#f0f0ff',
-      accent: '#00ffcc',
-      background: '#f8f9fa',
-      foreground: '#0c0c1d'
+      primary: 'oklch(0.67 0.290 341)',
+      secondary: 'oklch(0.96 0.020 286)',
+      accent: 'oklch(0.89 0.174 171)',
+      background: 'oklch(0.98 0.002 248)',
+      foreground: 'oklch(0.16 0.035 282)',
     },
-    lightModeConfig: {
-      background: '#f8f9fa',
-      foreground: '#0c0c1d',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#ff00c8',
-      'primary-foreground': '#ffffff',
-      secondary: '#f0f0ff',
-      'secondary-foreground': '#0f172a',
-      muted: '#f0f0ff',
-      'muted-foreground': '#64748b',
-      accent: '#00ffcc',
-      'accent-foreground': '#0f172a',
-      destructive: '#ff3d00',
-      'destructive-foreground': '#ffffff',
-      border: '#dfe6e9',
-      input: '#dfe6e9',
-      ring: '#ff00c8'
-    },
-    darkModeConfig: {
-      background: '#0c0c1d',
-      foreground: '#eceff4',
-      card: '#1e1e3f',
-      'card-foreground': '#f8fafc',
-      popover: '#1e1e3f',
-      'popover-foreground': '#f8fafc',
-      primary: '#ff00c8',
-      'primary-foreground': '#ffffff',
-      secondary: '#1e1e3f',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1e1e3f',
-      'muted-foreground': '#94a3b8',
-      accent: '#00ffcc',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ff3d00',
-      'destructive-foreground': '#ffffff',
-      border: '#2e2e5e',
-      input: '#2e2e5e',
-      ring: '#ff00c8'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.98 0.002 248)',
+      foreground: 'oklch(0.16 0.035 282)',
+      card: 'oklch(1.00 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.67 0.290 341)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.96 0.020 286)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.96 0.020 286)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.89 0.174 171)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.65 0.235 34)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.92 0.009 225)',
+      input: 'oklch(0.92 0.009 225)',
+      ring: 'oklch(0.67 0.290 341)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.16 0.035 282)',
+      foreground: 'oklch(0.95 0.007 261)',
+      card: 'oklch(0.25 0.061 281)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.25 0.061 281)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.67 0.290 341)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.25 0.061 281)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.25 0.061 281)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.89 0.174 171)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.65 0.235 34)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.33 0.083 281)',
+      input: 'oklch(0.33 0.083 281)',
+      ring: 'oklch(0.67 0.290 341)',
+    }),
   },
   {
     id: 'neo-brutalism',
     name: 'Neo Brutalism',
     category: 'creative',
     colors: {
-      primary: '#ff3333',
-      secondary: '#ffff00',
-      accent: '#0066ff',
-      background: '#ffffff',
-      foreground: '#000000'
+      primary: 'oklch(0.65 0.237 27)',
+      secondary: 'oklch(0.97 0.211 110)',
+      accent: 'oklch(0.56 0.241 261)',
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.00 0.000 0)',
     },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#000000',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#ff3333',
-      'primary-foreground': '#ffffff',
-      secondary: '#ffff00',
-      'secondary-foreground': '#0f172a',
-      muted: '#f0f0f0',
-      'muted-foreground': '#64748b',
-      accent: '#0066ff',
-      'accent-foreground': '#0f172a',
-      destructive: '#000000',
-      'destructive-foreground': '#ffffff',
-      border: '#000000',
-      input: '#000000',
-      ring: '#ff3333'
-    },
-    darkModeConfig: {
-      background: '#000000',
-      foreground: '#ffffff',
-      card: '#333333',
-      'card-foreground': '#f8fafc',
-      popover: '#333333',
-      'popover-foreground': '#f8fafc',
-      primary: '#ff6666',
-      'primary-foreground': '#ffffff',
-      secondary: '#ffff33',
-      'secondary-foreground': '#f8fafc',
-      muted: '#333333',
-      'muted-foreground': '#94a3b8',
-      accent: '#3399ff',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ffffff',
-      'destructive-foreground': '#ffffff',
-      border: '#ffffff',
-      input: '#ffffff',
-      ring: '#ff6666'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.00 0.000 0)',
+      card: 'oklch(1.00 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.65 0.237 27)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.97 0.211 110)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.96 0.000 90)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.56 0.241 261)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.00 0.000 0)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.00 0.000 0)',
+      input: 'oklch(0.00 0.000 0)',
+      ring: 'oklch(0.65 0.237 27)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.00 0.000 0)',
+      foreground: 'oklch(1.00 0.000 90)',
+      card: 'oklch(0.32 0.000 90)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.32 0.000 90)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.70 0.187 23)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.97 0.201 110)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.32 0.000 90)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.68 0.176 252)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(1.00 0.000 90)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(1.00 0.000 90)',
+      input: 'oklch(1.00 0.000 90)',
+      ring: 'oklch(0.70 0.187 23)',
+    }),
   },
   {
     id: 'catppuccin',
     name: 'Catppuccin',
     category: 'specialty',
     colors: {
-      primary: '#8839ef',
-      secondary: '#ccd0da',
-      accent: '#04a5e5',
-      background: '#eff1f5',
-      foreground: '#4c4f69'
+      primary: 'oklch(0.55 0.250 297)',
+      secondary: 'oklch(0.86 0.014 268)',
+      accent: 'oklch(0.68 0.145 235)',
+      background: 'oklch(0.96 0.006 265)',
+      foreground: 'oklch(0.44 0.043 279)',
     },
-    lightModeConfig: {
-      background: '#eff1f5',
-      foreground: '#4c4f69',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ccd0da',
-      'popover-foreground': '#000000',
-      primary: '#8839ef',
-      'primary-foreground': '#ffffff',
-      secondary: '#ccd0da',
-      'secondary-foreground': '#0f172a',
-      muted: '#dce0e8',
-      'muted-foreground': '#64748b',
-      accent: '#04a5e5',
-      'accent-foreground': '#0f172a',
-      destructive: '#d20f39',
-      'destructive-foreground': '#ffffff',
-      border: '#bcc0cc',
-      input: '#ccd0da',
-      ring: '#8839ef'
-    },
-    darkModeConfig: {
-      background: '#181825',
-      foreground: '#cdd6f4',
-      card: '#1e1e2e',
-      'card-foreground': '#f8fafc',
-      popover: '#45475a',
-      'popover-foreground': '#f8fafc',
-      primary: '#cba6f7',
-      'primary-foreground': '#ffffff',
-      secondary: '#585b70',
-      'secondary-foreground': '#f8fafc',
-      muted: '#292c3c',
-      'muted-foreground': '#94a3b8',
-      accent: '#89dceb',
-      'accent-foreground': '#f8fafc',
-      destructive: '#f38ba8',
-      'destructive-foreground': '#ffffff',
-      border: '#313244',
-      input: '#313244',
-      ring: '#cba6f7'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.96 0.006 265)',
+      foreground: 'oklch(0.44 0.043 279)',
+      card: 'oklch(1.00 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(0.86 0.014 268)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.55 0.250 297)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.86 0.014 268)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.91 0.012 265)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.68 0.145 235)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.55 0.216 20)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.81 0.017 271)',
+      input: 'oklch(0.86 0.014 268)',
+      ring: 'oklch(0.55 0.250 297)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.22 0.025 284)',
+      foreground: 'oklch(0.88 0.043 272)',
+      card: 'oklch(0.24 0.030 284)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.40 0.032 280)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.79 0.119 305)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.48 0.034 279)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.30 0.029 276)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.85 0.083 210)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.76 0.130 3)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.32 0.032 282)',
+      input: 'oklch(0.32 0.032 282)',
+      ring: 'oklch(0.79 0.119 305)',
+    }),
   },
   {
     id: 'retro-arcade',
     name: 'Retro Arcade',
     category: 'creative',
     colors: {
-      primary: '#d33682',
-      secondary: '#2aa198',
-      accent: '#cb4b16',
-      background: '#fdf6e3',
-      foreground: '#073642'
+      primary: 'oklch(0.59 0.202 356)',
+      secondary: 'oklch(0.64 0.102 187)',
+      accent: 'oklch(0.58 0.173 40)',
+      background: 'oklch(0.97 0.026 90)',
+      foreground: 'oklch(0.31 0.052 220)',
     },
-    lightModeConfig: {
-      background: '#fdf6e3',
-      foreground: '#073642',
-      card: '#eee8d5',
-      'card-foreground': '#000000',
-      popover: '#eee8d5',
-      'popover-foreground': '#000000',
-      primary: '#d33682',
-      'primary-foreground': '#ffffff',
-      secondary: '#2aa198',
-      'secondary-foreground': '#0f172a',
-      muted: '#93a1a1',
-      'muted-foreground': '#64748b',
-      accent: '#cb4b16',
-      'accent-foreground': '#0f172a',
-      destructive: '#dc322f',
-      'destructive-foreground': '#ffffff',
-      border: '#839496',
-      input: '#839496',
-      ring: '#d33682'
-    },
-    darkModeConfig: {
-      background: '#002b36',
-      foreground: '#93a1a1',
-      card: '#073642',
-      'card-foreground': '#f8fafc',
-      popover: '#073642',
-      'popover-foreground': '#f8fafc',
-      primary: '#d33682',
-      'primary-foreground': '#ffffff',
-      secondary: '#2aa198',
-      'secondary-foreground': '#f8fafc',
-      muted: '#586e75',
-      'muted-foreground': '#94a3b8',
-      accent: '#cb4b16',
-      'accent-foreground': '#f8fafc',
-      destructive: '#dc322f',
-      'destructive-foreground': '#ffffff',
-      border: '#586e75',
-      input: '#586e75',
-      ring: '#d33682'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.97 0.026 90)',
+      foreground: 'oklch(0.31 0.052 220)',
+      card: 'oklch(0.93 0.026 92)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(0.93 0.026 92)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.59 0.202 356)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.64 0.102 187)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.70 0.016 197)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.58 0.173 40)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.59 0.206 27)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.65 0.020 205)',
+      input: 'oklch(0.65 0.020 205)',
+      ring: 'oklch(0.59 0.202 356)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.27 0.049 220)',
+      foreground: 'oklch(0.70 0.016 197)',
+      card: 'oklch(0.31 0.052 220)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.31 0.052 220)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.59 0.202 356)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.64 0.102 187)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.52 0.028 219)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.58 0.173 40)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.59 0.206 27)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.52 0.028 219)',
+      input: 'oklch(0.52 0.028 219)',
+      ring: 'oklch(0.59 0.202 356)',
+    }),
   },
   {
     id: 'mono',
     name: 'Mono',
     category: 'monochrome',
     colors: {
-      primary: '#737373',
-      secondary: '#f5f5f5',
-      accent: '#f5f5f5',
-      background: '#ffffff',
-      foreground: '#0a0a0a'
+      primary: 'oklch(0.56 0.000 90)',
+      secondary: 'oklch(0.97 0.000 90)',
+      accent: 'oklch(0.97 0.000 90)',
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.14 0.000 90)',
     },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#0a0a0a',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#737373',
-      'primary-foreground': '#ffffff',
-      secondary: '#f5f5f5',
-      'secondary-foreground': '#0f172a',
-      muted: '#f5f5f5',
-      'muted-foreground': '#64748b',
-      accent: '#f5f5f5',
-      'accent-foreground': '#0f172a',
-      destructive: '#e7000b',
-      'destructive-foreground': '#ffffff',
-      border: '#e5e5e5',
-      input: '#e5e5e5',
-      ring: '#a1a1a1'
-    },
-    darkModeConfig: {
-      background: '#0a0a0a',
-      foreground: '#fafafa',
-      card: '#191919',
-      'card-foreground': '#f8fafc',
-      popover: '#262626',
-      'popover-foreground': '#f8fafc',
-      primary: '#737373',
-      'primary-foreground': '#ffffff',
-      secondary: '#262626',
-      'secondary-foreground': '#f8fafc',
-      muted: '#262626',
-      'muted-foreground': '#94a3b8',
-      accent: '#404040',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ff6467',
-      'destructive-foreground': '#ffffff',
-      border: '#383838',
-      input: '#525252',
-      ring: '#737373'
-    }
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(1.00 0.000 90)',
+      foreground: 'oklch(0.14 0.000 90)',
+      card: 'oklch(1.00 0.000 90)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(1.00 0.000 90)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.56 0.000 90)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.97 0.000 90)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.97 0.000 90)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.97 0.000 90)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.58 0.239 28)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.92 0.000 90)',
+      input: 'oklch(0.92 0.000 90)',
+      ring: 'oklch(0.71 0.000 90)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.14 0.000 90)',
+      foreground: 'oklch(0.99 0.000 90)',
+      card: 'oklch(0.21 0.000 90)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.27 0.000 90)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.56 0.000 90)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.27 0.000 90)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.27 0.000 90)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.37 0.000 90)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.70 0.189 22)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.34 0.000 90)',
+      input: 'oklch(0.44 0.000 90)',
+      ring: 'oklch(0.56 0.000 90)',
+    }),
   },
   {
     id: 'vintage-paper',
     name: 'Vintage Paper',
     category: 'monochrome',
     colors: {
-      primary: '#a67c52',
-      secondary: '#e2d8c3',
-      accent: '#d4c8aa',
-      background: '#f5f1e6',
-      foreground: '#4a3f35'
+      primary: 'oklch(0.62 0.078 66)',
+      secondary: 'oklch(0.88 0.030 86)',
+      accent: 'oklch(0.83 0.043 89)',
+      background: 'oklch(0.96 0.015 90)',
+      foreground: 'oklch(0.38 0.022 64)',
+    },
+    lightModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.96 0.015 90)',
+      foreground: 'oklch(0.38 0.022 64)',
+      card: 'oklch(0.99 0.010 87)',
+      'card-foreground': 'oklch(0.00 0.000 0)',
+      popover: 'oklch(0.99 0.010 87)',
+      'popover-foreground': 'oklch(0.00 0.000 0)',
+      primary: 'oklch(0.62 0.078 66)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.88 0.030 86)',
+      'secondary-foreground': 'oklch(0.21 0.040 266)',
+      muted: 'oklch(0.92 0.019 83)',
+      'muted-foreground': 'oklch(0.55 0.041 257)',
+      accent: 'oklch(0.83 0.043 89)',
+      'accent-foreground': 'oklch(0.21 0.040 266)',
+      destructive: 'oklch(0.55 0.144 33)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.86 0.032 85)',
+      input: 'oklch(0.86 0.032 85)',
+      ring: 'oklch(0.62 0.078 66)',
+    }),
+    darkModeConfig: generateCompleteThemeConfig({
+      background: 'oklch(0.27 0.014 58)',
+      foreground: 'oklch(0.92 0.019 83)',
+      card: 'oklch(0.32 0.016 59)',
+      'card-foreground': 'oklch(0.98 0.003 248)',
+      popover: 'oklch(0.32 0.016 59)',
+      'popover-foreground': 'oklch(0.98 0.003 248)',
+      primary: 'oklch(0.73 0.058 67)',
+      'primary-foreground': 'oklch(1.00 0.000 90)',
+      secondary: 'oklch(0.38 0.018 57)',
+      'secondary-foreground': 'oklch(0.98 0.003 248)',
+      muted: 'oklch(0.32 0.016 59)',
+      'muted-foreground': 'oklch(0.71 0.035 257)',
+      accent: 'oklch(0.42 0.028 56)',
+      'accent-foreground': 'oklch(0.98 0.003 248)',
+      destructive: 'oklch(0.55 0.144 33)',
+      'destructive-foreground': 'oklch(1.00 0.000 90)',
+      border: 'oklch(0.38 0.018 57)',
+      input: 'oklch(0.38 0.018 57)',
+      ring: 'oklch(0.73 0.058 67)',
+    }),
+  },{
+    id: 'bubblegum',
+    name: 'Bubblegum',
+    category: 'popular',
+    colors: {
+      primary: 'oklch(0.62 0.18 348.14)',
+      secondary: 'oklch(0.81 0.07 198.19)',
+      accent: 'oklch(0.92 0.08 87.67)',
+      background: 'oklch(0.94 0.02 345.70)',
+      foreground: 'oklch(0.47 0 0)',
     },
     lightModeConfig: {
-      background: '#f5f1e6',
-      foreground: '#4a3f35',
-      card: '#fffcf5',
-      'card-foreground': '#000000',
-      popover: '#fffcf5',
-      'popover-foreground': '#000000',
-      primary: '#a67c52',
-      'primary-foreground': '#ffffff',
-      secondary: '#e2d8c3',
-      'secondary-foreground': '#0f172a',
-      muted: '#ece5d8',
-      'muted-foreground': '#64748b',
-      accent: '#d4c8aa',
-      'accent-foreground': '#0f172a',
-      destructive: '#b54a35',
-      'destructive-foreground': '#ffffff',
-      border: '#dbd0ba',
-      input: '#dbd0ba',
-      ring: '#a67c52'
+      // Base colors
+      background: 'oklch(0.94 0.02 345.70)',
+      foreground: 'oklch(0.47 0 0)',
+      card: 'oklch(0.95 0.05 86.89)',
+      'card-foreground': 'oklch(0.47 0 0)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.47 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.62 0.18 348.14)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.81 0.07 198.19)',
+      'secondary-foreground': 'oklch(0.32 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.88 0.05 212.10)',
+      'muted-foreground': 'oklch(0.58 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.92 0.08 87.67)',
+      'accent-foreground': 'oklch(0.32 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.71 0.17 21.96)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.62 0.18 348.14)',
+      input: 'oklch(0.92 0 0)',
+      ring: 'oklch(0.70 0.16 350.75)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.70 0.16 350.75)',
+      'chart-2': 'oklch(0.82 0.08 212.09)',
+      'chart-3': 'oklch(0.92 0.08 87.67)',
+      'chart-4': 'oklch(0.80 0.11 348.18)',
+      'chart-5': 'oklch(0.62 0.19 353.91)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.91 0.04 343.09)',
+      'sidebar-foreground': 'oklch(0.32 0 0)',
+      'sidebar-primary': 'oklch(0.66 0.21 354.31)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.82 0.11 346.02)',
+      'sidebar-accent-foreground': 'oklch(0.32 0 0)',
+      'sidebar-border': 'oklch(0.95 0.03 307.17)',
+      'sidebar-ring': 'oklch(0.66 0.21 354.31)',
+
+      // Typography
+      'font-sans': "'Poppins', sans-serif",
+      'font-serif': "'Lora', serif",
+      'font-mono': "'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.4rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.62 0.18 348.14)',
+      'shadow-opacity': '0.5',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '3px',
+      'shadow-offset-y': '3px',
     },
     darkModeConfig: {
-      background: '#2d2621',
-      foreground: '#ece5d8',
-      card: '#3a322c',
-      'card-foreground': '#f8fafc',
-      popover: '#3a322c',
-      'popover-foreground': '#f8fafc',
-      primary: '#c0a080',
-      'primary-foreground': '#ffffff',
-      secondary: '#4a4039',
-      'secondary-foreground': '#f8fafc',
-      muted: '#3a322c',
-      'muted-foreground': '#94a3b8',
-      accent: '#59493e',
-      'accent-foreground': '#f8fafc',
-      destructive: '#b54a35',
-      'destructive-foreground': '#ffffff',
-      border: '#4a4039',
-      input: '#4a4039',
-      ring: '#c0a080'
-    }
+      // Base colors
+      background: 'oklch(0.25 0.03 234.16)',
+      foreground: 'oklch(0.93 0.02 349.08)',
+      card: 'oklch(0.29 0.03 233.54)',
+      'card-foreground': 'oklch(0.93 0.02 349.08)',
+      popover: 'oklch(0.29 0.03 233.54)',
+      'popover-foreground': 'oklch(0.93 0.02 349.08)',
+
+      // Primary colors
+      primary: 'oklch(0.92 0.08 87.67)',
+      'primary-foreground': 'oklch(0.25 0.03 234.16)',
+
+      // Secondary colors
+      secondary: 'oklch(0.78 0.08 4.13)',
+      'secondary-foreground': 'oklch(0.25 0.03 234.16)',
+
+      // Muted colors
+      muted: 'oklch(0.27 0.01 255.58)',
+      'muted-foreground': 'oklch(0.78 0.08 4.13)',
+
+      // Accent colors
+      accent: 'oklch(0.67 0.10 356.98)',
+      'accent-foreground': 'oklch(0.93 0.02 349.08)',
+
+      // Destructive colors
+      destructive: 'oklch(0.67 0.18 350.36)',
+      'destructive-foreground': 'oklch(0.25 0.03 234.16)',
+
+      // Border and input
+      border: 'oklch(0.39 0.04 242.22)',
+      input: 'oklch(0.31 0.03 232.00)',
+      ring: 'oklch(0.70 0.09 201.87)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.70 0.09 201.87)',
+      'chart-2': 'oklch(0.78 0.08 4.13)',
+      'chart-3': 'oklch(0.67 0.10 356.98)',
+      'chart-4': 'oklch(0.44 0.07 217.08)',
+      'chart-5': 'oklch(0.27 0.01 255.58)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.23 0.03 235.97)',
+      'sidebar-foreground': 'oklch(0.97 0.00 264.54)',
+      'sidebar-primary': 'oklch(0.66 0.21 354.31)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.82 0.11 346.02)',
+      'sidebar-accent-foreground': 'oklch(0.28 0.03 256.85)',
+      'sidebar-border': 'oklch(0.37 0.03 259.73)',
+      'sidebar-ring': 'oklch(0.66 0.21 354.31)',
+
+      // Typography
+      'font-sans': "'Poppins', sans-serif",
+      'font-serif': "'Lora', serif",
+      'font-mono': "'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.4rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.27 0.08 206.15)',
+      'shadow-opacity': '0.5',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '3px',
+      'shadow-offset-y': '3px',
+    },
   },
+
   {
-    id: 'forest-green',
-    name: 'Forest Green',
+    id: 't3-chat',
+    name: 'T3 Chat',
+    category: 'popular',
+    colors: {
+      primary: 'oklch(0.53 0.14 355.20)',
+      secondary: 'oklch(0.87 0.07 334.90)',
+      accent: 'oklch(0.87 0.07 334.90)',
+      background: 'oklch(0.98 0.01 325.64)',
+      foreground: 'oklch(0.33 0.12 325.04)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.98 0.01 325.64)',
+      foreground: 'oklch(0.33 0.12 325.04)',
+      card: 'oklch(0.98 0.01 325.64)',
+      'card-foreground': 'oklch(0.33 0.12 325.04)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.33 0.12 325.04)',
+
+      // Primary colors
+      primary: 'oklch(0.53 0.14 355.20)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.87 0.07 334.90)',
+      'secondary-foreground': 'oklch(0.44 0.13 324.80)',
+
+      // Muted colors
+      muted: 'oklch(0.94 0.03 331.55)',
+      'muted-foreground': 'oklch(0.49 0.12 324.45)',
+
+      // Accent colors
+      accent: 'oklch(0.87 0.07 334.90)',
+      'accent-foreground': 'oklch(0.44 0.13 324.80)',
+
+      // Destructive colors
+      destructive: 'oklch(0.52 0.14 20.83)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.86 0.08 328.91)',
+      input: 'oklch(0.85 0.06 336.60)',
+      ring: 'oklch(0.59 0.22 0.58)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.60 0.24 344.47)',
+      'chart-2': 'oklch(0.44 0.23 300.62)',
+      'chart-3': 'oklch(0.38 0.04 226.15)',
+      'chart-4': 'oklch(0.83 0.12 88.35)',
+      'chart-5': 'oklch(0.78 0.13 59.00)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.94 0.03 320.58)',
+      'sidebar-foreground': 'oklch(0.49 0.19 354.54)',
+      'sidebar-primary': 'oklch(0.40 0.03 285.20)',
+      'sidebar-primary-foreground': 'oklch(0.97 0.01 337.52)',
+      'sidebar-accent': 'oklch(0.98 0.00 106.42)',
+      'sidebar-accent-foreground': 'oklch(0.40 0.03 285.20)',
+      'sidebar-border': 'oklch(0.94 0.00 48.72)',
+      'sidebar-ring': 'oklch(0.59 0.22 0.58)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.24 0.02 307.53)',
+      foreground: 'oklch(0.84 0.04 309.54)',
+      card: 'oklch(0.28 0.02 307.54)',
+      'card-foreground': 'oklch(0.85 0.03 341.46)',
+      popover: 'oklch(0.15 0.01 338.90)',
+      'popover-foreground': 'oklch(0.96 0.01 341.80)',
+
+      // Primary colors
+      primary: 'oklch(0.46 0.19 4.10)',
+      'primary-foreground': 'oklch(0.86 0.06 346.37)',
+
+      // Secondary colors
+      secondary: 'oklch(0.31 0.03 310.06)',
+      'secondary-foreground': 'oklch(0.85 0.04 307.96)',
+
+      // Muted colors
+      muted: 'oklch(0.26 0.02 309.47)',
+      'muted-foreground': 'oklch(0.79 0.04 307.10)',
+
+      // Accent colors
+      accent: 'oklch(0.36 0.05 308.49)',
+      'accent-foreground': 'oklch(0.96 0.01 341.80)',
+
+      // Destructive colors
+      destructive: 'oklch(0.23 0.05 12.61)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.33 0.02 343.45)',
+      input: 'oklch(0.34 0.02 332.83)',
+      ring: 'oklch(0.59 0.22 0.58)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.53 0.14 355.20)',
+      'chart-2': 'oklch(0.56 0.19 306.86)',
+      'chart-3': 'oklch(0.72 0.15 60.58)',
+      'chart-4': 'oklch(0.62 0.20 312.74)',
+      'chart-5': 'oklch(0.61 0.21 6.14)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.19 0.02 331.05)',
+      'sidebar-foreground': 'oklch(0.86 0.03 343.66)',
+      'sidebar-primary': 'oklch(0.49 0.22 264.38)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.23 0.03 338.20)',
+      'sidebar-accent-foreground': 'oklch(0.97 0.00 286.38)',
+      'sidebar-border': 'oklch(0 0 0)',
+      'sidebar-ring': 'oklch(0.59 0.22 0.58)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
+  },
+
+  {
+    id: 'mocha-mousse',
+    name: 'Mocha Mousse',
+    category: 'popular',
+    colors: {
+      primary: 'oklch(0.61 0.06 44.36)',
+      secondary: 'oklch(0.75 0.04 80.55)',
+      accent: 'oklch(0.85 0.04 49.09)',
+      background: 'oklch(0.95 0.01 102.46)',
+      foreground: 'oklch(0.41 0.03 40.36)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.95 0.01 102.46)',
+      foreground: 'oklch(0.41 0.03 40.36)',
+      card: 'oklch(0.95 0.01 102.46)',
+      'card-foreground': 'oklch(0.41 0.03 40.36)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.41 0.03 40.36)',
+
+      // Primary colors
+      primary: 'oklch(0.61 0.06 44.36)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.75 0.04 80.55)',
+      'secondary-foreground': 'oklch(1.00 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.85 0.04 49.09)',
+      'muted-foreground': 'oklch(0.54 0.05 37.21)',
+
+      // Accent colors
+      accent: 'oklch(0.85 0.04 49.09)',
+      'accent-foreground': 'oklch(0.41 0.03 40.36)',
+
+      // Destructive colors
+      destructive: 'oklch(0.22 0.01 52.96)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.75 0.04 80.55)',
+      input: 'oklch(0.75 0.04 80.55)',
+      ring: 'oklch(0.61 0.06 44.36)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.61 0.06 44.36)',
+      'chart-2': 'oklch(0.54 0.05 37.21)',
+      'chart-3': 'oklch(0.73 0.05 52.33)',
+      'chart-4': 'oklch(0.75 0.04 80.55)',
+      'chart-5': 'oklch(0.64 0.04 52.39)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.89 0.03 49.57)',
+      'sidebar-foreground': 'oklch(0.41 0.03 40.36)',
+      'sidebar-primary': 'oklch(0.61 0.06 44.36)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.73 0.05 52.33)',
+      'sidebar-accent-foreground': 'oklch(1.00 0 0)',
+      'sidebar-border': 'oklch(0.64 0.04 52.39)',
+      'sidebar-ring': 'oklch(0.61 0.06 44.36)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.51 0.090 20)',
+      'shadow-opacity': '0.11',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '2px',
+      'shadow-offset-y': '2px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.27 0.01 48.18)',
+      foreground: 'oklch(0.95 0.01 102.46)',
+      card: 'oklch(0.33 0.02 50.89)',
+      'card-foreground': 'oklch(0.95 0.01 102.46)',
+      popover: 'oklch(0.33 0.02 50.89)',
+      'popover-foreground': 'oklch(0.95 0.01 102.46)',
+
+      // Primary colors
+      primary: 'oklch(0.73 0.05 52.33)',
+      'primary-foreground': 'oklch(0.27 0.01 48.18)',
+
+      // Secondary colors
+      secondary: 'oklch(0.54 0.05 37.21)',
+      'secondary-foreground': 'oklch(0.95 0.01 102.46)',
+
+      // Muted colors
+      muted: 'oklch(0.41 0.03 40.36)',
+      'muted-foreground': 'oklch(0.76 0.04 50.86)',
+
+      // Accent colors
+      accent: 'oklch(0.75 0.04 80.55)',
+      'accent-foreground': 'oklch(0.27 0.01 48.18)',
+
+      // Destructive colors
+      destructive: 'oklch(0.69 0.14 21.46)',
+      'destructive-foreground': 'oklch(0.27 0.01 48.18)',
+
+      // Border and input
+      border: 'oklch(0.41 0.03 40.36)',
+      input: 'oklch(0.41 0.03 40.36)',
+      ring: 'oklch(0.73 0.05 52.33)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.73 0.05 52.33)',
+      'chart-2': 'oklch(0.75 0.04 80.55)',
+      'chart-3': 'oklch(0.61 0.06 44.36)',
+      'chart-4': 'oklch(0.54 0.05 37.21)',
+      'chart-5': 'oklch(0.64 0.04 52.39)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.22 0.01 52.96)',
+      'sidebar-foreground': 'oklch(0.95 0.01 102.46)',
+      'sidebar-primary': 'oklch(0.73 0.05 52.33)',
+      'sidebar-primary-foreground': 'oklch(0.22 0.01 52.96)',
+      'sidebar-accent': 'oklch(0.75 0.04 80.55)',
+      'sidebar-accent-foreground': 'oklch(0.22 0.01 52.96)',
+      'sidebar-border': 'oklch(0.41 0.03 40.36)',
+      'sidebar-ring': 'oklch(0.73 0.05 52.33)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.30 0.076 20)',
+      'shadow-opacity': '0.11',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '2px',
+      'shadow-offset-y': '2px',
+    },
+  },
+
+  {
+    id: 'doom-64',
+    name: 'Doom 64',
+    category: 'popular',
+    colors: {
+      primary: 'oklch(0.50 0.19 27.48)',
+      secondary: 'oklch(0.50 0.09 126.19)',
+      accent: 'oklch(0.59 0.10 245.74)',
+      background: 'oklch(0.85 0 0)',
+      foreground: 'oklch(0.24 0 0)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.85 0 0)',
+      foreground: 'oklch(0.24 0 0)',
+      card: 'oklch(0.76 0 0)',
+      'card-foreground': 'oklch(0.24 0 0)',
+      popover: 'oklch(0.76 0 0)',
+      'popover-foreground': 'oklch(0.24 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.50 0.19 27.48)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.50 0.09 126.19)',
+      'secondary-foreground': 'oklch(1.00 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.78 0 0)',
+      'muted-foreground': 'oklch(0.41 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.59 0.10 245.74)',
+      'accent-foreground': 'oklch(1.00 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.71 0.20 46.46)',
+      'destructive-foreground': 'oklch(0 0 0)',
+
+      // Border and input
+      border: 'oklch(0.43 0 0)',
+      input: 'oklch(0.43 0 0)',
+      ring: 'oklch(0.50 0.19 27.48)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.50 0.19 27.48)',
+      'chart-2': 'oklch(0.50 0.09 126.19)',
+      'chart-3': 'oklch(0.59 0.10 245.74)',
+      'chart-4': 'oklch(0.71 0.20 46.46)',
+      'chart-5': 'oklch(0.57 0.04 40.43)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.76 0 0)',
+      'sidebar-foreground': 'oklch(0.24 0 0)',
+      'sidebar-primary': 'oklch(0.50 0.19 27.48)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.59 0.10 245.74)',
+      'sidebar-accent-foreground': 'oklch(1.00 0 0)',
+      'sidebar-border': 'oklch(0.43 0 0)',
+      'sidebar-ring': 'oklch(0.50 0.19 27.48)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0px',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.4',
+      'shadow-blur': '4px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '2px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.22 0 0)',
+      foreground: 'oklch(0.91 0 0)',
+      card: 'oklch(0.29 0 0)',
+      'card-foreground': 'oklch(0.91 0 0)',
+      popover: 'oklch(0.29 0 0)',
+      'popover-foreground': 'oklch(0.91 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.61 0.21 27.03)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.64 0.15 133.01)',
+      'secondary-foreground': 'oklch(0 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.26 0 0)',
+      'muted-foreground': 'oklch(0.71 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.75 0.12 244.75)',
+      'accent-foreground': 'oklch(0 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.78 0.17 68.09)',
+      'destructive-foreground': 'oklch(0 0 0)',
+
+      // Border and input
+      border: 'oklch(0.41 0 0)',
+      input: 'oklch(0.41 0 0)',
+      ring: 'oklch(0.61 0.21 27.03)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.61 0.21 27.03)',
+      'chart-2': 'oklch(0.64 0.15 133.01)',
+      'chart-3': 'oklch(0.75 0.12 244.75)',
+      'chart-4': 'oklch(0.78 0.17 68.09)',
+      'chart-5': 'oklch(0.65 0.03 40.80)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.19 0 0)',
+      'sidebar-foreground': 'oklch(0.91 0 0)',
+      'sidebar-primary': 'oklch(0.61 0.21 27.03)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.75 0.12 244.75)',
+      'sidebar-accent-foreground': 'oklch(0 0 0)',
+      'sidebar-border': 'oklch(0.41 0 0)',
+      'sidebar-ring': 'oklch(0.61 0.21 27.03)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0px',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.6',
+      'shadow-blur': '5px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '2px',
+    },
+  },
+
+  {
+    id: 'graphite',
+    name: 'Graphite',
+    category: 'specialty',
+    colors: {
+      primary: 'oklch(0.49 0 0)',
+      secondary: 'oklch(0.91 0 0)',
+      accent: 'oklch(0.81 0 0)',
+      background: 'oklch(0.96 0 0)',
+      foreground: 'oklch(0.32 0 0)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.96 0 0)',
+      foreground: 'oklch(0.32 0 0)',
+      card: 'oklch(0.97 0 0)',
+      'card-foreground': 'oklch(0.32 0 0)',
+      popover: 'oklch(0.97 0 0)',
+      'popover-foreground': 'oklch(0.32 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.49 0 0)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.91 0 0)',
+      'secondary-foreground': 'oklch(0.32 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.89 0 0)',
+      'muted-foreground': 'oklch(0.51 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.81 0 0)',
+      'accent-foreground': 'oklch(0.32 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.56 0.19 25.86)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.86 0 0)',
+      input: 'oklch(0.91 0 0)',
+      ring: 'oklch(0.49 0 0)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.49 0 0)',
+      'chart-2': 'oklch(0.49 0.04 196.03)',
+      'chart-3': 'oklch(0.65 0 0)',
+      'chart-4': 'oklch(0.73 0 0)',
+      'chart-5': 'oklch(0.81 0 0)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.94 0 0)',
+      'sidebar-foreground': 'oklch(0.32 0 0)',
+      'sidebar-primary': 'oklch(0.49 0 0)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.81 0 0)',
+      'sidebar-accent-foreground': 'oklch(0.32 0 0)',
+      'sidebar-border': 'oklch(0.86 0 0)',
+      'sidebar-ring': 'oklch(0.49 0 0)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.35rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.20 0.000 0)',
+      'shadow-opacity': '0.15',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '2px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.22 0 0)',
+      foreground: 'oklch(0.89 0 0)',
+      card: 'oklch(0.24 0 0)',
+      'card-foreground': 'oklch(0.89 0 0)',
+      popover: 'oklch(0.24 0 0)',
+      'popover-foreground': 'oklch(0.89 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.71 0 0)',
+      'primary-foreground': 'oklch(0.22 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.31 0 0)',
+      'secondary-foreground': 'oklch(0.89 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.29 0 0)',
+      'muted-foreground': 'oklch(0.60 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.37 0 0)',
+      'accent-foreground': 'oklch(0.89 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.66 0.15 22.17)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.33 0 0)',
+      input: 'oklch(0.31 0 0)',
+      ring: 'oklch(0.71 0 0)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.71 0 0)',
+      'chart-2': 'oklch(0.67 0.03 206.35)',
+      'chart-3': 'oklch(0.55 0 0)',
+      'chart-4': 'oklch(0.46 0 0)',
+      'chart-5': 'oklch(0.37 0 0)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.24 0 0)',
+      'sidebar-foreground': 'oklch(0.89 0 0)',
+      'sidebar-primary': 'oklch(0.71 0 0)',
+      'sidebar-primary-foreground': 'oklch(0.22 0 0)',
+      'sidebar-accent': 'oklch(0.37 0 0)',
+      'sidebar-accent-foreground': 'oklch(0.89 0 0)',
+      'sidebar-border': 'oklch(0.33 0 0)',
+      'sidebar-ring': 'oklch(0.71 0 0)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.35rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.20 0.000 0)',
+      'shadow-opacity': '0.15',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '2px',
+    },
+  },
+
+  {
+    id: 'perpetuity',
+    name: 'Perpetuity',
+    category: 'specialty',
+    colors: {
+      primary: 'oklch(0.56 0.09 203.28)',
+      secondary: 'oklch(0.92 0.02 196.84)',
+      accent: 'oklch(0.90 0.03 201.89)',
+      background: 'oklch(0.95 0.01 197.01)',
+      foreground: 'oklch(0.38 0.06 212.66)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.95 0.01 197.01)',
+      foreground: 'oklch(0.38 0.06 212.66)',
+      card: 'oklch(0.97 0.01 197.07)',
+      'card-foreground': 'oklch(0.38 0.06 212.66)',
+      popover: 'oklch(0.97 0.01 197.07)',
+      'popover-foreground': 'oklch(0.38 0.06 212.66)',
+
+      // Primary colors
+      primary: 'oklch(0.56 0.09 203.28)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.92 0.02 196.84)',
+      'secondary-foreground': 'oklch(0.38 0.06 212.66)',
+
+      // Muted colors
+      muted: 'oklch(0.93 0.01 196.97)',
+      'muted-foreground': 'oklch(0.54 0.06 201.57)',
+
+      // Accent colors
+      accent: 'oklch(0.90 0.03 201.89)',
+      'accent-foreground': 'oklch(0.38 0.06 212.66)',
+
+      // Destructive colors
+      destructive: 'oklch(0.57 0.19 25.54)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.89 0.02 204.41)',
+      input: 'oklch(0.92 0.02 196.84)',
+      ring: 'oklch(0.56 0.09 203.28)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.56 0.09 203.28)',
+      'chart-2': 'oklch(0.64 0.10 201.59)',
+      'chart-3': 'oklch(0.71 0.11 201.25)',
+      'chart-4': 'oklch(0.77 0.10 201.18)',
+      'chart-5': 'oklch(0.83 0.08 200.97)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.93 0.02 205.32)',
+      'sidebar-foreground': 'oklch(0.38 0.06 212.66)',
+      'sidebar-primary': 'oklch(0.56 0.09 203.28)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.90 0.03 201.89)',
+      'sidebar-accent-foreground': 'oklch(0.38 0.06 212.66)',
+      'sidebar-border': 'oklch(0.89 0.02 204.41)',
+      'sidebar-ring': 'oklch(0.56 0.09 203.28)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.125rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.30 0.294 185)',
+      'shadow-opacity': '0.15',
+      'shadow-blur': '2px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '1px',
+      'shadow-offset-y': '1px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.21 0.02 224.45)',
+      foreground: 'oklch(0.85 0.13 195.04)',
+      card: 'oklch(0.23 0.03 216.07)',
+      'card-foreground': 'oklch(0.85 0.13 195.04)',
+      popover: 'oklch(0.23 0.03 216.07)',
+      'popover-foreground': 'oklch(0.85 0.13 195.04)',
+
+      // Primary colors
+      primary: 'oklch(0.85 0.13 195.04)',
+      'primary-foreground': 'oklch(0.21 0.02 224.45)',
+
+      // Secondary colors
+      secondary: 'oklch(0.38 0.06 216.50)',
+      'secondary-foreground': 'oklch(0.85 0.13 195.04)',
+
+      // Muted colors
+      muted: 'oklch(0.29 0.04 218.82)',
+      'muted-foreground': 'oklch(0.66 0.10 195.05)',
+
+      // Accent colors
+      accent: 'oklch(0.38 0.06 216.50)',
+      'accent-foreground': 'oklch(0.85 0.13 195.04)',
+
+      // Destructive colors
+      destructive: 'oklch(0.62 0.21 25.81)',
+      'destructive-foreground': 'oklch(0.96 0 0)',
+
+      // Border and input
+      border: 'oklch(0.38 0.06 216.50)',
+      input: 'oklch(0.38 0.06 216.50)',
+      ring: 'oklch(0.85 0.13 195.04)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.85 0.13 195.04)',
+      'chart-2': 'oklch(0.66 0.10 195.05)',
+      'chart-3': 'oklch(0.58 0.08 195.07)',
+      'chart-4': 'oklch(0.43 0.06 202.62)',
+      'chart-5': 'oklch(0.31 0.05 204.16)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.21 0.02 224.45)',
+      'sidebar-foreground': 'oklch(0.85 0.13 195.04)',
+      'sidebar-primary': 'oklch(0.85 0.13 195.04)',
+      'sidebar-primary-foreground': 'oklch(0.21 0.02 224.45)',
+      'sidebar-accent': 'oklch(0.38 0.06 216.50)',
+      'sidebar-accent-foreground': 'oklch(0.85 0.13 195.04)',
+      'sidebar-border': 'oklch(0.38 0.06 216.50)',
+      'sidebar-ring': 'oklch(0.85 0.13 195.04)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.125rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.60 0.336 180)',
+      'shadow-opacity': '0.2',
+      'shadow-blur': '2px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '1px',
+      'shadow-offset-y': '1px',
+    },
+  },
+
+  {
+    id: 'kodama-grove',
+    name: 'Kodama Grove',
     category: 'nature',
     colors: {
-      primary: '#16a34a',
-      secondary: '#dcfce7',
-      accent: '#bbf7d0',
-      background: '#f0fdf4',
-      foreground: '#052e16'
+      primary: 'oklch(0.67 0.11 118.91)',
+      secondary: 'oklch(0.85 0.06 91.15)',
+      accent: 'oklch(0.84 0.07 90.33)',
+      background: 'oklch(0.88 0.05 91.79)',
+      foreground: 'oklch(0.43 0.03 59.22)',
     },
     lightModeConfig: {
-      background: '#f0fdf4',
-      foreground: '#052e16',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#16a34a',
-      'primary-foreground': '#ffffff',
-      secondary: '#dcfce7',
-      'secondary-foreground': '#0f172a',
-      muted: '#f3f4f6',
-      'muted-foreground': '#64748b',
-      accent: '#bbf7d0',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e5e7eb',
-      input: '#e5e7eb',
-      ring: '#16a34a'
+      // Base colors
+      background: 'oklch(0.88 0.05 91.79)',
+      foreground: 'oklch(0.43 0.03 59.22)',
+      card: 'oklch(0.89 0.04 87.57)',
+      'card-foreground': 'oklch(0.43 0.03 59.22)',
+      popover: 'oklch(0.94 0.03 89.85)',
+      'popover-foreground': 'oklch(0.43 0.03 59.22)',
+
+      // Primary colors
+      primary: 'oklch(0.67 0.11 118.91)',
+      'primary-foreground': 'oklch(0.99 0.01 88.64)',
+
+      // Secondary colors
+      secondary: 'oklch(0.85 0.06 91.15)',
+      'secondary-foreground': 'oklch(0.43 0.03 59.22)',
+
+      // Muted colors
+      muted: 'oklch(0.85 0.06 91.15)',
+      'muted-foreground': 'oklch(0.58 0.03 60.93)',
+
+      // Accent colors
+      accent: 'oklch(0.84 0.07 90.33)',
+      'accent-foreground': 'oklch(0.43 0.03 59.22)',
+
+      // Destructive colors
+      destructive: 'oklch(0.71 0.10 29.98)',
+      'destructive-foreground': 'oklch(0.98 0.01 91.48)',
+
+      // Border and input
+      border: 'oklch(0.69 0.04 59.84)',
+      input: 'oklch(0.84 0.07 90.33)',
+      ring: 'oklch(0.73 0.06 130.85)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.73 0.06 130.85)',
+      'chart-2': 'oklch(0.68 0.06 132.45)',
+      'chart-3': 'oklch(0.82 0.03 136.65)',
+      'chart-4': 'oklch(0.59 0.05 137.62)',
+      'chart-5': 'oklch(0.52 0.04 137.19)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.86 0.06 90.52)',
+      'sidebar-foreground': 'oklch(0.43 0.03 59.22)',
+      'sidebar-primary': 'oklch(0.73 0.06 130.85)',
+      'sidebar-primary-foreground': 'oklch(0.99 0.01 88.64)',
+      'sidebar-accent': 'oklch(0.92 0.02 88.00)',
+      'sidebar-accent-foreground': 'oklch(0.43 0.03 59.22)',
+      'sidebar-border': 'oklch(0.91 0.02 88.00)',
+      'sidebar-ring': 'oklch(0.73 0.06 130.85)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.425rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.35 0.100 88)',
+      'shadow-opacity': '0.15',
+      'shadow-blur': '2px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '3px',
+      'shadow-offset-y': '3px',
     },
     darkModeConfig: {
-      background: '#0f1e0f',
-      foreground: '#dcfce7',
-      card: '#1a2e1a',
-      'card-foreground': '#f8fafc',
-      popover: '#1a2e1a',
-      'popover-foreground': '#f8fafc',
-      primary: '#22c55e',
-      'primary-foreground': '#ffffff',
-      secondary: '#2d4a2d',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1a2e1a',
-      'muted-foreground': '#94a3b8',
-      accent: '#374151',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#374151',
-      input: '#374151',
-      ring: '#22c55e'
-    }
+      // Base colors
+      background: 'oklch(0.33 0.02 88.07)',
+      foreground: 'oklch(0.92 0.02 82.12)',
+      card: 'oklch(0.36 0.02 82.33)',
+      'card-foreground': 'oklch(0.92 0.02 82.12)',
+      popover: 'oklch(0.36 0.02 82.33)',
+      'popover-foreground': 'oklch(0.92 0.02 82.12)',
+
+      // Primary colors
+      primary: 'oklch(0.68 0.06 132.45)',
+      'primary-foreground': 'oklch(0.27 0.01 61.02)',
+
+      // Secondary colors
+      secondary: 'oklch(0.44 0.02 84.55)',
+      'secondary-foreground': 'oklch(0.92 0.02 82.12)',
+
+      // Muted colors
+      muted: 'oklch(0.39 0.02 82.71)',
+      'muted-foreground': 'oklch(0.71 0.02 73.62)',
+
+      // Accent colors
+      accent: 'oklch(0.65 0.07 90.76)',
+      'accent-foreground': 'oklch(0.27 0.01 61.02)',
+
+      // Destructive colors
+      destructive: 'oklch(0.63 0.08 31.30)',
+      'destructive-foreground': 'oklch(0.94 0.02 84.59)',
+
+      // Border and input
+      border: 'oklch(0.44 0.02 84.55)',
+      input: 'oklch(0.44 0.02 84.55)',
+      ring: 'oklch(0.68 0.06 132.45)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.68 0.06 132.45)',
+      'chart-2': 'oklch(0.73 0.06 130.85)',
+      'chart-3': 'oklch(0.59 0.05 137.62)',
+      'chart-4': 'oklch(0.65 0.07 90.76)',
+      'chart-5': 'oklch(0.52 0.04 137.19)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.33 0.02 88.07)',
+      'sidebar-foreground': 'oklch(0.92 0.02 82.12)',
+      'sidebar-primary': 'oklch(0.68 0.06 132.45)',
+      'sidebar-primary-foreground': 'oklch(0.27 0.01 61.02)',
+      'sidebar-accent': 'oklch(0.65 0.07 90.76)',
+      'sidebar-accent-foreground': 'oklch(0.27 0.01 61.02)',
+      'sidebar-border': 'oklch(0.44 0.02 84.55)',
+      'sidebar-ring': 'oklch(0.68 0.06 132.45)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.425rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.35 0.100 88)',
+      'shadow-opacity': '0.15',
+      'shadow-blur': '2px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '3px',
+      'shadow-offset-y': '3px',
+    },
   },
+
   {
-    id: 'coral-reef',
-    name: 'Coral Reef',
+    id: 'cosmic-night',
+    name: 'Cosmic Night',
     category: 'nature',
     colors: {
-      primary: '#fb7185',
-      secondary: '#fce7f3',
-      accent: '#fbbf24',
-      background: '#fffbeb',
-      foreground: '#451a03'
+      primary: 'oklch(0.54 0.18 288.03)',
+      secondary: 'oklch(0.92 0.04 292.69)',
+      accent: 'oklch(0.92 0.04 262.14)',
+      background: 'oklch(0.97 0.01 286.15)',
+      foreground: 'oklch(0.30 0.06 282.42)',
     },
     lightModeConfig: {
-      background: '#fffbeb',
-      foreground: '#451a03',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#fb7185',
-      'primary-foreground': '#ffffff',
-      secondary: '#fce7f3',
-      'secondary-foreground': '#0f172a',
-      muted: '#fef3c7',
-      'muted-foreground': '#64748b',
-      accent: '#fbbf24',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#fed7aa',
-      input: '#fed7aa',
-      ring: '#fb7185'
+      // Base colors
+      background: 'oklch(0.97 0.01 286.15)',
+      foreground: 'oklch(0.30 0.06 282.42)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.30 0.06 282.42)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.30 0.06 282.42)',
+
+      // Primary colors
+      primary: 'oklch(0.54 0.18 288.03)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.92 0.04 292.69)',
+      'secondary-foreground': 'oklch(0.41 0.10 288.17)',
+
+      // Muted colors
+      muted: 'oklch(0.96 0.01 286.15)',
+      'muted-foreground': 'oklch(0.54 0.05 284.74)',
+
+      // Accent colors
+      accent: 'oklch(0.92 0.04 262.14)',
+      'accent-foreground': 'oklch(0.30 0.06 282.42)',
+
+      // Destructive colors
+      destructive: 'oklch(0.69 0.21 14.99)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.91 0.02 285.96)',
+      input: 'oklch(0.91 0.02 285.96)',
+      ring: 'oklch(0.54 0.18 288.03)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.54 0.18 288.03)',
+      'chart-2': 'oklch(0.70 0.16 288.99)',
+      'chart-3': 'oklch(0.57 0.21 276.71)',
+      'chart-4': 'oklch(0.64 0.19 281.81)',
+      'chart-5': 'oklch(0.45 0.18 279.38)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.96 0.01 286.15)',
+      'sidebar-foreground': 'oklch(0.30 0.06 282.42)',
+      'sidebar-primary': 'oklch(0.54 0.18 288.03)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.92 0.04 262.14)',
+      'sidebar-accent-foreground': 'oklch(0.30 0.06 282.42)',
+      'sidebar-border': 'oklch(0.91 0.02 285.96)',
+      'sidebar-ring': 'oklch(0.54 0.18 288.03)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.25 0.090 240)',
+      'shadow-opacity': '0.12',
+      'shadow-blur': '10px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '4px',
     },
     darkModeConfig: {
-      background: '#2d1b1b',
-      foreground: '#fce7f3',
-      card: '#3d2626',
-      'card-foreground': '#f8fafc',
-      popover: '#3d2626',
-      'popover-foreground': '#f8fafc',
-      primary: '#fb7185',
-      'primary-foreground': '#ffffff',
-      secondary: '#4a3030',
-      'secondary-foreground': '#f8fafc',
-      muted: '#3d2626',
-      'muted-foreground': '#94a3b8',
-      accent: '#fbbf24',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#4a3030',
-      input: '#4a3030',
-      ring: '#fb7185'
-    }
+      // Base colors
+      background: 'oklch(0.17 0.02 283.80)',
+      foreground: 'oklch(0.92 0.03 285.88)',
+      card: 'oklch(0.23 0.04 282.93)',
+      'card-foreground': 'oklch(0.92 0.03 285.88)',
+      popover: 'oklch(0.23 0.04 282.93)',
+      'popover-foreground': 'oklch(0.92 0.03 285.88)',
+
+      // Primary colors
+      primary: 'oklch(0.72 0.16 290.40)',
+      'primary-foreground': 'oklch(0.17 0.02 283.80)',
+
+      // Secondary colors
+      secondary: 'oklch(0.31 0.07 283.46)',
+      'secondary-foreground': 'oklch(0.84 0.08 285.91)',
+
+      // Muted colors
+      muted: 'oklch(0.27 0.06 281.44)',
+      'muted-foreground': 'oklch(0.72 0.05 285.17)',
+
+      // Accent colors
+      accent: 'oklch(0.34 0.08 280.97)',
+      'accent-foreground': 'oklch(0.92 0.03 285.88)',
+
+      // Destructive colors
+      destructive: 'oklch(0.69 0.21 14.99)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.33 0.06 282.58)',
+      input: 'oklch(0.33 0.06 282.58)',
+      ring: 'oklch(0.72 0.16 290.40)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.72 0.16 290.40)',
+      'chart-2': 'oklch(0.64 0.10 274.91)',
+      'chart-3': 'oklch(0.75 0.12 244.75)',
+      'chart-4': 'oklch(0.71 0.10 186.68)',
+      'chart-5': 'oklch(0.75 0.18 346.81)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.23 0.04 282.93)',
+      'sidebar-foreground': 'oklch(0.92 0.03 285.88)',
+      'sidebar-primary': 'oklch(0.72 0.16 290.40)',
+      'sidebar-primary-foreground': 'oklch(0.17 0.02 283.80)',
+      'sidebar-accent': 'oklch(0.34 0.08 280.97)',
+      'sidebar-accent-foreground': 'oklch(0.92 0.03 285.88)',
+      'sidebar-border': 'oklch(0.33 0.06 282.58)',
+      'sidebar-ring': 'oklch(0.72 0.16 290.40)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.25 0.090 240)',
+      'shadow-opacity': '0.12',
+      'shadow-blur': '10px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '4px',
+    },
   },
+
   {
-    id: 'midnight-blue',
-    name: 'Midnight Blue',
+    id: 'tangerine',
+    name: 'Tangerine',
+    category: 'creative',
+    colors: {
+      primary: 'oklch(0.64 0.17 36.44)',
+      secondary: 'oklch(0.97 0.00 264.54)',
+      accent: 'oklch(0.91 0.02 243.82)',
+      background: 'oklch(0.94 0.00 236.50)',
+      foreground: 'oklch(0.32 0 0)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.94 0.00 236.50)',
+      foreground: 'oklch(0.32 0 0)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.32 0 0)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.32 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.64 0.17 36.44)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.97 0.00 264.54)',
+      'secondary-foreground': 'oklch(0.45 0.03 256.80)',
+
+      // Muted colors
+      muted: 'oklch(0.98 0.00 247.84)',
+      'muted-foreground': 'oklch(0.55 0.02 264.36)',
+
+      // Accent colors
+      accent: 'oklch(0.91 0.02 243.82)',
+      'accent-foreground': 'oklch(0.38 0.14 265.52)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.90 0.01 247.88)',
+      input: 'oklch(0.97 0.00 264.54)',
+      ring: 'oklch(0.64 0.17 36.44)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.72 0.06 248.68)',
+      'chart-2': 'oklch(0.79 0.09 35.96)',
+      'chart-3': 'oklch(0.58 0.08 254.16)',
+      'chart-4': 'oklch(0.50 0.08 259.49)',
+      'chart-5': 'oklch(0.42 0.10 264.03)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.90 0.00 258.33)',
+      'sidebar-foreground': 'oklch(0.32 0 0)',
+      'sidebar-primary': 'oklch(0.64 0.17 36.44)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.91 0.02 243.82)',
+      'sidebar-accent-foreground': 'oklch(0.38 0.14 265.52)',
+      'sidebar-border': 'oklch(0.93 0.01 264.53)',
+      'sidebar-ring': 'oklch(0.64 0.17 36.44)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.75rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '1px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.26 0.03 262.67)',
+      foreground: 'oklch(0.92 0 0)',
+      card: 'oklch(0.31 0.03 268.64)',
+      'card-foreground': 'oklch(0.92 0 0)',
+      popover: 'oklch(0.29 0.02 268.40)',
+      'popover-foreground': 'oklch(0.92 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.64 0.17 36.44)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.31 0.03 266.71)',
+      'secondary-foreground': 'oklch(0.92 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.31 0.03 266.71)',
+      'muted-foreground': 'oklch(0.72 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.34 0.06 267.59)',
+      'accent-foreground': 'oklch(0.88 0.06 254.13)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.38 0.03 269.73)',
+      input: 'oklch(0.38 0.03 269.73)',
+      ring: 'oklch(0.64 0.17 36.44)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.72 0.06 248.68)',
+      'chart-2': 'oklch(0.77 0.09 34.19)',
+      'chart-3': 'oklch(0.58 0.08 254.16)',
+      'chart-4': 'oklch(0.50 0.08 259.49)',
+      'chart-5': 'oklch(0.42 0.10 264.03)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.31 0.03 267.74)',
+      'sidebar-foreground': 'oklch(0.92 0 0)',
+      'sidebar-primary': 'oklch(0.64 0.17 36.44)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.34 0.06 267.59)',
+      'sidebar-accent-foreground': 'oklch(0.88 0.06 254.13)',
+      'sidebar-border': 'oklch(0.38 0.03 269.73)',
+      'sidebar-ring': 'oklch(0.64 0.17 36.44)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.75rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '1px',
+    },
+  },
+
+  {
+    id: 'quantum-rose',
+    name: 'Quantum Rose',
+    category: 'creative',
+    colors: {
+      primary: 'oklch(0.60 0.24 0.13)',
+      secondary: 'oklch(0.92 0.07 326.13)',
+      accent: 'oklch(0.88 0.08 344.88)',
+      background: 'oklch(0.97 0.02 343.93)',
+      foreground: 'oklch(0.44 0.17 352.38)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.97 0.02 343.93)',
+      foreground: 'oklch(0.44 0.17 352.38)',
+      card: 'oklch(0.98 0.01 339.33)',
+      'card-foreground': 'oklch(0.44 0.17 352.38)',
+      popover: 'oklch(0.98 0.01 339.33)',
+      'popover-foreground': 'oklch(0.44 0.17 352.38)',
+
+      // Primary colors
+      primary: 'oklch(0.60 0.24 0.13)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.92 0.07 326.13)',
+      'secondary-foreground': 'oklch(0.44 0.17 352.38)',
+
+      // Muted colors
+      muted: 'oklch(0.94 0.04 344.26)',
+      'muted-foreground': 'oklch(0.57 0.17 352.05)',
+
+      // Accent colors
+      accent: 'oklch(0.88 0.08 344.88)',
+      'accent-foreground': 'oklch(0.44 0.17 352.38)',
+
+      // Destructive colors
+      destructive: 'oklch(0.58 0.19 6.34)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.89 0.07 344.39)',
+      input: 'oklch(0.92 0.07 326.13)',
+      ring: 'oklch(0.60 0.24 0.13)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.60 0.24 0.13)',
+      'chart-2': 'oklch(0.60 0.17 345.04)',
+      'chart-3': 'oklch(0.60 0.12 311.80)',
+      'chart-4': 'oklch(0.58 0.12 283.29)',
+      'chart-5': 'oklch(0.65 0.19 267.97)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.96 0.02 345.75)',
+      'sidebar-foreground': 'oklch(0.44 0.17 352.38)',
+      'sidebar-primary': 'oklch(0.60 0.24 0.13)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.88 0.08 344.88)',
+      'sidebar-accent-foreground': 'oklch(0.44 0.17 352.38)',
+      'sidebar-border': 'oklch(0.93 0.04 343.31)',
+      'sidebar-ring': 'oklch(0.60 0.24 0.13)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.30 0.294 330)',
+      'shadow-opacity': '0.18',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '3px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.18 0.05 313.72)',
+      foreground: 'oklch(0.86 0.13 326.64)',
+      card: 'oklch(0.24 0.07 313.23)',
+      'card-foreground': 'oklch(0.86 0.13 326.64)',
+      popover: 'oklch(0.24 0.07 313.23)',
+      'popover-foreground': 'oklch(0.86 0.13 326.64)',
+
+      // Primary colors
+      primary: 'oklch(0.75 0.23 332.02)',
+      'primary-foreground': 'oklch(0.16 0.05 327.57)',
+
+      // Secondary colors
+      secondary: 'oklch(0.32 0.09 319.65)',
+      'secondary-foreground': 'oklch(0.86 0.13 326.64)',
+
+      // Muted colors
+      muted: 'oklch(0.27 0.08 312.35)',
+      'muted-foreground': 'oklch(0.71 0.16 327.11)',
+
+      // Accent colors
+      accent: 'oklch(0.36 0.12 325.77)',
+      'accent-foreground': 'oklch(0.86 0.13 326.64)',
+
+      // Destructive colors
+      destructive: 'oklch(0.65 0.24 7.17)',
+      'destructive-foreground': 'oklch(0.98 0 0)',
+
+      // Border and input
+      border: 'oklch(0.33 0.12 313.54)',
+      input: 'oklch(0.32 0.09 319.65)',
+      ring: 'oklch(0.75 0.23 332.02)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.75 0.23 332.02)',
+      'chart-2': 'oklch(0.65 0.22 317.63)',
+      'chart-3': 'oklch(0.62 0.22 292.77)',
+      'chart-4': 'oklch(0.61 0.16 278.72)',
+      'chart-5': 'oklch(0.62 0.20 268.05)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.19 0.05 311.40)',
+      'sidebar-foreground': 'oklch(0.86 0.13 326.64)',
+      'sidebar-primary': 'oklch(0.75 0.23 332.02)',
+      'sidebar-primary-foreground': 'oklch(0.16 0.05 327.57)',
+      'sidebar-accent': 'oklch(0.36 0.12 325.77)',
+      'sidebar-accent-foreground': 'oklch(0.86 0.13 326.64)',
+      'sidebar-border': 'oklch(0.33 0.12 313.54)',
+      'sidebar-ring': 'oklch(0.75 0.23 332.02)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.50 0.400 300)',
+      'shadow-opacity': '0.18',
+      'shadow-blur': '0px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '3px',
+    },
+  },
+
+  {
+    id: 'nature',
+    name: 'Nature',
     category: 'nature',
     colors: {
-      primary: '#1e40af',
-      secondary: '#dbeafe',
-      accent: '#bfdbfe',
-      background: '#f8fafc',
-      foreground: '#1e293b'
+      primary: 'oklch(0.52 0.13 144.17)',
+      secondary: 'oklch(0.96 0.02 147.64)',
+      accent: 'oklch(0.90 0.05 146.04)',
+      background: 'oklch(0.97 0.01 80.72)',
+      foreground: 'oklch(0.30 0.04 30.20)',
     },
     lightModeConfig: {
-      background: '#f8fafc',
-      foreground: '#1e293b',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#1e40af',
-      'primary-foreground': '#ffffff',
-      secondary: '#dbeafe',
-      'secondary-foreground': '#0f172a',
-      muted: '#f1f5f9',
-      'muted-foreground': '#64748b',
-      accent: '#bfdbfe',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e2e8f0',
-      input: '#e2e8f0',
-      ring: '#1e40af'
+      // Base colors
+      background: 'oklch(0.97 0.01 80.72)',
+      foreground: 'oklch(0.30 0.04 30.20)',
+      card: 'oklch(0.97 0.01 80.72)',
+      'card-foreground': 'oklch(0.30 0.04 30.20)',
+      popover: 'oklch(0.97 0.01 80.72)',
+      'popover-foreground': 'oklch(0.30 0.04 30.20)',
+
+      // Primary colors
+      primary: 'oklch(0.52 0.13 144.17)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.96 0.02 147.64)',
+      'secondary-foreground': 'oklch(0.43 0.12 144.31)',
+
+      // Muted colors
+      muted: 'oklch(0.94 0.01 74.42)',
+      'muted-foreground': 'oklch(0.45 0.05 39.21)',
+
+      // Accent colors
+      accent: 'oklch(0.90 0.05 146.04)',
+      'accent-foreground': 'oklch(0.43 0.12 144.31)',
+
+      // Destructive colors
+      destructive: 'oklch(0.54 0.19 26.72)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.88 0.02 74.64)',
+      input: 'oklch(0.88 0.02 74.64)',
+      ring: 'oklch(0.52 0.13 144.17)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.67 0.16 144.21)',
+      'chart-2': 'oklch(0.58 0.14 144.18)',
+      'chart-3': 'oklch(0.52 0.13 144.17)',
+      'chart-4': 'oklch(0.43 0.12 144.31)',
+      'chart-5': 'oklch(0.22 0.05 145.73)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.94 0.01 74.42)',
+      'sidebar-foreground': 'oklch(0.30 0.04 30.20)',
+      'sidebar-primary': 'oklch(0.52 0.13 144.17)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.90 0.05 146.04)',
+      'sidebar-accent-foreground': 'oklch(0.43 0.12 144.31)',
+      'sidebar-border': 'oklch(0.88 0.02 74.64)',
+      'sidebar-ring': 'oklch(0.52 0.13 144.17)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
     },
     darkModeConfig: {
-      background: '#0c1220',
-      foreground: '#dbeafe',
-      card: '#1e293b',
-      'card-foreground': '#f8fafc',
-      popover: '#1e293b',
-      'popover-foreground': '#f8fafc',
-      primary: '#3b82f6',
-      'primary-foreground': '#ffffff',
-      secondary: '#334155',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1e293b',
-      'muted-foreground': '#94a3b8',
-      accent: '#475569',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#475569',
-      input: '#475569',
-      ring: '#3b82f6'
-    }
+      // Base colors
+      background: 'oklch(0.27 0.03 150.77)',
+      foreground: 'oklch(0.94 0.01 72.66)',
+      card: 'oklch(0.33 0.03 146.99)',
+      'card-foreground': 'oklch(0.94 0.01 72.66)',
+      popover: 'oklch(0.33 0.03 146.99)',
+      'popover-foreground': 'oklch(0.94 0.01 72.66)',
+
+      // Primary colors
+      primary: 'oklch(0.67 0.16 144.21)',
+      'primary-foreground': 'oklch(0.22 0.05 145.73)',
+
+      // Secondary colors
+      secondary: 'oklch(0.39 0.03 142.99)',
+      'secondary-foreground': 'oklch(0.90 0.02 142.55)',
+
+      // Muted colors
+      muted: 'oklch(0.33 0.03 146.99)',
+      'muted-foreground': 'oklch(0.86 0.02 76.10)',
+
+      // Accent colors
+      accent: 'oklch(0.58 0.14 144.18)',
+      'accent-foreground': 'oklch(0.94 0.01 72.66)',
+
+      // Destructive colors
+      destructive: 'oklch(0.54 0.19 26.72)',
+      'destructive-foreground': 'oklch(0.94 0.01 72.66)',
+
+      // Border and input
+      border: 'oklch(0.39 0.03 142.99)',
+      input: 'oklch(0.39 0.03 142.99)',
+      ring: 'oklch(0.67 0.16 144.21)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.77 0.12 145.30)',
+      'chart-2': 'oklch(0.72 0.14 144.89)',
+      'chart-3': 'oklch(0.67 0.16 144.21)',
+      'chart-4': 'oklch(0.63 0.15 144.20)',
+      'chart-5': 'oklch(0.58 0.14 144.18)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.27 0.03 150.77)',
+      'sidebar-foreground': 'oklch(0.94 0.01 72.66)',
+      'sidebar-primary': 'oklch(0.67 0.16 144.21)',
+      'sidebar-primary-foreground': 'oklch(0.22 0.05 145.73)',
+      'sidebar-accent': 'oklch(0.58 0.14 144.18)',
+      'sidebar-accent-foreground': 'oklch(0.94 0.01 72.66)',
+      'sidebar-border': 'oklch(0.39 0.03 142.99)',
+      'sidebar-ring': 'oklch(0.67 0.16 144.21)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
   },
+
   {
-    id: 'corporate-blue',
-    name: 'Corporate Blue',
-    category: 'corporate',
-    colors: {
-      primary: '#2563eb',
-      secondary: '#f1f5f9',
-      accent: '#e2e8f0',
-      background: '#ffffff',
-      foreground: '#1e293b'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#1e293b',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#2563eb',
-      'primary-foreground': '#ffffff',
-      secondary: '#f1f5f9',
-      'secondary-foreground': '#0f172a',
-      muted: '#f8fafc',
-      'muted-foreground': '#64748b',
-      accent: '#e2e8f0',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e2e8f0',
-      input: '#e2e8f0',
-      ring: '#2563eb'
-    },
-    darkModeConfig: {
-      background: '#0f172a',
-      foreground: '#f1f5f9',
-      card: '#1e293b',
-      'card-foreground': '#f8fafc',
-      popover: '#1e293b',
-      'popover-foreground': '#f8fafc',
-      primary: '#3b82f6',
-      'primary-foreground': '#ffffff',
-      secondary: '#334155',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1e293b',
-      'muted-foreground': '#94a3b8',
-      accent: '#475569',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#475569',
-      input: '#475569',
-      ring: '#3b82f6'
-    }
-  },
-  {
-    id: 'enterprise-gray',
-    name: 'Enterprise Gray',
-    category: 'corporate',
-    colors: {
-      primary: '#374151',
-      secondary: '#f9fafb',
-      accent: '#e5e7eb',
-      background: '#ffffff',
-      foreground: '#111827'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#111827',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#374151',
-      'primary-foreground': '#ffffff',
-      secondary: '#f9fafb',
-      'secondary-foreground': '#0f172a',
-      muted: '#f3f4f6',
-      'muted-foreground': '#64748b',
-      accent: '#e5e7eb',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#d1d5db',
-      input: '#d1d5db',
-      ring: '#374151'
-    },
-    darkModeConfig: {
-      background: '#111827',
-      foreground: '#f9fafb',
-      card: '#1f2937',
-      'card-foreground': '#f8fafc',
-      popover: '#1f2937',
-      'popover-foreground': '#f8fafc',
-      primary: '#6b7280',
-      'primary-foreground': '#ffffff',
-      secondary: '#374151',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1f2937',
-      'muted-foreground': '#94a3b8',
-      accent: '#4b5563',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#4b5563',
-      input: '#4b5563',
-      ring: '#6b7280'
-    }
-  },
-  {
-    id: 'professional-green',
-    name: 'Professional Green',
-    category: 'corporate',
-    colors: {
-      primary: '#059669',
-      secondary: '#ecfdf5',
-      accent: '#d1fae5',
-      background: '#ffffff',
-      foreground: '#064e3b'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#064e3b',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#059669',
-      'primary-foreground': '#ffffff',
-      secondary: '#ecfdf5',
-      'secondary-foreground': '#0f172a',
-      muted: '#f0fdf4',
-      'muted-foreground': '#64748b',
-      accent: '#d1fae5',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#bbf7d0',
-      input: '#bbf7d0',
-      ring: '#059669'
-    },
-    darkModeConfig: {
-      background: '#064e3b',
-      foreground: '#ecfdf5',
-      card: '#0f5d4f',
-      'card-foreground': '#f8fafc',
-      popover: '#0f5d4f',
-      'popover-foreground': '#f8fafc',
-      primary: '#10b981',
-      'primary-foreground': '#ffffff',
-      secondary: '#1a6b5a',
-      'secondary-foreground': '#f8fafc',
-      muted: '#0f5d4f',
-      'muted-foreground': '#94a3b8',
-      accent: '#22c55e',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#1a6b5a',
-      input: '#1a6b5a',
-      ring: '#10b981'
-    }
-  },
-  {
-    id: 'rainbow-gradient',
-    name: 'Rainbow Gradient',
+    id: 'bold-tech',
+    name: 'Bold Tech',
     category: 'creative',
     colors: {
-      primary: '#ec4899',
-      secondary: '#f3e8ff',
-      accent: '#a78bfa',
-      background: '#fefcff',
-      foreground: '#3b0764'
+      primary: 'oklch(0.61 0.22 292.72)',
+      secondary: 'oklch(0.96 0.02 295.19)',
+      accent: 'oklch(0.93 0.03 255.59)',
+      background: 'oklch(1.00 0 0)',
+      foreground: 'oklch(0.36 0.14 278.70)',
     },
     lightModeConfig: {
-      background: '#fefcff',
-      foreground: '#3b0764',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#ec4899',
-      'primary-foreground': '#ffffff',
-      secondary: '#f3e8ff',
-      'secondary-foreground': '#0f172a',
-      muted: '#faf5ff',
-      'muted-foreground': '#64748b',
-      accent: '#a78bfa',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e9d5ff',
-      input: '#e9d5ff',
-      ring: '#ec4899'
+      // Base colors
+      background: 'oklch(1.00 0 0)',
+      foreground: 'oklch(0.36 0.14 278.70)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.36 0.14 278.70)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.36 0.14 278.70)',
+
+      // Primary colors
+      primary: 'oklch(0.61 0.22 292.72)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.96 0.02 295.19)',
+      'secondary-foreground': 'oklch(0.46 0.21 277.02)',
+
+      // Muted colors
+      muted: 'oklch(0.97 0.02 293.76)',
+      'muted-foreground': 'oklch(0.54 0.25 293.01)',
+
+      // Accent colors
+      accent: 'oklch(0.93 0.03 255.59)',
+      'accent-foreground': 'oklch(0.42 0.18 265.64)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.93 0.03 272.79)',
+      input: 'oklch(0.93 0.03 272.79)',
+      ring: 'oklch(0.61 0.22 292.72)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.61 0.22 292.72)',
+      'chart-2': 'oklch(0.54 0.25 293.01)',
+      'chart-3': 'oklch(0.49 0.24 292.58)',
+      'chart-4': 'oklch(0.43 0.21 292.76)',
+      'chart-5': 'oklch(0.38 0.18 293.74)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.97 0.02 293.76)',
+      'sidebar-foreground': 'oklch(0.36 0.14 278.70)',
+      'sidebar-primary': 'oklch(0.61 0.22 292.72)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.93 0.03 255.59)',
+      'sidebar-accent-foreground': 'oklch(0.42 0.18 265.64)',
+      'sidebar-border': 'oklch(0.93 0.03 272.79)',
+      'sidebar-ring': 'oklch(0.61 0.22 292.72)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.625rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.66 0.258 255)',
+      'shadow-opacity': '0.2',
+      'shadow-blur': '4px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '2px',
+      'shadow-offset-y': '2px',
     },
     darkModeConfig: {
-      background: '#3b0764',
-      foreground: '#f3e8ff',
-      card: '#4c1d95',
-      'card-foreground': '#f8fafc',
-      popover: '#4c1d95',
-      'popover-foreground': '#f8fafc',
-      primary: '#f472b6',
-      'primary-foreground': '#ffffff',
-      secondary: '#5b21b6',
-      'secondary-foreground': '#f8fafc',
-      muted: '#4c1d95',
-      'muted-foreground': '#94a3b8',
-      accent: '#a78bfa',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#5b21b6',
-      input: '#5b21b6',
-      ring: '#f472b6'
-    }
+      // Base colors
+      background: 'oklch(0.21 0.04 265.75)',
+      foreground: 'oklch(0.93 0.03 272.79)',
+      card: 'oklch(0.26 0.09 281.29)',
+      'card-foreground': 'oklch(0.93 0.03 272.79)',
+      popover: 'oklch(0.26 0.09 281.29)',
+      'popover-foreground': 'oklch(0.93 0.03 272.79)',
+
+      // Primary colors
+      primary: 'oklch(0.61 0.22 292.72)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.26 0.09 281.29)',
+      'secondary-foreground': 'oklch(0.93 0.03 272.79)',
+
+      // Muted colors
+      muted: 'oklch(0.26 0.09 281.29)',
+      'muted-foreground': 'oklch(0.81 0.10 293.57)',
+
+      // Accent colors
+      accent: 'oklch(0.46 0.21 277.02)',
+      'accent-foreground': 'oklch(0.93 0.03 272.79)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.28 0.14 291.09)',
+      input: 'oklch(0.28 0.14 291.09)',
+      ring: 'oklch(0.61 0.22 292.72)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.71 0.16 293.54)',
+      'chart-2': 'oklch(0.61 0.22 292.72)',
+      'chart-3': 'oklch(0.54 0.25 293.01)',
+      'chart-4': 'oklch(0.49 0.24 292.58)',
+      'chart-5': 'oklch(0.43 0.21 292.76)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.21 0.04 265.75)',
+      'sidebar-foreground': 'oklch(0.93 0.03 272.79)',
+      'sidebar-primary': 'oklch(0.61 0.22 292.72)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.46 0.21 277.02)',
+      'sidebar-accent-foreground': 'oklch(0.93 0.03 272.79)',
+      'sidebar-border': 'oklch(0.28 0.14 291.09)',
+      'sidebar-ring': 'oklch(0.61 0.22 292.72)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.625rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.66 0.258 255)',
+      'shadow-opacity': '0.2',
+      'shadow-blur': '4px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '2px',
+      'shadow-offset-y': '2px',
+    },
   },
+
   {
-    id: 'neon-glow',
-    name: 'Neon Glow',
+    id: 'elegant-luxury',
+    name: 'Elegant Luxury',
     category: 'creative',
     colors: {
-      primary: '#10b981',
-      secondary: '#1f2937',
-      accent: '#6366f1',
-      background: '#0f1419',
-      foreground: '#ecfdf5'
+      primary: 'oklch(0.47 0.15 24.94)',
+      secondary: 'oklch(0.96 0.04 89.09)',
+      accent: 'oklch(0.96 0.06 95.62)',
+      background: 'oklch(0.98 0.00 56.38)',
+      foreground: 'oklch(0.22 0 0)',
     },
     lightModeConfig: {
-      background: '#f0fdf4',
-      foreground: '#0f1419',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#10b981',
-      'primary-foreground': '#ffffff',
-      secondary: '#f3f4f6',
-      'secondary-foreground': '#0f172a',
-      muted: '#ecfdf5',
-      'muted-foreground': '#64748b',
-      accent: '#6366f1',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#d1fae5',
-      input: '#d1fae5',
-      ring: '#10b981'
+      // Base colors
+      background: 'oklch(0.98 0.00 56.38)',
+      foreground: 'oklch(0.22 0 0)',
+      card: 'oklch(0.98 0.00 56.38)',
+      'card-foreground': 'oklch(0.22 0 0)',
+      popover: 'oklch(0.98 0.00 56.38)',
+      'popover-foreground': 'oklch(0.22 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.47 0.15 24.94)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.96 0.04 89.09)',
+      'secondary-foreground': 'oklch(0.48 0.10 75.12)',
+
+      // Muted colors
+      muted: 'oklch(0.94 0.01 53.44)',
+      'muted-foreground': 'oklch(0.44 0.01 73.64)',
+
+      // Accent colors
+      accent: 'oklch(0.96 0.06 95.62)',
+      'accent-foreground': 'oklch(0.40 0.13 25.72)',
+
+      // Destructive colors
+      destructive: 'oklch(0.44 0.16 26.90)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.94 0.03 80.99)',
+      input: 'oklch(0.94 0.03 80.99)',
+      ring: 'oklch(0.47 0.15 24.94)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.51 0.19 27.52)',
+      'chart-2': 'oklch(0.47 0.15 24.94)',
+      'chart-3': 'oklch(0.40 0.13 25.72)',
+      'chart-4': 'oklch(0.56 0.15 49.00)',
+      'chart-5': 'oklch(0.47 0.12 46.20)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.94 0.01 53.44)',
+      'sidebar-foreground': 'oklch(0.22 0 0)',
+      'sidebar-primary': 'oklch(0.47 0.15 24.94)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.96 0.06 95.62)',
+      'sidebar-accent-foreground': 'oklch(0.40 0.13 25.72)',
+      'sidebar-border': 'oklch(0.94 0.03 80.99)',
+      'sidebar-ring': 'oklch(0.47 0.15 24.94)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.375rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.18 0.189 0)',
+      'shadow-opacity': '0.12',
+      'shadow-blur': '16px',
+      'shadow-spread': '-2px',
+      'shadow-offset-x': '1px',
+      'shadow-offset-y': '1px',
     },
     darkModeConfig: {
-      background: '#0f1419',
-      foreground: '#ecfdf5',
-      card: '#1f2937',
-      'card-foreground': '#f8fafc',
-      popover: '#1f2937',
-      'popover-foreground': '#f8fafc',
-      primary: '#10b981',
-      'primary-foreground': '#ffffff',
-      secondary: '#374151',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1f2937',
-      'muted-foreground': '#94a3b8',
-      accent: '#6366f1',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#374151',
-      input: '#374151',
-      ring: '#10b981'
-    }
+      // Base colors
+      background: 'oklch(0.22 0.01 56.04)',
+      foreground: 'oklch(0.97 0.00 106.42)',
+      card: 'oklch(0.27 0.01 34.30)',
+      'card-foreground': 'oklch(0.97 0.00 106.42)',
+      popover: 'oklch(0.27 0.01 34.30)',
+      'popover-foreground': 'oklch(0.97 0.00 106.42)',
+
+      // Primary colors
+      primary: 'oklch(0.51 0.19 27.52)',
+      'primary-foreground': 'oklch(0.98 0.00 56.38)',
+
+      // Secondary colors
+      secondary: 'oklch(0.47 0.12 46.20)',
+      'secondary-foreground': 'oklch(0.96 0.06 95.62)',
+
+      // Muted colors
+      muted: 'oklch(0.27 0.01 34.30)',
+      'muted-foreground': 'oklch(0.87 0.00 56.37)',
+
+      // Accent colors
+      accent: 'oklch(0.56 0.15 49.00)',
+      'accent-foreground': 'oklch(0.96 0.06 95.62)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.37 0.01 67.56)',
+      input: 'oklch(0.37 0.01 67.56)',
+      ring: 'oklch(0.51 0.19 27.52)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.71 0.17 22.22)',
+      'chart-2': 'oklch(0.64 0.21 25.33)',
+      'chart-3': 'oklch(0.58 0.22 27.33)',
+      'chart-4': 'oklch(0.84 0.16 84.43)',
+      'chart-5': 'oklch(0.77 0.16 70.08)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.22 0.01 56.04)',
+      'sidebar-foreground': 'oklch(0.97 0.00 106.42)',
+      'sidebar-primary': 'oklch(0.51 0.19 27.52)',
+      'sidebar-primary-foreground': 'oklch(0.98 0.00 56.38)',
+      'sidebar-accent': 'oklch(0.56 0.15 49.00)',
+      'sidebar-accent-foreground': 'oklch(0.96 0.06 95.62)',
+      'sidebar-border': 'oklch(0.37 0.01 67.56)',
+      'sidebar-ring': 'oklch(0.51 0.19 27.52)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.375rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.18 0.189 0)',
+      'shadow-opacity': '0.12',
+      'shadow-blur': '16px',
+      'shadow-spread': '-2px',
+      'shadow-offset-x': '1px',
+      'shadow-offset-y': '1px',
+    },
   },
+
   {
-    id: 'electric-blue',
-    name: 'Electric Blue',
+    id: 'amber-minimal',
+    name: 'Amber Minimal',
     category: 'creative',
     colors: {
-      primary: '#0ea5e9',
-      secondary: '#e0f2fe',
-      accent: '#7dd3fc',
-      background: '#f0f9ff',
-      foreground: '#0c4a6e'
+      primary: 'oklch(0.77 0.16 70.08)',
+      secondary: 'oklch(0.97 0.00 264.54)',
+      accent: 'oklch(0.99 0.02 95.28)',
+      background: 'oklch(1.00 0 0)',
+      foreground: 'oklch(0.27 0 0)',
     },
     lightModeConfig: {
-      background: '#f0f9ff',
-      foreground: '#0c4a6e',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#0ea5e9',
-      'primary-foreground': '#ffffff',
-      secondary: '#e0f2fe',
-      'secondary-foreground': '#0f172a',
-      muted: '#f0f9ff',
-      'muted-foreground': '#64748b',
-      accent: '#7dd3fc',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#bae6fd',
-      input: '#bae6fd',
-      ring: '#0ea5e9'
+      // Base colors
+      background: 'oklch(1.00 0 0)',
+      foreground: 'oklch(0.27 0 0)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.27 0 0)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.27 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.77 0.16 70.08)',
+      'primary-foreground': 'oklch(0 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.97 0.00 264.54)',
+      'secondary-foreground': 'oklch(0.45 0.03 256.80)',
+
+      // Muted colors
+      muted: 'oklch(0.98 0.00 247.84)',
+      'muted-foreground': 'oklch(0.55 0.02 264.36)',
+
+      // Accent colors
+      accent: 'oklch(0.99 0.02 95.28)',
+      'accent-foreground': 'oklch(0.47 0.12 46.20)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.93 0.01 264.53)',
+      input: 'oklch(0.93 0.01 264.53)',
+      ring: 'oklch(0.77 0.16 70.08)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.77 0.16 70.08)',
+      'chart-2': 'oklch(0.67 0.16 58.32)',
+      'chart-3': 'oklch(0.56 0.15 49.00)',
+      'chart-4': 'oklch(0.47 0.12 46.20)',
+      'chart-5': 'oklch(0.41 0.11 45.90)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.98 0.00 247.84)',
+      'sidebar-foreground': 'oklch(0.27 0 0)',
+      'sidebar-primary': 'oklch(0.77 0.16 70.08)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.99 0.02 95.28)',
+      'sidebar-accent-foreground': 'oklch(0.47 0.12 46.20)',
+      'sidebar-border': 'oklch(0.93 0.01 264.53)',
+      'sidebar-ring': 'oklch(0.77 0.16 70.08)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.375rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '8px',
+      'shadow-spread': '-1px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '4px',
     },
     darkModeConfig: {
-      background: '#0c1220',
-      foreground: '#e0f2fe',
-      card: '#1e293b',
-      'card-foreground': '#f8fafc',
-      popover: '#1e293b',
-      'popover-foreground': '#f8fafc',
-      primary: '#0ea5e9',
-      'primary-foreground': '#ffffff',
-      secondary: '#334155',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1e293b',
-      'muted-foreground': '#94a3b8',
-      accent: '#7dd3fc',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#334155',
-      input: '#334155',
-      ring: '#0ea5e9'
-    }
+      // Base colors
+      background: 'oklch(0.20 0 0)',
+      foreground: 'oklch(0.92 0 0)',
+      card: 'oklch(0.27 0 0)',
+      'card-foreground': 'oklch(0.92 0 0)',
+      popover: 'oklch(0.27 0 0)',
+      'popover-foreground': 'oklch(0.92 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.77 0.16 70.08)',
+      'primary-foreground': 'oklch(0 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.27 0 0)',
+      'secondary-foreground': 'oklch(0.92 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.27 0 0)',
+      'muted-foreground': 'oklch(0.72 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.47 0.12 46.20)',
+      'accent-foreground': 'oklch(0.92 0.12 95.75)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.37 0 0)',
+      input: 'oklch(0.37 0 0)',
+      ring: 'oklch(0.77 0.16 70.08)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.84 0.16 84.43)',
+      'chart-2': 'oklch(0.67 0.16 58.32)',
+      'chart-3': 'oklch(0.47 0.12 46.20)',
+      'chart-4': 'oklch(0.56 0.15 49.00)',
+      'chart-5': 'oklch(0.47 0.12 46.20)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.17 0 0)',
+      'sidebar-foreground': 'oklch(0.92 0 0)',
+      'sidebar-primary': 'oklch(0.77 0.16 70.08)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.47 0.12 46.20)',
+      'sidebar-accent-foreground': 'oklch(0.92 0.12 95.75)',
+      'sidebar-border': 'oklch(0.37 0 0)',
+      'sidebar-ring': 'oklch(0.77 0.16 70.08)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.375rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '8px',
+      'shadow-spread': '-1px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '4px',
+    },
   },
+
   {
-    id: 'black-white',
-    name: 'Black & White',
-    category: 'monochrome',
-    colors: {
-      primary: '#000000',
-      secondary: '#f5f5f5',
-      accent: '#d4d4d4',
-      background: '#ffffff',
-      foreground: '#000000'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#000000',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#000000',
-      'primary-foreground': '#ffffff',
-      secondary: '#f5f5f5',
-      'secondary-foreground': '#0f172a',
-      muted: '#f9f9f9',
-      'muted-foreground': '#64748b',
-      accent: '#d4d4d4',
-      'accent-foreground': '#0f172a',
-      destructive: '#dc2626',
-      'destructive-foreground': '#ffffff',
-      border: '#e5e5e5',
-      input: '#e5e5e5',
-      ring: '#000000'
-    },
-    darkModeConfig: {
-      background: '#000000',
-      foreground: '#ffffff',
-      card: '#1a1a1a',
-      'card-foreground': '#f8fafc',
-      popover: '#1a1a1a',
-      'popover-foreground': '#f8fafc',
-      primary: '#ffffff',
-      'primary-foreground': '#000000',
-      secondary: '#262626',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1a1a1a',
-      'muted-foreground': '#94a3b8',
-      accent: '#404040',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#404040',
-      input: '#404040',
-      ring: '#ffffff'
-    }
-  },
-  {
-    id: 'charcoal',
-    name: 'Charcoal',
-    category: 'monochrome',
-    colors: {
-      primary: '#525252',
-      secondary: '#f3f4f6',
-      accent: '#e5e7eb',
-      background: '#fafafa',
-      foreground: '#171717'
-    },
-    lightModeConfig: {
-      background: '#fafafa',
-      foreground: '#171717',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#525252',
-      'primary-foreground': '#ffffff',
-      secondary: '#f3f4f6',
-      'secondary-foreground': '#0f172a',
-      muted: '#f9fafb',
-      'muted-foreground': '#64748b',
-      accent: '#e5e7eb',
-      'accent-foreground': '#0f172a',
-      destructive: '#dc2626',
-      'destructive-foreground': '#ffffff',
-      border: '#d1d5db',
-      input: '#d1d5db',
-      ring: '#525252'
-    },
-    darkModeConfig: {
-      background: '#171717',
-      foreground: '#f3f4f6',
-      card: '#262626',
-      'card-foreground': '#f8fafc',
-      popover: '#262626',
-      'popover-foreground': '#f8fafc',
-      primary: '#737373',
-      'primary-foreground': '#ffffff',
-      secondary: '#404040',
-      'secondary-foreground': '#f8fafc',
-      muted: '#262626',
-      'muted-foreground': '#94a3b8',
-      accent: '#525252',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#525252',
-      input: '#525252',
-      ring: '#737373'
-    }
-  },
-  {
-    id: 'dracula',
-    name: 'Dracula',
-    category: 'specialty',
-    colors: {
-      primary: '#bd93f9',
-      secondary: '#44475a',
-      accent: '#ff79c6',
-      background: '#282a36',
-      foreground: '#f8f8f2'
-    },
-    lightModeConfig: {
-      background: '#f8f8f2',
-      foreground: '#282a36',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#6272a4',
-      'primary-foreground': '#ffffff',
-      secondary: '#f1f1f1',
-      'secondary-foreground': '#0f172a',
-      muted: '#f4f4f4',
-      'muted-foreground': '#64748b',
-      accent: '#bd93f9',
-      'accent-foreground': '#0f172a',
-      destructive: '#ff5555',
-      'destructive-foreground': '#ffffff',
-      border: '#e0e0e0',
-      input: '#e0e0e0',
-      ring: '#6272a4'
-    },
-    darkModeConfig: {
-      background: '#282a36',
-      foreground: '#f8f8f2',
-      card: '#44475a',
-      'card-foreground': '#f8fafc',
-      popover: '#44475a',
-      'popover-foreground': '#f8fafc',
-      primary: '#bd93f9',
-      'primary-foreground': '#ffffff',
-      secondary: '#6272a4',
-      'secondary-foreground': '#f8fafc',
-      muted: '#44475a',
-      'muted-foreground': '#94a3b8',
-      accent: '#ff79c6',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ff5555',
-      'destructive-foreground': '#ffffff',
-      border: '#6272a4',
-      input: '#6272a4',
-      ring: '#bd93f9'
-    }
-  },
-  {
-    id: 'nord',
-    name: 'Nord',
-    category: 'specialty',
-    colors: {
-      primary: '#5e81ac',
-      secondary: '#eceff4',
-      accent: '#88c0d0',
-      background: '#ffffff',
-      foreground: '#2e3440'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#2e3440',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#5e81ac',
-      'primary-foreground': '#ffffff',
-      secondary: '#eceff4',
-      'secondary-foreground': '#0f172a',
-      muted: '#f8f9fa',
-      'muted-foreground': '#64748b',
-      accent: '#88c0d0',
-      'accent-foreground': '#0f172a',
-      destructive: '#bf616a',
-      'destructive-foreground': '#ffffff',
-      border: '#d8dee9',
-      input: '#d8dee9',
-      ring: '#5e81ac'
-    },
-    darkModeConfig: {
-      background: '#2e3440',
-      foreground: '#eceff4',
-      card: '#3b4252',
-      'card-foreground': '#f8fafc',
-      popover: '#3b4252',
-      'popover-foreground': '#f8fafc',
-      primary: '#81a1c1',
-      'primary-foreground': '#ffffff',
-      secondary: '#434c5e',
-      'secondary-foreground': '#f8fafc',
-      muted: '#3b4252',
-      'muted-foreground': '#94a3b8',
-      accent: '#88c0d0',
-      'accent-foreground': '#f8fafc',
-      destructive: '#bf616a',
-      'destructive-foreground': '#ffffff',
-      border: '#434c5e',
-      input: '#434c5e',
-      ring: '#81a1c1'
-    }
-  },
-  {
-    id: 'gruvbox',
-    name: 'Gruvbox',
-    category: 'specialty',
-    colors: {
-      primary: '#fe8019',
-      secondary: '#fbf1c7',
-      accent: '#fabd2f',
-      background: '#fbf1c7',
-      foreground: '#3c3836'
-    },
-    lightModeConfig: {
-      background: '#fbf1c7',
-      foreground: '#3c3836',
-      card: '#f9f5d7',
-      'card-foreground': '#000000',
-      popover: '#f9f5d7',
-      'popover-foreground': '#000000',
-      primary: '#fe8019',
-      'primary-foreground': '#ffffff',
-      secondary: '#ebdbb2',
-      'secondary-foreground': '#0f172a',
-      muted: '#f2e5bc',
-      'muted-foreground': '#64748b',
-      accent: '#fabd2f',
-      'accent-foreground': '#0f172a',
-      destructive: '#cc241d',
-      'destructive-foreground': '#ffffff',
-      border: '#d5c4a1',
-      input: '#d5c4a1',
-      ring: '#fe8019'
-    },
-    darkModeConfig: {
-      background: '#282828',
-      foreground: '#fbf1c7',
-      card: '#3c3836',
-      'card-foreground': '#f8fafc',
-      popover: '#3c3836',
-      'popover-foreground': '#f8fafc',
-      primary: '#fe8019',
-      'primary-foreground': '#ffffff',
-      secondary: '#504945',
-      'secondary-foreground': '#f8fafc',
-      muted: '#3c3836',
-      'muted-foreground': '#94a3b8',
-      accent: '#fabd2f',
-      'accent-foreground': '#f8fafc',
-      destructive: '#fb4934',
-      'destructive-foreground': '#ffffff',
-      border: '#504945',
-      input: '#504945',
-      ring: '#fe8019'
-    }
-  },
-  {
-    id: 'tokyo-night',
-    name: 'Tokyo Night',
-    category: 'specialty',
-    colors: {
-      primary: '#7aa2f7',
-      secondary: '#1a1b26',
-      accent: '#bb9af7',
-      background: '#1a1b26',
-      foreground: '#c0caf5'
-    },
-    lightModeConfig: {
-      background: '#d5d6db',
-      foreground: '#1a1b26',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#3d59a1',
-      'primary-foreground': '#ffffff',
-      secondary: '#e9e9ed',
-      'secondary-foreground': '#0f172a',
-      muted: '#f0f0f4',
-      'muted-foreground': '#64748b',
-      accent: '#8f5cf4',
-      'accent-foreground': '#0f172a',
-      destructive: '#f7768e',
-      'destructive-foreground': '#ffffff',
-      border: '#cbccd1',
-      input: '#cbccd1',
-      ring: '#3d59a1'
-    },
-    darkModeConfig: {
-      background: '#1a1b26',
-      foreground: '#c0caf5',
-      card: '#24283b',
-      'card-foreground': '#f8fafc',
-      popover: '#24283b',
-      'popover-foreground': '#f8fafc',
-      primary: '#7aa2f7',
-      'primary-foreground': '#ffffff',
-      secondary: '#414868',
-      'secondary-foreground': '#f8fafc',
-      muted: '#24283b',
-      'muted-foreground': '#94a3b8',
-      accent: '#bb9af7',
-      'accent-foreground': '#f8fafc',
-      destructive: '#f7768e',
-      'destructive-foreground': '#ffffff',
-      border: '#414868',
-      input: '#414868',
-      ring: '#7aa2f7'
-    }
-  },
-  {
-    id: 'solarized-light',
-    name: 'Solarized Light',
-    category: 'specialty',
-    colors: {
-      primary: '#268bd2',
-      secondary: '#fdf6e3',
-      accent: '#2aa198',
-      background: '#fdf6e3',
-      foreground: '#657b83'
-    },
-    lightModeConfig: {
-      background: '#fdf6e3',
-      foreground: '#657b83',
-      card: '#eee8d5',
-      'card-foreground': '#000000',
-      popover: '#eee8d5',
-      'popover-foreground': '#000000',
-      primary: '#268bd2',
-      'primary-foreground': '#ffffff',
-      secondary: '#eee8d5',
-      'secondary-foreground': '#0f172a',
-      muted: '#93a1a1',
-      'muted-foreground': '#64748b',
-      accent: '#2aa198',
-      'accent-foreground': '#0f172a',
-      destructive: '#dc322f',
-      'destructive-foreground': '#ffffff',
-      border: '#839496',
-      input: '#839496',
-      ring: '#268bd2'
-    },
-    darkModeConfig: {
-      background: '#002b36',
-      foreground: '#839496',
-      card: '#073642',
-      'card-foreground': '#f8fafc',
-      popover: '#073642',
-      'popover-foreground': '#f8fafc',
-      primary: '#268bd2',
-      'primary-foreground': '#ffffff',
-      secondary: '#586e75',
-      'secondary-foreground': '#f8fafc',
-      muted: '#073642',
-      'muted-foreground': '#94a3b8',
-      accent: '#2aa198',
-      'accent-foreground': '#f8fafc',
-      destructive: '#dc322f',
-      'destructive-foreground': '#ffffff',
-      border: '#586e75',
-      input: '#586e75',
-      ring: '#268bd2'
-    }
-  },
-  {
-    id: 'github-light',
-    name: 'GitHub Light',
-    category: 'popular',
-    colors: {
-      primary: '#0969da',
-      secondary: '#f6f8fa',
-      accent: '#dbeafe',
-      background: '#ffffff',
-      foreground: '#24292f'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#24292f',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#0969da',
-      'primary-foreground': '#ffffff',
-      secondary: '#f6f8fa',
-      'secondary-foreground': '#0f172a',
-      muted: '#f6f8fa',
-      'muted-foreground': '#64748b',
-      accent: '#dbeafe',
-      'accent-foreground': '#0f172a',
-      destructive: '#cf222e',
-      'destructive-foreground': '#ffffff',
-      border: '#d0d7de',
-      input: '#d0d7de',
-      ring: '#0969da'
-    },
-    darkModeConfig: {
-      background: '#0d1117',
-      foreground: '#e6edf3',
-      card: '#161b22',
-      'card-foreground': '#f8fafc',
-      popover: '#161b22',
-      'popover-foreground': '#f8fafc',
-      primary: '#2f81f7',
-      'primary-foreground': '#ffffff',
-      secondary: '#21262d',
-      'secondary-foreground': '#f8fafc',
-      muted: '#161b22',
-      'muted-foreground': '#94a3b8',
-      accent: '#1e3a8a',
-      'accent-foreground': '#f8fafc',
-      destructive: '#da3633',
-      'destructive-foreground': '#ffffff',
-      border: '#30363d',
-      input: '#30363d',
-      ring: '#2f81f7'
-    }
-  },
-  {
-    id: 'linear',
-    name: 'Linear',
-    category: 'popular',
-    colors: {
-      primary: '#5e6ad2',
-      secondary: '#f6f6f7',
-      accent: '#e4e4e7',
-      background: '#fafafa',
-      foreground: '#0d0e10'
-    },
-    lightModeConfig: {
-      background: '#fafafa',
-      foreground: '#0d0e10',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#5e6ad2',
-      'primary-foreground': '#ffffff',
-      secondary: '#f6f6f7',
-      'secondary-foreground': '#0f172a',
-      muted: '#f1f1f3',
-      'muted-foreground': '#64748b',
-      accent: '#e4e4e7',
-      'accent-foreground': '#0f172a',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#e4e4e7',
-      input: '#e4e4e7',
-      ring: '#5e6ad2'
-    },
-    darkModeConfig: {
-      background: '#0d0e10',
-      foreground: '#f6f6f7',
-      card: '#1a1b1e',
-      'card-foreground': '#f8fafc',
-      popover: '#1a1b1e',
-      'popover-foreground': '#f8fafc',
-      primary: '#8b93ff',
-      'primary-foreground': '#ffffff',
-      secondary: '#27282c',
-      'secondary-foreground': '#f8fafc',
-      muted: '#1a1b1e',
-      'muted-foreground': '#94a3b8',
-      accent: '#333438',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
-      border: '#333438',
-      input: '#333438',
-      ring: '#8b93ff'
-    }
-  },
-  {
-    id: 'notion',
-    name: 'Notion',
-    category: 'popular',
-    colors: {
-      primary: '#2eaadc',
-      secondary: '#f7f6f3',
-      accent: '#e9e5e0',
-      background: '#ffffff',
-      foreground: '#37352f'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#37352f',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#2eaadc',
-      'primary-foreground': '#ffffff',
-      secondary: '#f7f6f3',
-      'secondary-foreground': '#0f172a',
-      muted: '#f1f1ef',
-      'muted-foreground': '#64748b',
-      accent: '#e9e5e0',
-      'accent-foreground': '#0f172a',
-      destructive: '#eb5147',
-      'destructive-foreground': '#ffffff',
-      border: '#e9e5e0',
-      input: '#e9e5e0',
-      ring: '#2eaadc'
-    },
-    darkModeConfig: {
-      background: '#191919',
-      foreground: '#f7f6f3',
-      card: '#2f2f2f',
-      'card-foreground': '#f8fafc',
-      popover: '#2f2f2f',
-      'popover-foreground': '#f8fafc',
-      primary: '#2eaadc',
-      'primary-foreground': '#ffffff',
-      secondary: '#3f3f3f',
-      'secondary-foreground': '#f8fafc',
-      muted: '#2f2f2f',
-      'muted-foreground': '#94a3b8',
-      accent: '#454545',
-      'accent-foreground': '#f8fafc',
-      destructive: '#eb5147',
-      'destructive-foreground': '#ffffff',
-      border: '#454545',
-      input: '#454545',
-      ring: '#2eaadc'
-    }
-  },
-  {
-    id: 'discord',
-    name: 'Discord',
-    category: 'popular',
-    colors: {
-      primary: '#5865f2',
-      secondary: '#f2f3f5',
-      accent: '#e3e5e8',
-      background: '#ffffff',
-      foreground: '#2e3338'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#2e3338',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#5865f2',
-      'primary-foreground': '#ffffff',
-      secondary: '#f2f3f5',
-      'secondary-foreground': '#0f172a',
-      muted: '#f9f9f9',
-      'muted-foreground': '#64748b',
-      accent: '#e3e5e8',
-      'accent-foreground': '#0f172a',
-      destructive: '#ed4245',
-      'destructive-foreground': '#ffffff',
-      border: '#e3e5e8',
-      input: '#e3e5e8',
-      ring: '#5865f2'
-    },
-    darkModeConfig: {
-      background: '#313338',
-      foreground: '#f2f3f5',
-      card: '#2b2d31',
-      'card-foreground': '#f8fafc',
-      popover: '#2b2d31',
-      'popover-foreground': '#f8fafc',
-      primary: '#5865f2',
-      'primary-foreground': '#ffffff',
-      secondary: '#4e5058',
-      'secondary-foreground': '#f8fafc',
-      muted: '#2b2d31',
-      'muted-foreground': '#94a3b8',
-      accent: '#404249',
-      'accent-foreground': '#f8fafc',
-      destructive: '#ed4245',
-      'destructive-foreground': '#ffffff',
-      border: '#404249',
-      input: '#404249',
-      ring: '#5865f2'
-    }
-  },
-  {
-    id: 'spotify',
-    name: 'Spotify',
-    category: 'popular',
-    colors: {
-      primary: '#1db954',
-      secondary: '#f6f6f6',
-      accent: '#e8f5e8',
-      background: '#ffffff',
-      foreground: '#191414'
-    },
-    lightModeConfig: {
-      background: '#ffffff',
-      foreground: '#191414',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#1db954',
-      'primary-foreground': '#ffffff',
-      secondary: '#f6f6f6',
-      'secondary-foreground': '#0f172a',
-      muted: '#f8f8f8',
-      'muted-foreground': '#64748b',
-      accent: '#e8f5e8',
-      'accent-foreground': '#0f172a',
-      destructive: '#e22134',
-      'destructive-foreground': '#ffffff',
-      border: '#e0e0e0',
-      input: '#e0e0e0',
-      ring: '#1db954'
-    },
-    darkModeConfig: {
-      background: '#191414',
-      foreground: '#ffffff',
-      card: '#282828',
-      'card-foreground': '#f8fafc',
-      popover: '#282828',
-      'popover-foreground': '#f8fafc',
-      primary: '#1db954',
-      'primary-foreground': '#ffffff',
-      secondary: '#404040',
-      'secondary-foreground': '#f8fafc',
-      muted: '#282828',
-      'muted-foreground': '#94a3b8',
-      accent: '#535353',
-      'accent-foreground': '#f8fafc',
-      destructive: '#e22134',
-      'destructive-foreground': '#ffffff',
-      border: '#535353',
-      input: '#535353',
-      ring: '#1db954'
-    }
-  },
-  {
-    id: 'orange-sunset',
-    name: 'Orange Sunset',
-    category: 'nature',
-    colors: {
-      primary: '#fb923c',
-      secondary: '#fed7aa',
-      accent: '#f97316',
-      background: '#fff7ed',
-      foreground: '#9a3412'
-    },
-    lightModeConfig: {
-      background: '#fff7ed',
-      foreground: '#9a3412',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#fb923c',
-      'primary-foreground': '#ffffff',
-      secondary: '#fed7aa',
-      'secondary-foreground': '#0f172a',
-      muted: '#ffedd5',
-      'muted-foreground': '#64748b',
-      accent: '#f97316',
-      'accent-foreground': '#0f172a',
-      destructive: '#dc2626',
-      'destructive-foreground': '#ffffff',
-      border: '#fdba74',
-      input: '#fdba74',
-      ring: '#fb923c'
-    },
-    darkModeConfig: {
-      background: '#431407',
-      foreground: '#fed7aa',
-      card: '#7c2d12',
-      'card-foreground': '#f8fafc',
-      popover: '#7c2d12',
-      'popover-foreground': '#f8fafc',
-      primary: '#fb923c',
-      'primary-foreground': '#ffffff',
-      secondary: '#9a3412',
-      'secondary-foreground': '#f8fafc',
-      muted: '#7c2d12',
-      'muted-foreground': '#94a3b8',
-      accent: '#f97316',
-      'accent-foreground': '#f8fafc',
-      destructive: '#dc2626',
-      'destructive-foreground': '#ffffff',
-      border: '#9a3412',
-      input: '#9a3412',
-      ring: '#fb923c'
-    }
-  },
-  {
-    id: 'purple-haze',
-    name: 'Purple Haze',
+    id: 'solar-dusk',
+    name: 'Solar Dusk',
     category: 'creative',
     colors: {
-      primary: '#a855f7',
-      secondary: '#f3e8ff',
-      accent: '#c084fc',
-      background: '#faf5ff',
-      foreground: '#581c87'
+      primary: 'oklch(0.56 0.15 49.00)',
+      secondary: 'oklch(0.83 0.08 74.44)',
+      accent: 'oklch(0.90 0.05 74.99)',
+      background: 'oklch(0.99 0.01 84.57)',
+      foreground: 'oklch(0.37 0.03 49.61)',
     },
     lightModeConfig: {
-      background: '#faf5ff',
-      foreground: '#581c87',
-      card: '#ffffff',
-      'card-foreground': '#000000',
-      popover: '#ffffff',
-      'popover-foreground': '#000000',
-      primary: '#a855f7',
-      'primary-foreground': '#ffffff',
-      secondary: '#f3e8ff',
-      'secondary-foreground': '#0f172a',
-      muted: '#f5f3ff',
-      'muted-foreground': '#64748b',
-      accent: '#c084fc',
-      'accent-foreground': '#0f172a',
-      destructive: '#dc2626',
-      'destructive-foreground': '#ffffff',
-      border: '#e9d5ff',
-      input: '#e9d5ff',
-      ring: '#a855f7'
+      // Base colors
+      background: 'oklch(0.99 0.01 84.57)',
+      foreground: 'oklch(0.37 0.03 49.61)',
+      card: 'oklch(0.97 0.01 78.28)',
+      'card-foreground': 'oklch(0.37 0.03 49.61)',
+      popover: 'oklch(0.97 0.01 78.28)',
+      'popover-foreground': 'oklch(0.37 0.03 49.61)',
+
+      // Primary colors
+      primary: 'oklch(0.56 0.15 49.00)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.83 0.08 74.44)',
+      'secondary-foreground': 'oklch(0.44 0.01 73.64)',
+
+      // Muted colors
+      muted: 'oklch(0.94 0.02 83.26)',
+      'muted-foreground': 'oklch(0.55 0.01 58.07)',
+
+      // Accent colors
+      accent: 'oklch(0.90 0.05 74.99)',
+      'accent-foreground': 'oklch(0.44 0.01 73.64)',
+
+      // Destructive colors
+      destructive: 'oklch(0.44 0.16 26.90)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.89 0.04 89.70)',
+      input: 'oklch(0.89 0.04 89.70)',
+      ring: 'oklch(0.56 0.15 49.00)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.56 0.15 49.00)',
+      'chart-2': 'oklch(0.55 0.01 58.07)',
+      'chart-3': 'oklch(0.55 0.12 66.44)',
+      'chart-4': 'oklch(0.55 0.01 58.07)',
+      'chart-5': 'oklch(0.68 0.14 75.83)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.94 0.02 83.26)',
+      'sidebar-foreground': 'oklch(0.37 0.03 49.61)',
+      'sidebar-primary': 'oklch(0.56 0.15 49.00)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.55 0.12 66.44)',
+      'sidebar-accent-foreground': 'oklch(1.00 0 0)',
+      'sidebar-border': 'oklch(0.89 0.04 89.70)',
+      'sidebar-ring': 'oklch(0.56 0.15 49.00)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.3rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.25 0.054 28)',
+      'shadow-opacity': '0.18',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '2px',
     },
     darkModeConfig: {
-      background: '#581c87',
-      foreground: '#f3e8ff',
-      card: '#7c3aed',
-      'card-foreground': '#f8fafc',
-      popover: '#7c3aed',
-      'popover-foreground': '#f8fafc',
-      primary: '#a855f7',
-      'primary-foreground': '#ffffff',
-      secondary: '#8b5cf6',
-      'secondary-foreground': '#f8fafc',
-      muted: '#7c3aed',
-      'muted-foreground': '#94a3b8',
-      accent: '#c084fc',
-      'accent-foreground': '#f8fafc',
-      destructive: '#dc2626',
-      'destructive-foreground': '#ffffff',
-      border: '#8b5cf6',
-      input: '#8b5cf6',
-      ring: '#a855f7'
-    }
+      // Base colors
+      background: 'oklch(0.22 0.01 56.04)',
+      foreground: 'oklch(0.97 0.00 106.42)',
+      card: 'oklch(0.27 0.01 34.30)',
+      'card-foreground': 'oklch(0.97 0.00 106.42)',
+      popover: 'oklch(0.27 0.01 34.30)',
+      'popover-foreground': 'oklch(0.97 0.00 106.42)',
+
+      // Primary colors
+      primary: 'oklch(0.70 0.19 47.60)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.44 0.01 73.64)',
+      'secondary-foreground': 'oklch(0.92 0.00 48.72)',
+
+      // Muted colors
+      muted: 'oklch(0.27 0.01 34.30)',
+      'muted-foreground': 'oklch(0.72 0.01 56.26)',
+
+      // Accent colors
+      accent: 'oklch(0.36 0.05 229.32)',
+      'accent-foreground': 'oklch(0.92 0.00 48.72)',
+
+      // Destructive colors
+      destructive: 'oklch(0.58 0.22 27.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.37 0.01 67.56)',
+      input: 'oklch(0.37 0.01 67.56)',
+      ring: 'oklch(0.70 0.19 47.60)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.70 0.19 47.60)',
+      'chart-2': 'oklch(0.68 0.15 237.32)',
+      'chart-3': 'oklch(0.80 0.16 86.05)',
+      'chart-4': 'oklch(0.72 0.01 56.26)',
+      'chart-5': 'oklch(0.55 0.01 58.07)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.27 0.01 34.30)',
+      'sidebar-foreground': 'oklch(0.97 0.00 106.42)',
+      'sidebar-primary': 'oklch(0.70 0.19 47.60)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.68 0.15 237.32)',
+      'sidebar-accent-foreground': 'oklch(0.28 0.07 254.54)',
+      'sidebar-border': 'oklch(0.37 0.01 67.56)',
+      'sidebar-ring': 'oklch(0.70 0.19 47.60)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.3rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.05 0.000 0)',
+      'shadow-opacity': '0.18',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '2px',
+    },
+  },
+
+  {
+    id: 'claymorphism',
+    name: 'Claymorphism',
+    category: 'creative',
+    colors: {
+      primary: 'oklch(0.59 0.20 277.12)',
+      secondary: 'oklch(0.87 0.00 56.37)',
+      accent: 'oklch(0.94 0.03 321.94)',
+      background: 'oklch(0.92 0.00 48.72)',
+      foreground: 'oklch(0.28 0.04 260.03)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.92 0.00 48.72)',
+      foreground: 'oklch(0.28 0.04 260.03)',
+      card: 'oklch(0.97 0.00 106.42)',
+      'card-foreground': 'oklch(0.28 0.04 260.03)',
+      popover: 'oklch(0.97 0.00 106.42)',
+      'popover-foreground': 'oklch(0.28 0.04 260.03)',
+
+      // Primary colors
+      primary: 'oklch(0.59 0.20 277.12)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.87 0.00 56.37)',
+      'secondary-foreground': 'oklch(0.45 0.03 256.80)',
+
+      // Muted colors
+      muted: 'oklch(0.92 0.00 48.72)',
+      'muted-foreground': 'oklch(0.55 0.02 264.36)',
+
+      // Accent colors
+      accent: 'oklch(0.94 0.03 321.94)',
+      'accent-foreground': 'oklch(0.37 0.03 259.73)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.87 0.00 56.37)',
+      input: 'oklch(0.87 0.00 56.37)',
+      ring: 'oklch(0.59 0.20 277.12)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.59 0.20 277.12)',
+      'chart-2': 'oklch(0.51 0.23 276.97)',
+      'chart-3': 'oklch(0.46 0.21 277.02)',
+      'chart-4': 'oklch(0.40 0.18 277.37)',
+      'chart-5': 'oklch(0.36 0.14 278.70)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.87 0.00 56.37)',
+      'sidebar-foreground': 'oklch(0.28 0.04 260.03)',
+      'sidebar-primary': 'oklch(0.59 0.20 277.12)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.94 0.03 321.94)',
+      'sidebar-accent-foreground': 'oklch(0.37 0.03 259.73)',
+      'sidebar-border': 'oklch(0.87 0.00 56.37)',
+      'sidebar-ring': 'oklch(0.59 0.20 277.12)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '1.25rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.60 0.012 240)',
+      'shadow-opacity': '0.18',
+      'shadow-blur': '10px',
+      'shadow-spread': '4px',
+      'shadow-offset-x': '2px',
+      'shadow-offset-y': '2px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.22 0.01 67.44)',
+      foreground: 'oklch(0.93 0.01 255.51)',
+      card: 'oklch(0.28 0.01 59.34)',
+      'card-foreground': 'oklch(0.93 0.01 255.51)',
+      popover: 'oklch(0.28 0.01 59.34)',
+      'popover-foreground': 'oklch(0.93 0.01 255.51)',
+
+      // Primary colors
+      primary: 'oklch(0.68 0.16 276.93)',
+      'primary-foreground': 'oklch(0.22 0.01 67.44)',
+
+      // Secondary colors
+      secondary: 'oklch(0.34 0.01 59.42)',
+      'secondary-foreground': 'oklch(0.87 0.01 258.34)',
+
+      // Muted colors
+      muted: 'oklch(0.28 0.01 59.34)',
+      'muted-foreground': 'oklch(0.71 0.02 261.32)',
+
+      // Accent colors
+      accent: 'oklch(0.39 0.01 59.47)',
+      'accent-foreground': 'oklch(0.87 0.01 258.34)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(0.22 0.01 67.44)',
+
+      // Border and input
+      border: 'oklch(0.34 0.01 59.42)',
+      input: 'oklch(0.34 0.01 59.42)',
+      ring: 'oklch(0.68 0.16 276.93)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.68 0.16 276.93)',
+      'chart-2': 'oklch(0.59 0.20 277.12)',
+      'chart-3': 'oklch(0.51 0.23 276.97)',
+      'chart-4': 'oklch(0.46 0.21 277.02)',
+      'chart-5': 'oklch(0.40 0.18 277.37)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.34 0.01 59.42)',
+      'sidebar-foreground': 'oklch(0.93 0.01 255.51)',
+      'sidebar-primary': 'oklch(0.68 0.16 276.93)',
+      'sidebar-primary-foreground': 'oklch(0.22 0.01 67.44)',
+      'sidebar-accent': 'oklch(0.39 0.01 59.47)',
+      'sidebar-accent-foreground': 'oklch(0.87 0.01 258.34)',
+      'sidebar-border': 'oklch(0.34 0.01 59.42)',
+      'sidebar-ring': 'oklch(0.68 0.16 276.93)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '1.25rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.18',
+      'shadow-blur': '10px',
+      'shadow-spread': '4px',
+      'shadow-offset-x': '2px',
+      'shadow-offset-y': '2px',
+    },
+  },
+
+  {
+    id: 'pastel-dreams',
+    name: 'Pastel Dreams',
+    category: 'creative',
+    colors: {
+      primary: 'oklch(0.71 0.16 293.54)',
+      secondary: 'oklch(0.91 0.05 306.09)',
+      accent: 'oklch(0.94 0.03 321.94)',
+      background: 'oklch(0.97 0.01 314.78)',
+      foreground: 'oklch(0.37 0.03 259.73)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.97 0.01 314.78)',
+      foreground: 'oklch(0.37 0.03 259.73)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.37 0.03 259.73)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.37 0.03 259.73)',
+
+      // Primary colors
+      primary: 'oklch(0.71 0.16 293.54)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.91 0.05 306.09)',
+      'secondary-foreground': 'oklch(0.45 0.03 256.80)',
+
+      // Muted colors
+      muted: 'oklch(0.95 0.03 307.17)',
+      'muted-foreground': 'oklch(0.55 0.02 264.36)',
+
+      // Accent colors
+      accent: 'oklch(0.94 0.03 321.94)',
+      'accent-foreground': 'oklch(0.37 0.03 259.73)',
+
+      // Destructive colors
+      destructive: 'oklch(0.81 0.10 19.57)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.91 0.05 306.09)',
+      input: 'oklch(0.91 0.05 306.09)',
+      ring: 'oklch(0.71 0.16 293.54)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.71 0.16 293.54)',
+      'chart-2': 'oklch(0.61 0.22 292.72)',
+      'chart-3': 'oklch(0.54 0.25 293.01)',
+      'chart-4': 'oklch(0.49 0.24 292.58)',
+      'chart-5': 'oklch(0.43 0.21 292.76)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.91 0.05 306.09)',
+      'sidebar-foreground': 'oklch(0.37 0.03 259.73)',
+      'sidebar-primary': 'oklch(0.71 0.16 293.54)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.94 0.03 321.94)',
+      'sidebar-accent-foreground': 'oklch(0.37 0.03 259.73)',
+      'sidebar-border': 'oklch(0.91 0.05 306.09)',
+      'sidebar-ring': 'oklch(0.71 0.16 293.54)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '1.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.08',
+      'shadow-blur': '16px',
+      'shadow-spread': '-4px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '8px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.22 0.01 56.04)',
+      foreground: 'oklch(0.93 0.03 272.79)',
+      card: 'oklch(0.28 0.03 307.23)',
+      'card-foreground': 'oklch(0.93 0.03 272.79)',
+      popover: 'oklch(0.28 0.03 307.23)',
+      'popover-foreground': 'oklch(0.93 0.03 272.79)',
+
+      // Primary colors
+      primary: 'oklch(0.79 0.12 295.75)',
+      'primary-foreground': 'oklch(0.22 0.01 56.04)',
+
+      // Secondary colors
+      secondary: 'oklch(0.34 0.04 308.85)',
+      'secondary-foreground': 'oklch(0.87 0.01 258.34)',
+
+      // Muted colors
+      muted: 'oklch(0.28 0.03 307.23)',
+      'muted-foreground': 'oklch(0.71 0.02 261.32)',
+
+      // Accent colors
+      accent: 'oklch(0.39 0.05 304.64)',
+      'accent-foreground': 'oklch(0.87 0.01 258.34)',
+
+      // Destructive colors
+      destructive: 'oklch(0.81 0.10 19.57)',
+      'destructive-foreground': 'oklch(0.22 0.01 56.04)',
+
+      // Border and input
+      border: 'oklch(0.34 0.04 308.85)',
+      input: 'oklch(0.34 0.04 308.85)',
+      ring: 'oklch(0.79 0.12 295.75)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.79 0.12 295.75)',
+      'chart-2': 'oklch(0.71 0.16 293.54)',
+      'chart-3': 'oklch(0.61 0.22 292.72)',
+      'chart-4': 'oklch(0.54 0.25 293.01)',
+      'chart-5': 'oklch(0.49 0.24 292.58)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.34 0.04 308.85)',
+      'sidebar-foreground': 'oklch(0.93 0.03 272.79)',
+      'sidebar-primary': 'oklch(0.79 0.12 295.75)',
+      'sidebar-primary-foreground': 'oklch(0.22 0.01 56.04)',
+      'sidebar-accent': 'oklch(0.39 0.05 304.64)',
+      'sidebar-accent-foreground': 'oklch(0.87 0.01 258.34)',
+      'sidebar-border': 'oklch(0.34 0.04 308.85)',
+      'sidebar-ring': 'oklch(0.79 0.12 295.75)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '1.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.08',
+      'shadow-blur': '16px',
+      'shadow-spread': '-4px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '8px',
+    },
+  },
+
+  {
+    id: 'clean-slate',
+    name: 'Clean Slate',
+    category: 'specialty',
+    colors: {
+      primary: 'oklch(0.59 0.20 277.12)',
+      secondary: 'oklch(0.93 0.01 264.53)',
+      accent: 'oklch(0.93 0.03 272.79)',
+      background: 'oklch(0.98 0.00 247.86)',
+      foreground: 'oklch(0.28 0.04 260.03)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.98 0.00 247.86)',
+      foreground: 'oklch(0.28 0.04 260.03)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.28 0.04 260.03)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.28 0.04 260.03)',
+
+      // Primary colors
+      primary: 'oklch(0.59 0.20 277.12)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.93 0.01 264.53)',
+      'secondary-foreground': 'oklch(0.37 0.03 259.73)',
+
+      // Muted colors
+      muted: 'oklch(0.97 0.00 264.54)',
+      'muted-foreground': 'oklch(0.55 0.02 264.36)',
+
+      // Accent colors
+      accent: 'oklch(0.93 0.03 272.79)',
+      'accent-foreground': 'oklch(0.37 0.03 259.73)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.87 0.01 258.34)',
+      input: 'oklch(0.87 0.01 258.34)',
+      ring: 'oklch(0.59 0.20 277.12)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.59 0.20 277.12)',
+      'chart-2': 'oklch(0.51 0.23 276.97)',
+      'chart-3': 'oklch(0.46 0.21 277.02)',
+      'chart-4': 'oklch(0.40 0.18 277.37)',
+      'chart-5': 'oklch(0.36 0.14 278.70)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.97 0.00 264.54)',
+      'sidebar-foreground': 'oklch(0.28 0.04 260.03)',
+      'sidebar-primary': 'oklch(0.59 0.20 277.12)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.93 0.03 272.79)',
+      'sidebar-accent-foreground': 'oklch(0.37 0.03 259.73)',
+      'sidebar-border': 'oklch(0.87 0.01 258.34)',
+      'sidebar-ring': 'oklch(0.59 0.20 277.12)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '8px',
+      'shadow-spread': '-1px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '4px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.21 0.04 265.75)',
+      foreground: 'oklch(0.93 0.01 255.51)',
+      card: 'oklch(0.28 0.04 260.03)',
+      'card-foreground': 'oklch(0.93 0.01 255.51)',
+      popover: 'oklch(0.28 0.04 260.03)',
+      'popover-foreground': 'oklch(0.93 0.01 255.51)',
+
+      // Primary colors
+      primary: 'oklch(0.68 0.16 276.93)',
+      'primary-foreground': 'oklch(0.21 0.04 265.75)',
+
+      // Secondary colors
+      secondary: 'oklch(0.34 0.03 260.91)',
+      'secondary-foreground': 'oklch(0.87 0.01 258.34)',
+
+      // Muted colors
+      muted: 'oklch(0.28 0.04 260.03)',
+      'muted-foreground': 'oklch(0.71 0.02 261.32)',
+
+      // Accent colors
+      accent: 'oklch(0.37 0.03 259.73)',
+      'accent-foreground': 'oklch(0.87 0.01 258.34)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(0.21 0.04 265.75)',
+
+      // Border and input
+      border: 'oklch(0.45 0.03 256.80)',
+      input: 'oklch(0.45 0.03 256.80)',
+      ring: 'oklch(0.68 0.16 276.93)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.68 0.16 276.93)',
+      'chart-2': 'oklch(0.59 0.20 277.12)',
+      'chart-3': 'oklch(0.51 0.23 276.97)',
+      'chart-4': 'oklch(0.46 0.21 277.02)',
+      'chart-5': 'oklch(0.40 0.18 277.37)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.28 0.04 260.03)',
+      'sidebar-foreground': 'oklch(0.93 0.01 255.51)',
+      'sidebar-primary': 'oklch(0.68 0.16 276.93)',
+      'sidebar-primary-foreground': 'oklch(0.21 0.04 265.75)',
+      'sidebar-accent': 'oklch(0.37 0.03 259.73)',
+      'sidebar-accent-foreground': 'oklch(0.87 0.01 258.34)',
+      'sidebar-border': 'oklch(0.45 0.03 256.80)',
+      'sidebar-ring': 'oklch(0.68 0.16 276.93)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '8px',
+      'shadow-spread': '-1px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '4px',
+    },
+  },
+
+  {
+    id: 'caffeine',
+    name: 'Caffeine',
+    category: 'specialty',
+    colors: {
+      primary: 'oklch(0.43 0.04 41.99)',
+      secondary: 'oklch(0.92 0.07 74.37)',
+      accent: 'oklch(0.93 0 0)',
+      background: 'oklch(0.98 0 0)',
+      foreground: 'oklch(0.24 0 0)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.98 0 0)',
+      foreground: 'oklch(0.24 0 0)',
+      card: 'oklch(0.99 0 0)',
+      'card-foreground': 'oklch(0.24 0 0)',
+      popover: 'oklch(0.99 0 0)',
+      'popover-foreground': 'oklch(0.24 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.43 0.04 41.99)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.92 0.07 74.37)',
+      'secondary-foreground': 'oklch(0.35 0.07 40.83)',
+
+      // Muted colors
+      muted: 'oklch(0.95 0 0)',
+      'muted-foreground': 'oklch(0.50 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.93 0 0)',
+      'accent-foreground': 'oklch(0.24 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.63 0.19 33.34)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.88 0 0)',
+      input: 'oklch(0.88 0 0)',
+      ring: 'oklch(0.43 0.04 41.99)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.43 0.04 41.99)',
+      'chart-2': 'oklch(0.92 0.07 74.37)',
+      'chart-3': 'oklch(0.93 0 0)',
+      'chart-4': 'oklch(0.94 0.05 75.50)',
+      'chart-5': 'oklch(0.43 0.04 41.67)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.99 0 0)',
+      'sidebar-foreground': 'oklch(0.26 0 0)',
+      'sidebar-primary': 'oklch(0.33 0 0)',
+      'sidebar-primary-foreground': 'oklch(0.99 0 0)',
+      'sidebar-accent': 'oklch(0.98 0 0)',
+      'sidebar-accent-foreground': 'oklch(0.33 0 0)',
+      'sidebar-border': 'oklch(0.94 0 0)',
+      'sidebar-ring': 'oklch(0.77 0 0)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.18 0 0)',
+      foreground: 'oklch(0.95 0 0)',
+      card: 'oklch(0.21 0 0)',
+      'card-foreground': 'oklch(0.95 0 0)',
+      popover: 'oklch(0.21 0 0)',
+      'popover-foreground': 'oklch(0.95 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.92 0.05 66.17)',
+      'primary-foreground': 'oklch(0.20 0.02 200.20)',
+
+      // Secondary colors
+      secondary: 'oklch(0.32 0.02 63.70)',
+      'secondary-foreground': 'oklch(0.92 0.05 66.17)',
+
+      // Muted colors
+      muted: 'oklch(0.25 0 0)',
+      'muted-foreground': 'oklch(0.77 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.29 0 0)',
+      'accent-foreground': 'oklch(0.95 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.63 0.19 33.34)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.24 0.01 91.75)',
+      input: 'oklch(0.40 0 0)',
+      ring: 'oklch(0.92 0.05 66.17)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.92 0.05 66.17)',
+      'chart-2': 'oklch(0.32 0.02 63.70)',
+      'chart-3': 'oklch(0.29 0 0)',
+      'chart-4': 'oklch(0.35 0.02 67.00)',
+      'chart-5': 'oklch(0.92 0.05 67.09)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.21 0.01 285.89)',
+      'sidebar-foreground': 'oklch(0.97 0.00 286.38)',
+      'sidebar-primary': 'oklch(0.49 0.22 264.38)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.27 0.01 286.03)',
+      'sidebar-accent-foreground': 'oklch(0.97 0.00 286.38)',
+      'sidebar-border': 'oklch(0.27 0.01 286.03)',
+      'sidebar-ring': 'oklch(0.87 0.01 286.29)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
+  },
+
+  {
+    id: 'midnight-bloom',
+    name: 'Midnight Bloom',
+    category: 'creative',
+    colors: {
+      primary: 'oklch(0.57 0.20 283.08)',
+      secondary: 'oklch(0.82 0.07 249.35)',
+      accent: 'oklch(0.65 0.06 117.43)',
+      background: 'oklch(0.98 0 0)',
+      foreground: 'oklch(0.32 0 0)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.98 0 0)',
+      foreground: 'oklch(0.32 0 0)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.32 0 0)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.32 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.57 0.20 283.08)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.82 0.07 249.35)',
+      'secondary-foreground': 'oklch(0.32 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.82 0.02 91.62)',
+      'muted-foreground': 'oklch(0.54 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.65 0.06 117.43)',
+      'accent-foreground': 'oklch(1.00 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.87 0 0)',
+      input: 'oklch(0.87 0 0)',
+      ring: 'oklch(0.57 0.20 283.08)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.57 0.20 283.08)',
+      'chart-2': 'oklch(0.53 0.17 314.65)',
+      'chart-3': 'oklch(0.34 0.18 301.68)',
+      'chart-4': 'oklch(0.67 0.14 261.34)',
+      'chart-5': 'oklch(0.59 0.10 245.74)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.98 0 0)',
+      'sidebar-foreground': 'oklch(0.32 0 0)',
+      'sidebar-primary': 'oklch(0.57 0.20 283.08)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.65 0.06 117.43)',
+      'sidebar-accent-foreground': 'oklch(1.00 0 0)',
+      'sidebar-border': 'oklch(0.87 0 0)',
+      'sidebar-ring': 'oklch(0.57 0.20 283.08)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '10px',
+      'shadow-spread': '-2px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '5px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.23 0.01 264.29)',
+      foreground: 'oklch(0.92 0 0)',
+      card: 'oklch(0.32 0.01 223.67)',
+      'card-foreground': 'oklch(0.92 0 0)',
+      popover: 'oklch(0.32 0.01 223.67)',
+      'popover-foreground': 'oklch(0.92 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.57 0.20 283.08)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.34 0.18 301.68)',
+      'secondary-foreground': 'oklch(0.92 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.39 0 0)',
+      'muted-foreground': 'oklch(0.72 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.67 0.14 261.34)',
+      'accent-foreground': 'oklch(0.92 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.39 0 0)',
+      input: 'oklch(0.39 0 0)',
+      ring: 'oklch(0.57 0.20 283.08)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.57 0.20 283.08)',
+      'chart-2': 'oklch(0.53 0.17 314.65)',
+      'chart-3': 'oklch(0.34 0.18 301.68)',
+      'chart-4': 'oklch(0.67 0.14 261.34)',
+      'chart-5': 'oklch(0.59 0.10 245.74)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.23 0.01 264.29)',
+      'sidebar-foreground': 'oklch(0.92 0 0)',
+      'sidebar-primary': 'oklch(0.57 0.20 283.08)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.67 0.14 261.34)',
+      'sidebar-accent-foreground': 'oklch(0.92 0 0)',
+      'sidebar-border': 'oklch(0.39 0 0)',
+      'sidebar-ring': 'oklch(0.57 0.20 283.08)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '10px',
+      'shadow-spread': '-2px',
+      'shadow-offset-x': '0px',
+      'shadow-offset-y': '5px',
+    },
+  },
+
+  {
+    id: 'candyland',
+    name: 'Candyland',
+    category: 'creative',
+    colors: {
+      primary: 'oklch(0.87 0.07 7.09)',
+      secondary: 'oklch(0.81 0.08 225.75)',
+      accent: 'oklch(0.97 0.21 109.77)',
+      background: 'oklch(0.98 0.00 228.78)',
+      foreground: 'oklch(0.32 0 0)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.98 0.00 228.78)',
+      foreground: 'oklch(0.32 0 0)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.32 0 0)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.32 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.87 0.07 7.09)',
+      'primary-foreground': 'oklch(0 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.81 0.08 225.75)',
+      'secondary-foreground': 'oklch(0 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.88 0.03 98.10)',
+      'muted-foreground': 'oklch(0.54 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.97 0.21 109.77)',
+      'accent-foreground': 'oklch(0 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.87 0 0)',
+      input: 'oklch(0.87 0 0)',
+      ring: 'oklch(0.87 0.07 7.09)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.87 0.07 7.09)',
+      'chart-2': 'oklch(0.81 0.08 225.75)',
+      'chart-3': 'oklch(0.97 0.21 109.77)',
+      'chart-4': 'oklch(0.80 0.14 349.23)',
+      'chart-5': 'oklch(0.74 0.23 142.85)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.98 0.00 228.78)',
+      'sidebar-foreground': 'oklch(0.32 0 0)',
+      'sidebar-primary': 'oklch(0.87 0.07 7.09)',
+      'sidebar-primary-foreground': 'oklch(0 0 0)',
+      'sidebar-accent': 'oklch(0.97 0.21 109.77)',
+      'sidebar-accent-foreground': 'oklch(0 0 0)',
+      'sidebar-border': 'oklch(0.87 0 0)',
+      'sidebar-ring': 'oklch(0.87 0.07 7.09)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.23 0.01 264.29)',
+      foreground: 'oklch(0.92 0 0)',
+      card: 'oklch(0.32 0.01 223.67)',
+      'card-foreground': 'oklch(0.92 0 0)',
+      popover: 'oklch(0.32 0.01 223.67)',
+      'popover-foreground': 'oklch(0.92 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.80 0.14 349.23)',
+      'primary-foreground': 'oklch(0 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.74 0.23 142.85)',
+      'secondary-foreground': 'oklch(0 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.39 0 0)',
+      'muted-foreground': 'oklch(0.72 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.81 0.08 225.75)',
+      'accent-foreground': 'oklch(0 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.39 0 0)',
+      input: 'oklch(0.39 0 0)',
+      ring: 'oklch(0.80 0.14 349.23)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.80 0.14 349.23)',
+      'chart-2': 'oklch(0.74 0.23 142.85)',
+      'chart-3': 'oklch(0.81 0.08 225.75)',
+      'chart-4': 'oklch(0.97 0.21 109.77)',
+      'chart-5': 'oklch(0.87 0.18 90.38)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.23 0.01 264.29)',
+      'sidebar-foreground': 'oklch(0.92 0 0)',
+      'sidebar-primary': 'oklch(0.80 0.14 349.23)',
+      'sidebar-primary-foreground': 'oklch(0 0 0)',
+      'sidebar-accent': 'oklch(0.81 0.08 225.75)',
+      'sidebar-accent-foreground': 'oklch(0 0 0)',
+      'sidebar-border': 'oklch(0.39 0 0)',
+      'sidebar-ring': 'oklch(0.80 0.14 349.23)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
+  },
+
+  {
+    id: 'northern-lights',
+    name: 'Northern Lights',
+    category: 'creative',
+    colors: {
+      primary: 'oklch(0.65 0.15 150.31)',
+      secondary: 'oklch(0.67 0.14 261.34)',
+      accent: 'oklch(0.83 0.11 211.96)',
+      background: 'oklch(0.98 0.00 286.38)',
+      foreground: 'oklch(0.32 0 0)',
+    },
+    lightModeConfig: {
+      // Base colors
+      background: 'oklch(0.98 0.00 286.38)',
+      foreground: 'oklch(0.32 0 0)',
+      card: 'oklch(1.00 0 0)',
+      'card-foreground': 'oklch(0.32 0 0)',
+      popover: 'oklch(1.00 0 0)',
+      'popover-foreground': 'oklch(0.32 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.65 0.15 150.31)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.67 0.14 261.34)',
+      'secondary-foreground': 'oklch(1.00 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.88 0.03 98.10)',
+      'muted-foreground': 'oklch(0.54 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.83 0.11 211.96)',
+      'accent-foreground': 'oklch(0.32 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.87 0 0)',
+      input: 'oklch(0.87 0 0)',
+      ring: 'oklch(0.65 0.15 150.31)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.65 0.15 150.31)',
+      'chart-2': 'oklch(0.67 0.14 261.34)',
+      'chart-3': 'oklch(0.83 0.11 211.96)',
+      'chart-4': 'oklch(0.59 0.10 245.74)',
+      'chart-5': 'oklch(0.59 0.16 148.24)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.98 0.00 286.38)',
+      'sidebar-foreground': 'oklch(0.32 0 0)',
+      'sidebar-primary': 'oklch(0.65 0.15 150.31)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.83 0.11 211.96)',
+      'sidebar-accent-foreground': 'oklch(0.32 0 0)',
+      'sidebar-border': 'oklch(0.87 0 0)',
+      'sidebar-ring': 'oklch(0.65 0.15 150.31)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
+    darkModeConfig: {
+      // Base colors
+      background: 'oklch(0.23 0.01 264.29)',
+      foreground: 'oklch(0.92 0 0)',
+      card: 'oklch(0.32 0.01 223.67)',
+      'card-foreground': 'oklch(0.92 0 0)',
+      popover: 'oklch(0.32 0.01 223.67)',
+      'popover-foreground': 'oklch(0.92 0 0)',
+
+      // Primary colors
+      primary: 'oklch(0.65 0.15 150.31)',
+      'primary-foreground': 'oklch(1.00 0 0)',
+
+      // Secondary colors
+      secondary: 'oklch(0.59 0.10 245.74)',
+      'secondary-foreground': 'oklch(0.92 0 0)',
+
+      // Muted colors
+      muted: 'oklch(0.39 0 0)',
+      'muted-foreground': 'oklch(0.72 0 0)',
+
+      // Accent colors
+      accent: 'oklch(0.67 0.14 261.34)',
+      'accent-foreground': 'oklch(0.92 0 0)',
+
+      // Destructive colors
+      destructive: 'oklch(0.64 0.21 25.33)',
+      'destructive-foreground': 'oklch(1.00 0 0)',
+
+      // Border and input
+      border: 'oklch(0.39 0 0)',
+      input: 'oklch(0.39 0 0)',
+      ring: 'oklch(0.65 0.15 150.31)',
+
+      // Chart colors
+      'chart-1': 'oklch(0.65 0.15 150.31)',
+      'chart-2': 'oklch(0.59 0.10 245.74)',
+      'chart-3': 'oklch(0.67 0.14 261.34)',
+      'chart-4': 'oklch(0.83 0.11 211.96)',
+      'chart-5': 'oklch(0.59 0.16 148.24)',
+
+      // Sidebar colors
+      sidebar: 'oklch(0.23 0.01 264.29)',
+      'sidebar-foreground': 'oklch(0.92 0 0)',
+      'sidebar-primary': 'oklch(0.65 0.15 150.31)',
+      'sidebar-primary-foreground': 'oklch(1.00 0 0)',
+      'sidebar-accent': 'oklch(0.67 0.14 261.34)',
+      'sidebar-accent-foreground': 'oklch(0.92 0 0)',
+      'sidebar-border': 'oklch(0.39 0 0)',
+      'sidebar-ring': 'oklch(0.65 0.15 150.31)',
+
+      // Typography
+      'font-sans': "'Inter', system-ui, -apple-system, sans-serif",
+      'font-serif': "'Georgia', serif",
+      'font-mono': "'JetBrains Mono', 'Fira Code', monospace",
+      'letter-spacing': '0em',
+
+      // Border radius
+      radius: '0.5rem',
+
+      // Shadow system
+      'shadow-color': 'oklch(0.00 0.000 0)',
+      'shadow-opacity': '0.1',
+      'shadow-blur': '3px',
+      'shadow-spread': '0px',
+      'shadow-offset-x': '0',
+      'shadow-offset-y': '1px',
+    },
   }
 ];
 
 export const getThemesByCategory = (category: PredefinedTheme['category']) => {
-  return PREDEFINED_THEMES.filter(theme => theme.category === category);
+  return PREDEFINED_THEMES.filter((theme) => theme.category === category);
 };
 
 export const getThemeById = (id: string) => {
-  return PREDEFINED_THEMES.find(theme => theme.id === id);
+  return PREDEFINED_THEMES.find((theme) => theme.id === id);
 };
 
 export const getAllCategories = (): PredefinedTheme['category'][] => {
-  return ['popular', 'nature', 'corporate', 'creative', 'monochrome', 'specialty'];
+  return [
+    'popular',
+    'nature',
+    'corporate',
+    'creative',
+    'monochrome',
+    'specialty'
+];
 };

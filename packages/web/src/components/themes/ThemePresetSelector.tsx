@@ -79,28 +79,31 @@ const isThemeNew = (theme: any) => {
 };
 
 const ThemeControls = () => {
-  const { toggleThemeMode, isDarkMode } = useCompanyTheme();
+  const { toggleThemeMode, isDarkMode, updateThemeColors } = useCompanyTheme();
 
   const allThemes = [...PREDEFINED_THEMES];
 
   const randomize = useCallback(() => {
+    if (!updateThemeColors) {
+      console.warn('updateThemeColors not available yet');
+      return;
+    }
+
     const random = Math.floor(Math.random() * allThemes.length);
     const randomTheme = allThemes[random];
     if (randomTheme) {
-      // Apply theme preview
-      const root = document.documentElement;
+      // Apply theme preview using DynamicThemeProvider's updateThemeColors method
       const config = isDarkMode
         ? randomTheme.darkModeConfig
         : randomTheme.lightModeConfig;
       const colorsToApply = config || randomTheme.colors;
 
-      Object.entries(colorsToApply).forEach(([key, value]) => {
-        root.style.setProperty(`--${key}`, value);
-      });
+      // Use the theme context's updateThemeColors method instead of direct DOM manipulation
+      updateThemeColors(colorsToApply, isDarkMode ? 'dark' : 'light');
 
       toast.success(`Applied random theme: ${randomTheme.name}`);
     }
-  }, [allThemes, isDarkMode]);
+  }, [allThemes, isDarkMode, updateThemeColors]);
 
   return (
     <div className="flex gap-1">
@@ -154,6 +157,7 @@ export const ThemePresetSelector: React.FC<ThemePresetSelectorProps> = ({
     applyTheme,
     loading,
     setCurrentTheme,
+    updateThemeColors,
   } = useCompanyTheme();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
@@ -300,16 +304,19 @@ export const ThemePresetSelector: React.FC<ThemePresetSelectorProps> = ({
   const handleThemeSelect = useCallback(
     async (selectedTheme: any) => {
       try {
-        // Apply preview first
-        const root = document.documentElement;
+        if (!updateThemeColors) {
+          console.warn('updateThemeColors not available yet');
+          return;
+        }
+
+        // Apply preview first using DynamicThemeProvider's updateThemeColors method
         const config = isDarkMode
           ? selectedTheme.darkModeConfig
           : selectedTheme.lightModeConfig;
         const colorsToApply = config || selectedTheme.colors;
 
-        Object.entries(colorsToApply).forEach(([key, value]) => {
-          root.style.setProperty(`--${key}`, value as string);
-        });
+        // Use the theme context's updateThemeColors method instead of direct DOM manipulation
+        updateThemeColors(colorsToApply, isDarkMode ? 'dark' : 'light');
 
         // If it's a built-in theme, save it to company first
         let themeToApply = selectedTheme;
@@ -363,6 +370,7 @@ export const ThemePresetSelector: React.FC<ThemePresetSelectorProps> = ({
       createThemeMutation,
       onThemeSelect,
       setCurrentTheme,
+      updateThemeColors,
     ],
   );
 
