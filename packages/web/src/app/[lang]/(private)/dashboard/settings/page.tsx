@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 const settingsOptions = [
   {
     title: 'Theme Configuration',
-    description: 'Customize your application colors and appearance',
+    description: 'Customize your application colors and appearance with Clean Architecture',
     href: '/dashboard/settings/themes',
     icon: 'Palette' as const,
   },

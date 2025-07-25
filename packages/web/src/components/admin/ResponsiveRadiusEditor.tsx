@@ -291,7 +291,7 @@ export const ResponsiveRadiusEditor = ({ onChange }: ResponsiveRadiusEditorProps
         </CardHeader>
         <CardContent>
           <div className="bg-muted p-3 rounded text-xs font-mono space-y-1 max-h-40 overflow-y-auto">
-            <div>/* Breakpoint: {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.name} */</div>
+            <div>{/* Breakpoint: {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.name} */}</div>
             <div>@media (min-width: {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.minWidth}) {"{"}</div>
             <div className="pl-4">:root {"{"}</div>
             {RADIUS_SIZES.map((size) => (

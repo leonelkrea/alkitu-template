@@ -398,7 +398,7 @@ export const GlobalRadiusEditor = ({ onChange, onSave }: GlobalRadiusEditorProps
         </CardHeader>
         <CardContent>
           <div className="bg-muted p-4 rounded text-xs font-mono space-y-1 max-h-60 overflow-y-auto">
-            <div>/* Breakpoint: {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.name} - {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.minWidth}px+ */</div>
+            <div>{/* Breakpoint: {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.name} - {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.minWidth}px+ */}</div>
             <div>@media (min-width: {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.minWidth}px) {"{"}</div>
             <div className="pl-4">:root {"{"}</div>
             {RADIUS_SIZES.map(size => {

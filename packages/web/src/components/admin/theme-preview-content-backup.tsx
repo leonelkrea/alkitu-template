@@ -1,18 +1,17 @@
-// Aquí tienes el componente CompactColorPalette ya integrado en el lugar correcto.
-// Solo necesitas reemplazar desde la línea que dice "Color de ShadCN Block" hasta el final de ese Card
+/**
+ * Theme Preview Content Backup
+ * Backup fragments for theme preview components
+ */
 
-{/* Compact Color Palette */}
-<div className="flex items-center justify-between mb-4">
-  <div className="flex items-center gap-2">
-    <ThemeToggle />
-    <ContrastCheckerDialog compact />
-  </div>
-</div>
-<CompactColorPalette
-  title="🎨 Color de ShadCN"
-  description="Sistema de colores ShadCN con paleta principal, neutros y semánticos"
-  colorGroups={colorGroups}
-/>
+import React from 'react';
 
-{/* Color de Material Design Block */}
-<MaterialDesignColorSystem currentThemeColors={tokens} />
+export function ThemePreviewBackup() {
+  return (
+    <div className="space-y-4">
+      {/* Backup content - not currently used */}
+      <div className="text-muted-foreground text-sm">
+        This is a backup file for theme preview content.
+      </div>
+    </div>
+  );
+}

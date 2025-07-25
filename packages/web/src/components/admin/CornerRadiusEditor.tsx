@@ -390,7 +390,7 @@ export const CornerRadiusEditor = ({ globalValues, onChange }: CornerRadiusEdito
         </CardHeader>
         <CardContent>
           <div className="bg-muted p-3 rounded text-xs font-mono space-y-1">
-            <div>/* {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.name} - radius-{activeSize} */</div>
+            <div>{/* {BREAKPOINTS.find(bp => bp.key === activeBreakpoint)?.name} - radius-{activeSize} */}</div>
             <div>.rounded-{activeSize} {"{"}</div>
             <div className="pl-4">border-top-left-radius: {(currentState.corners.tl / 16).toFixed(3)}rem;</div>
             <div className="pl-4">border-top-right-radius: {(currentState.corners.tr / 16).toFixed(3)}rem;</div>

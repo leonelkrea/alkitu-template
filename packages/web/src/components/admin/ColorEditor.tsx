@@ -508,13 +508,13 @@ export const ColorEditor = ({
         {!selectedShadcnColor ? (
           <div className="bg-muted/50 p-4 rounded-lg border-2 border-dashed">
             <p className="text-sm text-muted-foreground text-center">
-              Ve al tab "ShadCN + TailwindCSS v4" y haz clic en el botón MD3 de un color para empezar a vincularlo con Material Design 3.
+              Ve al tab &quot;ShadCN + TailwindCSS v4&quot; y haz clic en el botón MD3 de un color para empezar a vincularlo con Material Design 3.
             </p>
           </div>
         ) : (
           <div className="bg-primary/10 p-4 rounded-lg border">
             <p className="text-sm font-medium mb-2">
-              Selecciona un color de Material Design 3 para vincular con "{SHADCN_COLORS[selectedShadcnColor].name}"
+              Selecciona un color de Material Design 3 para vincular con &quot;{SHADCN_COLORS[selectedShadcnColor].name}&quot;
             </p>
             <p className="text-xs text-muted-foreground">
               Haz clic en cualquier color de la paleta para crear la vinculación.
