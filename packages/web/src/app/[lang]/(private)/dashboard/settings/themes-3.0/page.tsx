@@ -1,11 +1,11 @@
 'use client';
 
-import { ThemeEditor30 } from '@/components/admin/ThemeEditor30';
+import { ThemeEditor } from '@/components/admin/theme-editor-3.0';
 
 export default function Themes30Page() {
   return (
     <div className="h-screen overflow-hidden">
-      <ThemeEditor30 />
+      <ThemeEditor />
     </div>
   );
 }

@@ -49,20 +49,9 @@ export default function Home() {
             {t('homepage.hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="text-lg px-8 py-6" asChild>
-              <Link href="/auth/register">Comenzar Gratis</Link>
-            </Button>
             <Button
               size="lg"
               variant="outline"
-              className="text-lg px-8 py-6"
-              asChild
-            >
-              <Link href="/auth/login">Iniciar Sesión</Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="ghost"
               className="text-lg px-8 py-6"
               asChild
             >
@@ -97,31 +86,6 @@ export default function Home() {
         </div>
       </TailwindGrid>
 
-      {/* Quick Access Section */}
-      <section className="py-12 border-t bg-gradient-to-r from-primary/5 to-secondary/5">
-        <TailwindGrid maxWidth="lg" padding="md">
-          <div className="col-span-4 md:col-span-8 lg:col-span-12 text-center">
-            <h2 className="text-2xl font-bold mb-4">
-              ¿Listo para comenzar?
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Únete a nuestra plataforma y accede a todas las funcionalidades
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
-                <Link href="/auth/register">
-                  Crear Cuenta Gratis
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/auth/login">
-                  Ya tengo cuenta
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </TailwindGrid>
-      </section>
 
       {/* Features Section */}
       <section id="features" className="py-16 sm:py-24 bg-secondary/10">

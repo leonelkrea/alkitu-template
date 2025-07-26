@@ -67,7 +67,7 @@ export type ImportSource = 'file' | 'url' | 'json' | 'figma' | 'sketch';
 export interface ThemeImportExportProps {
   // Current theme
   currentTheme?: ThemeData;
-  onThemeChange: (theme: ThemeData) -> void;
+  onThemeChange: (theme: ThemeData) => void;
   
   // Save functionality
   onSaveTheme?: (theme: ThemeData, name: string, options?: SaveOptions) => Promise<void>;
