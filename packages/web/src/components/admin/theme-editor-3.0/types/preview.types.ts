@@ -8,17 +8,17 @@ export interface PreviewState {
   showRuler: boolean;
 }
 
-export interface ComponentShowcase {
+export interface ComponentShowcase<T = Record<string, unknown>> {
   id: string;
   name: string;
   category: 'atomos' | 'moleculas' | 'organismos';
-  component: React.ComponentType<any>;
-  props?: Record<string, any>;
-  variants?: ComponentVariant[];
+  component: React.ComponentType<T>;
+  props?: T;
+  variants?: ComponentVariant<T>[];
 }
 
-export interface ComponentVariant {
+export interface ComponentVariant<T = Record<string, unknown>> {
   name: string;
-  props: Record<string, any>;
+  props: T;
   description?: string;
 }

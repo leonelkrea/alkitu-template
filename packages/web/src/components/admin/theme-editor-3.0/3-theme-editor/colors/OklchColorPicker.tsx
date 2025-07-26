@@ -1,160 +1,218 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Slider } from '@/components/ui/slider';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { ColorToken, OklchColor } from '../../types/theme.types';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { OklchColor } from '../../types/theme.types';
 
 interface OklchColorPickerProps {
-  colorToken: ColorToken;
-  onColorChange: (token: ColorToken) => void;
+  oklch: OklchColor;
+  onChange: (oklch: OklchColor) => void;
   className?: string;
 }
 
-export function OklchColorPicker({ 
-  colorToken, 
-  onColorChange, 
+export function OklchColorPicker({
+  oklch,
+  onChange,
   className = ""
 }: OklchColorPickerProps) {
-  const [oklch, setOklch] = useState<OklchColor>(colorToken.oklch);
-  const [cssValue, setCssValue] = useState(colorToken.value);
-
-  // Convert OKLCH to CSS string
-  const oklchToCss = (color: OklchColor): string => {
-    return `oklch(${color.l.toFixed(4)} ${color.c.toFixed(4)} ${color.h.toFixed(1)})`;
+  
+  const handleLightnessChange = (value: number[]) => {
+    onChange({ ...oklch, l: value[0] / 100 });
   };
 
-  // Update color when OKLCH values change
-  useEffect(() => {
-    const newCssValue = oklchToCss(oklch);
-    setCssValue(newCssValue);
-    
-    const updatedToken: ColorToken = {
-      ...colorToken,
-      value: newCssValue,
-      oklch: oklch
-    };
-    
-    onColorChange(updatedToken);
-  }, [oklch]);
-
-  const handleSliderChange = (component: keyof OklchColor, value: number[]) => {
-    setOklch(prev => ({
-      ...prev,
-      [component]: value[0]
-    }));
+  const handleChromaChange = (value: number[]) => {
+    onChange({ ...oklch, c: value[0] / 100 });
   };
 
-  const handleInputChange = (component: keyof OklchColor, value: string) => {
-    const numValue = parseFloat(value) || 0;
-    setOklch(prev => ({
-      ...prev,
-      [component]: numValue
-    }));
+  const handleHueChange = (value: number[]) => {
+    onChange({ ...oklch, h: value[0] });
+  };
+
+  const handleAlphaChange = (value: number[]) => {
+    onChange({ ...oklch, a: value[0] / 100 });
+  };
+
+  const handleInputChange = (property: keyof OklchColor, value: string) => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue)) {
+      onChange({ ...oklch, [property]: numValue });
+    }
+  };
+
+  const addAlpha = () => {
+    onChange({ ...oklch, a: 1 });
+  };
+
+  const removeAlpha = () => {
+    const { a, ...rest } = oklch;
+    onChange(rest);
+  };
+
+  // Generate hue gradient for slider background
+  const hueGradient = () => {
+    const steps = 12;
+    const colors = [];
+    for (let i = 0; i <= steps; i++) {
+      const hue = (i / steps) * 360;
+      colors.push(`oklch(${oklch.l} ${oklch.c} ${hue})`);
+    }
+    return `linear-gradient(to right, ${colors.join(', ')})`;
   };
 
   return (
-    <Card className={`p-4 space-y-4 ${className}`}>
-      <div className="flex items-center gap-4">
-        <div className="flex-1">
-          <h4 className="text-sm font-medium">{colorToken.name}</h4>
-          {colorToken.description && (
-            <p className="text-xs text-muted-foreground">{colorToken.description}</p>
-          )}
+    <div className={`space-y-4 ${className}`}>
+      {/* Lightness */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label className="text-xs font-medium">Lightness</Label>
+          <span className="text-xs text-muted-foreground">
+            {(oklch.l * 100).toFixed(1)}%
+          </span>
         </div>
-        <div 
-          className="w-12 h-12 rounded border shadow-sm"
-          style={{ backgroundColor: cssValue }}
-          title={cssValue}
+        <Slider
+          value={[oklch.l * 100]}
+          onValueChange={handleLightnessChange}
+          min={0}
+          max={100}
+          step={0.1}
+          className="w-full"
+        />
+        <Input
+          type="number"
+          value={oklch.l.toFixed(4)}
+          onChange={(e) => handleInputChange('l', e.target.value)}
+          min={0}
+          max={1}
+          step={0.0001}
+          className="h-7 text-xs font-mono"
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
-        {/* Lightness */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs">Lightness (L)</Label>
-            <Input
-              type="number"
-              value={oklch.l.toFixed(4)}
-              onChange={(e) => handleInputChange('l', e.target.value)}
-              className="w-20 h-6 text-xs"
-              min="0"
-              max="1"
-              step="0.0001"
-            />
-          </div>
-          <Slider
-            value={[oklch.l]}
-            onValueChange={(value) => handleSliderChange('l', value)}
-            min={0}
-            max={1}
-            step={0.001}
-            className="w-full"
-          />
+      {/* Chroma */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label className="text-xs font-medium">Chroma</Label>
+          <span className="text-xs text-muted-foreground">
+            {oklch.c.toFixed(4)}
+          </span>
         </div>
+        <Slider
+          value={[oklch.c * 100]}
+          onValueChange={handleChromaChange}
+          min={0}
+          max={40}
+          step={0.1}
+          className="w-full"
+        />
+        <Input
+          type="number"
+          value={oklch.c.toFixed(4)}
+          onChange={(e) => handleInputChange('c', e.target.value)}
+          min={0}
+          max={0.4}
+          step={0.0001}
+          className="h-7 text-xs font-mono"
+        />
+      </div>
 
-        {/* Chroma */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs">Chroma (C)</Label>
-            <Input
-              type="number"
-              value={oklch.c.toFixed(4)}
-              onChange={(e) => handleInputChange('c', e.target.value)}
-              className="w-20 h-6 text-xs"
-              min="0"
-              max="0.4"
-              step="0.0001"
-            />
-          </div>
-          <Slider
-            value={[oklch.c]}
-            onValueChange={(value) => handleSliderChange('c', value)}
-            min={0}
-            max={0.4}
-            step={0.001}
-            className="w-full"
-          />
+      {/* Hue */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label className="text-xs font-medium">Hue</Label>
+          <span className="text-xs text-muted-foreground">
+            {oklch.h.toFixed(1)}°
+          </span>
         </div>
-
-        {/* Hue */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs">Hue (H)</Label>
-            <Input
-              type="number"
-              value={oklch.h.toFixed(1)}
-              onChange={(e) => handleInputChange('h', e.target.value)}
-              className="w-20 h-6 text-xs"
-              min="0"
-              max="360"
-              step="0.1"
-            />
-          </div>
+        <div className="relative">
           <Slider
             value={[oklch.h]}
-            onValueChange={(value) => handleSliderChange('h', value)}
+            onValueChange={handleHueChange}
             min={0}
             max={360}
             step={0.1}
             className="w-full"
+            style={{
+              background: hueGradient()
+            }}
           />
         </div>
-      </div>
-
-      {/* CSS Output */}
-      <div className="space-y-1">
-        <Label className="text-xs text-muted-foreground">CSS Value</Label>
         <Input
-          value={cssValue}
-          readOnly
-          className="font-mono text-xs"
-          title="CSS OKLCH value"
+          type="number"
+          value={oklch.h.toFixed(4)}
+          onChange={(e) => handleInputChange('h', e.target.value)}
+          min={0}
+          max={360}
+          step={0.0001}
+          className="h-7 text-xs font-mono"
         />
       </div>
-    </Card>
+
+      {/* Alpha (if present) */}
+      {oklch.a !== undefined ? (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label className="text-xs font-medium">Alpha</Label>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">
+                {(oklch.a * 100).toFixed(1)}%
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={removeAlpha}
+                className="h-6 px-2 text-xs"
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+          <Slider
+            value={[oklch.a * 100]}
+            onValueChange={handleAlphaChange}
+            min={0}
+            max={100}
+            step={0.1}
+            className="w-full"
+          />
+          <Input
+            type="number"
+            value={oklch.a.toFixed(4)}
+            onChange={(e) => handleInputChange('a', e.target.value)}
+            min={0}
+            max={1}
+            step={0.0001}
+            className="h-7 text-xs font-mono"
+          />
+        </div>
+      ) : (
+        <div className="flex justify-center">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={addAlpha}
+            className="text-xs"
+          >
+            Add Alpha Channel
+          </Button>
+        </div>
+      )}
+
+      {/* Color Preview */}
+      <div className="space-y-2">
+        <Label className="text-xs font-medium">Preview</Label>
+        <div 
+          className="w-full h-16 rounded border border-input shadow-sm"
+          style={{
+            backgroundColor: `oklch(${oklch.l.toFixed(4)} ${oklch.c.toFixed(4)} ${oklch.h.toFixed(4)}${oklch.a !== undefined ? ` / ${oklch.a.toFixed(2)}` : ''})`
+          }}
+        />
+        <div className="text-xs font-mono text-center text-muted-foreground bg-muted/30 rounded px-2 py-1">
+          oklch({oklch.l.toFixed(4)} {oklch.c.toFixed(4)} {oklch.h.toFixed(4)}{oklch.a !== undefined ? ` / ${oklch.a.toFixed(2)}` : ''})
+        </div>
+      </div>
+    </div>
   );
 }

@@ -17,39 +17,63 @@ export interface ThemeColors {
   // Base colors
   background: ColorToken;
   foreground: ColorToken;
-  border: ColorToken;
-  input: ColorToken;
-  ring: ColorToken;
   
-  // Semantic colors
-  primary: ColorToken;
-  primaryForeground: ColorToken;
-  secondary: ColorToken;
-  secondaryForeground: ColorToken;
-  muted: ColorToken;
-  mutedForeground: ColorToken;
-  accent: ColorToken;
-  accentForeground: ColorToken;
-  destructive: ColorToken;
-  destructiveForeground: ColorToken;
-  
-  // UI colors
+  // UI container colors
   card: ColorToken;
   cardForeground: ColorToken;
   popover: ColorToken;
   popoverForeground: ColorToken;
+  
+  // Primary colors
+  primary: ColorToken;
+  primaryForeground: ColorToken;
+  
+  // Secondary colors  
+  secondary: ColorToken;
+  secondaryForeground: ColorToken;
+  
+  // Accent colors
+  accent: ColorToken;
+  accentForeground: ColorToken;
+  
+  // Muted colors
+  muted: ColorToken;
+  mutedForeground: ColorToken;
+  
+  // Destructive colors
+  destructive: ColorToken;
+  destructiveForeground: ColorToken;
+  
+  // Border & Input colors
+  border: ColorToken;
+  input: ColorToken;
+  ring: ColorToken;
+  
+  // Chart colors
+  chart1: ColorToken;
+  chart2: ColorToken;
+  chart3: ColorToken;
+  chart4: ColorToken;
+  chart5: ColorToken;
+  
+  // Sidebar colors
+  sidebar: ColorToken;
+  sidebarForeground: ColorToken;
+  sidebarPrimary: ColorToken;
+  sidebarPrimaryForeground: ColorToken;
+  sidebarAccent: ColorToken;
+  sidebarAccentForeground: ColorToken;
+  sidebarBorder: ColorToken;
+  sidebarRing: ColorToken;
 }
 
 export interface ThemeTypography {
   fontFamilies: {
-    sans: string[];
-    serif: string[];
-    mono: string[];
+    sans: string;
+    serif: string;
+    mono: string;
   };
-  fontSizes: Record<string, string>;
-  lineHeights: Record<string, string>;
-  letterSpacing: Record<string, string>;
-  fontWeights: Record<string, number>;
+  trackingNormal: string;
 }
 
 export interface ThemeBrand {
@@ -61,25 +85,33 @@ export interface ThemeBrand {
 }
 
 export interface ThemeSpacing {
-  scale: Record<string, string>;
-  containers: Record<string, string>;
+  spacing: string; // Base spacing value (0.25rem)
 }
 
 export interface ThemeBorders {
-  radius: Record<string, string>;
-  width: Record<string, string>;
+  radius: string; // Base radius value
+  radiusSm: string; // calc(var(--radius) - 4px)
+  radiusMd: string; // calc(var(--radius) - 2px)
+  radiusLg: string; // var(--radius)
+  radiusXl: string; // calc(var(--radius) + 4px)
 }
 
 export interface ThemeShadows {
-  shadows: Record<string, string>;
-  dropShadows: Record<string, string>;
+  shadow2xs: string;
+  shadowXs: string;
+  shadowSm: string;
+  shadow: string;
+  shadowMd: string;
+  shadowLg: string;
+  shadowXl: string;
+  shadow2xl: string;
 }
 
 export interface ThemeScroll {
-  scrollbarWidth: string;
-  scrollbarColor: string;
-  scrollbarBg: string;
-  scrollBehavior: 'auto' | 'smooth';
+  width: string;
+  behavior: 'auto' | 'smooth' | 'instant';
+  smooth: boolean;
+  hide: boolean;
 }
 
 export interface ThemeData {
@@ -91,8 +123,11 @@ export interface ThemeData {
   createdAt: string;
   updatedAt: string;
   
-  // Theme properties
-  colors: ThemeColors;
+  // Dual-mode theme properties
+  lightColors: ThemeColors;   // Light mode color configuration
+  darkColors: ThemeColors;    // Dark mode color configuration
+  
+  // Shared properties (mode-independent)
   typography: ThemeTypography;
   brand: ThemeBrand;
   spacing: ThemeSpacing;
@@ -104,6 +139,13 @@ export interface ThemeData {
   tags?: string[];
   isPublic: boolean;
   isFavorite: boolean;
+}
+
+// Helper to get current colors based on mode
+export interface ThemeWithCurrentColors extends Omit<ThemeData, 'lightColors' | 'darkColors'> {
+  colors: ThemeColors; // Current active colors based on mode
+  lightColors: ThemeColors;
+  darkColors: ThemeColors;
 }
 
 export type ThemeMode = 'light' | 'dark';

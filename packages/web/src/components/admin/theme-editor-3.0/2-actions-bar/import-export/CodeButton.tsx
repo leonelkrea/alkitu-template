@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Code, Download, Copy, Check } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { ThemeData, ThemeExportFormat } from '../../types/theme.types';
+import { ThemeData, ThemeWithCurrentColors, ThemeExportFormat } from '../../types/theme.types';
 
 interface CodeButtonProps {
-  theme: ThemeData;
+  theme: ThemeWithCurrentColors;
   onExport?: (format: ThemeExportFormat) => void;
   className?: string;
 }
@@ -15,7 +15,7 @@ interface CodeButtonProps {
 export function CodeButton({ theme, onExport, className = "" }: CodeButtonProps) {
   const [copiedFormat, setCopiedFormat] = useState<string | null>(null);
 
-  const generateCSS = (theme: ThemeData): string => {
+  const generateCSS = (theme: ThemeWithCurrentColors): string => {
     const cssVars = Object.entries(theme.colors).map(([key, colorToken]) => {
       const varName = key.replace(/([A-Z])/g, '-$1').toLowerCase();
       return `    --${varName}: ${colorToken.value};`;
@@ -24,11 +24,11 @@ export function CodeButton({ theme, onExport, className = "" }: CodeButtonProps)
     return `:root {\n${cssVars}\n}`;
   };
 
-  const generateJSON = (theme: ThemeData): string => {
+  const generateJSON = (theme: ThemeWithCurrentColors): string => {
     return JSON.stringify(theme, null, 2);
   };
 
-  const generateTailwind = (theme: ThemeData): string => {
+  const generateTailwind = (theme: ThemeWithCurrentColors): string => {
     const colors = Object.entries(theme.colors).reduce((acc, [key, colorToken]) => {
       const colorName = key.replace(/([A-Z])/g, '-$1').toLowerCase();
       acc[colorName] = colorToken.value;

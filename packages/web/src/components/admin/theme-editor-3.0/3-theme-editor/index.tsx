@@ -2,65 +2,31 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { useThemeEditor } from '../context/ThemeEditorContext';
+import { useThemeUpdates } from '../hooks/useThemeUpdates';
+import { EditorSection } from '../types';
 import { Palette, Type, Building, Square, Grid, Zap, Scroll } from 'lucide-react';
-import { ColorsEditor } from './colors';
-import { TypographyEditor } from './typography';
-import { BrandEditor } from './brand';
-import { BordersEditor } from './borders';
-import { SpacingEditor } from './spacing';
-import { ShadowsEditor } from './shadows';
-import { ScrollEditor } from './scroll';
 
 export function ThemeEditor() {
-  const { state, setEditorSection, updateTheme } = useThemeEditor();
-
+  const { state, setEditorSection } = useThemeEditor();
+  const themeUpdates = useThemeUpdates();
 
   const sections = [
-    { id: 'colors', label: 'Colors', icon: Palette },
-    { id: 'typography', label: 'Typography', icon: Type },
-    { id: 'brand', label: 'Brand', icon: Building },
-    { id: 'borders', label: 'Borders', icon: Square },
-    { id: 'spacing', label: 'Spacing', icon: Grid },
-    { id: 'shadows', label: 'Shadows', icon: Zap },
-    { id: 'scroll', label: 'Scroll', icon: Scroll }
+    { id: 'colors', label: 'Colors', icon: Palette, updateHandler: themeUpdates.updateColors },
+    { id: 'typography', label: 'Typography', icon: Type, updateHandler: themeUpdates.updateTypography },
+    { id: 'brand', label: 'Brand', icon: Building, updateHandler: themeUpdates.updateBrand },
+    { id: 'borders', label: 'Borders', icon: Square, updateHandler: themeUpdates.updateBorders },
+    { id: 'spacing', label: 'Spacing', icon: Grid, updateHandler: themeUpdates.updateSpacing },
+    { id: 'shadows', label: 'Shadows', icon: Zap, updateHandler: themeUpdates.updateShadows },
+    { id: 'scroll', label: 'Scroll', icon: Scroll, updateHandler: themeUpdates.updateScroll }
   ];
-
-  const handleColorsChange = (colors: any) => {
-    updateTheme({ ...state.currentTheme, colors });
-  };
-
-  const handleTypographyChange = (typography: any) => {
-    updateTheme({ ...state.currentTheme, typography });
-  };
-
-  const handleBrandChange = (brand: any) => {
-    updateTheme({ ...state.currentTheme, brand });
-  };
-
-  const handleBordersChange = (borders: any) => {
-    updateTheme({ ...state.currentTheme, borders });
-  };
-
-  const handleSpacingChange = (spacing: any) => {
-    updateTheme({ ...state.currentTheme, spacing });
-  };
-
-  const handleShadowsChange = (shadows: any) => {
-    updateTheme({ ...state.currentTheme, shadows });
-  };
-
-  const handleScrollChange = (scroll: any) => {
-    updateTheme({ ...state.currentTheme, scroll });
-  };
 
   return (
     <div className="h-full bg-card">
       <div className="p-4">
         <Tabs 
           value={state.editor.activeSection} 
-          onValueChange={(value) => setEditorSection(value as any)}
+          onValueChange={(value) => setEditorSection(value as EditorSection)}
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-4 gap-1 h-auto p-1">

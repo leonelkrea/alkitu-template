@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useThemeEditor } from '../context/ThemeEditorContext';
+import { PreviewSection } from '../types';
 import { Palette, Type, Building, Atom, Layers, Layout } from 'lucide-react';
 
 export function Preview() {
@@ -36,7 +37,7 @@ export function Preview() {
       <div className="p-4">
         <Tabs 
           value={state.preview.activeSection} 
-          onValueChange={(value) => setPreviewSection(value as any)}
+          onValueChange={(value) => setPreviewSection(value as PreviewSection)}
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-3 gap-1 h-auto p-1">

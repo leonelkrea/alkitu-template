@@ -1,68 +1,28 @@
 'use client';
 
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { useThemeEditor } from '../context/ThemeEditorContext';
+import { useActionsBarLogic } from '../hooks/useActionsBarLogic';
 import { ViewportSelector } from './viewport-selector';
 import { ThemeMode } from './theme-mode';
 import { HistoryControls } from './history-controls';
 import { ImportExport } from './import-export';
 import { SaveControls } from './save-controls';
 import { ResetButton } from './reset-button';
-import { DEFAULT_THEMES } from '../constants/default-themes';
 
 export function ActionsBar() {
-  const { 
-    state, 
-    setViewport, 
+  const {
+    state,
+    currentTheme,
+    historyState,
+    setViewport,
     setThemeMode,
-    setTheme,
-    setError,
-    markSaved
-  } = useThemeEditor();
-
-  // Get current theme or default
-  const currentTheme = state.currentTheme || DEFAULT_THEMES[0];
-
-  // Mock history state (future: implement real history)
-  const historyState = {
-    canUndo: false,
-    canRedo: false,
-    undoCount: 0,
-    redoCount: 0
-  };
-
-  // Handlers
-  const handleUndo = () => {
-    // TODO: Implement undo functionality
-    console.log('Undo');
-  };
-
-  const handleRedo = () => {
-    // TODO: Implement redo functionality
-    console.log('Redo');
-  };
-
-  const handleImport = (theme: any) => {
-    setTheme(theme);
-  };
-
-  const handleImportError = (error: string) => {
-    setError(error);
-  };
-
-  const handleSave = (theme: any) => {
-    // TODO: Implement save to localStorage/API
-    console.log('Saving theme:', theme.name);
-    markSaved();
-  };
-
-  const handleReset = () => {
-    // Reset to default theme
-    setTheme(DEFAULT_THEMES[0]);
-    markSaved();
-  };
+    handleUndo,
+    handleRedo,
+    handleImport,
+    handleImportError,
+    handleSave,
+    handleReset
+  } = useActionsBarLogic();
 
   return (
     <div className="h-[75px] border-b border-border bg-card flex items-center justify-between px-4">

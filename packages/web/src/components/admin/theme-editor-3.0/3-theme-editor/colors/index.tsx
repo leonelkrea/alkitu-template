@@ -1,54 +1,55 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ColorPalette } from './ColorPalette';
-import { OklchColorPicker } from './OklchColorPicker';
-import { ThemeColors, ColorToken } from '../../types/theme.types';
+import React from 'react';
+import { useThemeEditor } from '../../context/ThemeEditorContext';
+import { COLOR_SECTIONS } from '../../types/color-sections.types';
+import { ColorSection } from './ColorSection';
+import { ColorToken, ThemeColors } from '../../types/theme.types';
 
-interface ColorsEditorProps {
-  colors: ThemeColors;
-  onColorsChange: (colors: ThemeColors) => void;
-  className?: string;
-}
+export function ColorsEditor() {
+  const { state, updateCurrentModeColors } = useThemeEditor();
 
-export function ColorsEditor({ colors, onColorsChange, className = "" }: ColorsEditorProps) {
-  const [selectedColorKey, setSelectedColorKey] = useState<string>('primary');
-  
-  const selectedColorToken = colors[selectedColorKey as keyof ThemeColors];
+  if (!state.currentTheme) {
+    return (
+      <div className="h-full bg-card flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-sm text-muted-foreground">No theme loaded</div>
+        </div>
+      </div>
+    );
+  }
 
-  const handleColorSelect = (colorKey: string, token: ColorToken) => {
-    setSelectedColorKey(colorKey);
-  };
-
-  const handleColorChange = (updatedToken: ColorToken) => {
+  const handleColorChange = (colorKey: keyof ThemeColors, newColor: ColorToken) => {
     const updatedColors = {
-      ...colors,
-      [selectedColorKey]: updatedToken
+      ...state.currentTheme.colors,
+      [colorKey]: newColor
     };
-    onColorsChange(updatedColors);
+    
+    // Update colors for current mode and apply to CSS immediately
+    updateCurrentModeColors(updatedColors);
   };
 
   return (
-    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 ${className}`}>
-      {/* Color Palette */}
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium">Color Palette</h3>
-        <ColorPalette
-          colors={colors}
-          onColorSelect={handleColorSelect}
-          selectedColorKey={selectedColorKey}
-        />
-      </div>
+    <div className="h-full overflow-y-auto">
+      <div className="p-4 space-y-4">
+        <div className="space-y-2">
+          <h2 className="text-lg font-semibold">Colors</h2>
+          <p className="text-sm text-muted-foreground">
+            Configure your theme colors using the OKLCH color space for modern, perceptually uniform colors.
+          </p>
+        </div>
 
-      {/* Color Editor */}
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium">Color Editor</h3>
-        {selectedColorToken && (
-          <OklchColorPicker
-            colorToken={selectedColorToken}
-            onColorChange={handleColorChange}
-          />
-        )}
+        {/* Color Sections */}
+        <div className="space-y-3">
+          {COLOR_SECTIONS.map((section) => (
+            <ColorSection
+              key={section.id}
+              section={section}
+              colors={state.currentTheme.colors}
+              onColorChange={handleColorChange}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

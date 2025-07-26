@@ -27,7 +27,10 @@ export function ScrollEditor({
   className = ""
 }: ScrollEditorProps) {
   
-  const handlePropertyChange = (property: keyof ThemeScroll, value: any) => {
+  const handlePropertyChange = <K extends keyof ThemeScroll>(
+    property: K, 
+    value: ThemeScroll[K]
+  ) => {
     const updatedScroll = {
       ...scroll,
       [property]: value

@@ -28,9 +28,16 @@ export function ImportButton({ onImport, onError, className = "" }: ImportButton
         const content = e.target?.result as string;
         const theme = JSON.parse(content) as ThemeData;
         
-        // Basic validation
-        if (!theme.id || !theme.name || !theme.colors) {
+        // Basic validation - check for new dual structure
+        if (!theme.id || !theme.name || (!theme.lightColors && !theme.colors)) {
           throw new Error('Invalid theme file format');
+        }
+        
+        // If it's an old format theme (with colors only), convert to new format
+        if (theme.colors && !theme.lightColors) {
+          theme.lightColors = theme.colors;
+          theme.darkColors = theme.colors; // Use same colors for both modes
+          delete (theme as any).colors; // Remove old property
         }
         
         onImport(theme);

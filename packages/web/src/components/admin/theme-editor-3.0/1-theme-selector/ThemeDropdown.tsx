@@ -52,12 +52,7 @@ export function ThemeDropdown({
           <div className="flex items-center gap-3 w-full">
             <ThemePreview theme={selectedTheme} size="md" />
             <div className="flex-1 text-left">
-              <div className="font-medium text-sm">{selectedTheme.name}</div>
-              {selectedTheme.description && (
-                <div className="text-xs text-muted-foreground truncate">
-                  {selectedTheme.description}
-                </div>
-              )}
+              <div className="font-medium text-sm text-foreground">{selectedTheme.name}</div>
             </div>
           </div>
         </Button>

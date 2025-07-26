@@ -1,13 +1,15 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { ThemeData, ThemeMode, EditorState, EditorSection, ViewportState, ViewportSize, PreviewState, PreviewSection } from '../types';
+import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import { ThemeData, ThemeWithCurrentColors, ThemeMode, EditorState, EditorSection, ViewportState, ViewportSize, PreviewState, PreviewSection } from '../types';
 import { DEFAULT_THEME } from '../constants/default-themes';
+import { applyThemeToRoot, applyThemeMode, applyModeSpecificColors } from '../utils/css-variables';
 
 // State interface
 interface ThemeEditorState {
   // Theme data
-  currentTheme: ThemeData;
+  baseTheme: ThemeData;              // Base theme with dual configs
+  currentTheme: ThemeWithCurrentColors; // Theme with current colors based on mode
   themeMode: ThemeMode;
   
   // Editor state
@@ -24,10 +26,23 @@ interface ThemeEditorState {
   error: string | null;
 }
 
+// Helper function to compute current theme with mode-specific colors
+function computeCurrentTheme(baseTheme: ThemeData, mode: ThemeMode): ThemeWithCurrentColors {
+  const colors = mode === 'dark' ? baseTheme.darkColors : baseTheme.lightColors;
+  
+  return {
+    ...baseTheme,
+    colors,
+    lightColors: baseTheme.lightColors,
+    darkColors: baseTheme.darkColors
+  };
+}
+
 // Action types
 type ThemeEditorAction =
   | { type: 'SET_THEME'; payload: ThemeData }
   | { type: 'SET_THEME_MODE'; payload: ThemeMode }
+  | { type: 'UPDATE_CURRENT_COLORS'; payload: { mode: ThemeMode; colors: import('../types/theme.types').ThemeColors } }
   | { type: 'SET_EDITOR_SECTION'; payload: EditorSection }
   | { type: 'SET_VIEWPORT'; payload: ViewportSize }
   | { type: 'SET_PREVIEW_SECTION'; payload: PreviewSection }
@@ -37,7 +52,8 @@ type ThemeEditorAction =
 
 // Initial state
 const initialState: ThemeEditorState = {
-  currentTheme: DEFAULT_THEME,
+  baseTheme: DEFAULT_THEME,
+  currentTheme: computeCurrentTheme(DEFAULT_THEME, 'light'),
   themeMode: 'light',
   editor: {
     activeSection: 'colors',
@@ -62,16 +78,40 @@ const initialState: ThemeEditorState = {
 function themeEditorReducer(state: ThemeEditorState, action: ThemeEditorAction): ThemeEditorState {
   switch (action.type) {
     case 'SET_THEME':
+      const newCurrentTheme = computeCurrentTheme(action.payload, state.themeMode);
       return {
         ...state,
-        currentTheme: action.payload,
+        baseTheme: action.payload,
+        currentTheme: newCurrentTheme,
         editor: { ...state.editor, hasUnsavedChanges: false }
       };
     
     case 'SET_THEME_MODE':
+      const updatedCurrentTheme = computeCurrentTheme(state.baseTheme, action.payload);
       return {
         ...state,
         themeMode: action.payload,
+        currentTheme: updatedCurrentTheme
+      };
+    
+    case 'UPDATE_CURRENT_COLORS':
+      // Update colors for the current mode in the base theme
+      const { mode, colors } = action.payload;
+      const updatedBaseTheme = {
+        ...state.baseTheme,
+        [mode === 'dark' ? 'darkColors' : 'lightColors']: colors
+      };
+      
+      // Recompute current theme if we're updating colors for the active mode
+      const shouldUpdateCurrent = mode === state.themeMode;
+      const newCurrentForColorUpdate = shouldUpdateCurrent 
+        ? { ...state.currentTheme, colors }
+        : state.currentTheme;
+      
+      return {
+        ...state,
+        baseTheme: updatedBaseTheme,
+        currentTheme: newCurrentForColorUpdate,
         editor: { ...state.editor, hasUnsavedChanges: true }
       };
     
@@ -126,6 +166,7 @@ interface ThemeEditorContextType {
   setTheme: (theme: ThemeData) => void;
   updateTheme: (theme: ThemeData) => void;
   setThemeMode: (mode: ThemeMode) => void;
+  updateCurrentModeColors: (colors: import('../types/theme.types').ThemeColors) => void;
   setEditorSection: (section: EditorSection) => void;
   setViewport: (viewport: ViewportSize) => void;
   setPreviewSection: (section: PreviewSection) => void;
@@ -145,13 +186,38 @@ interface ThemeEditorProviderProps {
 export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
   const [state, dispatch] = useReducer(themeEditorReducer, initialState);
   
+  // Apply initial theme and mode on load
+  useEffect(() => {
+    const initialColors = state.themeMode === 'dark' ? DEFAULT_THEME.darkColors : DEFAULT_THEME.lightColors;
+    applyModeSpecificColors(initialColors);
+    applyThemeMode(state.themeMode);
+  }, []);
+  
+  // Apply colors and mode when theme mode changes
+  useEffect(() => {
+    const currentColors = state.themeMode === 'dark' ? state.baseTheme.darkColors : state.baseTheme.lightColors;
+    applyModeSpecificColors(currentColors);
+    applyThemeMode(state.themeMode);
+  }, [state.themeMode, state.baseTheme]);
+  
   // Helper actions
-  const setTheme = (theme: ThemeData) => dispatch({ type: 'SET_THEME', payload: theme });
-  const updateTheme = (theme: ThemeData) => {
+  const setTheme = (theme: ThemeData) => {
     dispatch({ type: 'SET_THEME', payload: theme });
-    dispatch({ type: 'TOGGLE_UNSAVED_CHANGES', payload: true });
   };
-  const setThemeMode = (mode: ThemeMode) => dispatch({ type: 'SET_THEME_MODE', payload: mode });
+  
+  const setThemeMode = (mode: ThemeMode) => {
+    dispatch({ type: 'SET_THEME_MODE', payload: mode });
+  };
+  
+  const updateCurrentModeColors = (colors: import('../types/theme.types').ThemeColors) => {
+    dispatch({ 
+      type: 'UPDATE_CURRENT_COLORS', 
+      payload: { mode: state.themeMode, colors }
+    });
+    // Apply colors immediately for live preview
+    applyModeSpecificColors(colors);
+  };
+  
   const setEditorSection = (section: EditorSection) => dispatch({ type: 'SET_EDITOR_SECTION', payload: section });
   const setViewport = (viewport: ViewportSize) => dispatch({ type: 'SET_VIEWPORT', payload: viewport });
   const setPreviewSection = (section: PreviewSection) => dispatch({ type: 'SET_PREVIEW_SECTION', payload: section });
@@ -160,12 +226,18 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
   const markUnsaved = () => dispatch({ type: 'TOGGLE_UNSAVED_CHANGES', payload: true });
   const markSaved = () => dispatch({ type: 'TOGGLE_UNSAVED_CHANGES', payload: false });
   
+  const updateTheme = (theme: ThemeData) => {
+    dispatch({ type: 'SET_THEME', payload: theme });
+    markUnsaved();
+  };
+  
   const value: ThemeEditorContextType = {
     state,
     dispatch,
     setTheme,
     updateTheme,
     setThemeMode,
+    updateCurrentModeColors,
     setEditorSection,
     setViewport,
     setPreviewSection,

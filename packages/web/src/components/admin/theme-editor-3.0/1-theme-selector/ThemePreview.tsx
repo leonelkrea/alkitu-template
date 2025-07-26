@@ -22,12 +22,13 @@ export function ThemePreview({ theme, size = 'md', className = '' }: ThemePrevie
     lg: 'gap-2'
   };
 
-  // Extract primary colors for preview
+  // Extract primary colors for preview (use light colors as default)
+  const themeColors = theme.lightColors || theme.colors; // Fallback for legacy themes
   const colors = [
-    theme.colors.primary.value,
-    theme.colors.secondary.value,
-    theme.colors.accent.value,
-    theme.colors.muted.value
+    themeColors.primary.value,
+    themeColors.secondary.value,
+    themeColors.accent.value,
+    themeColors.muted.value
   ];
 
   return (
