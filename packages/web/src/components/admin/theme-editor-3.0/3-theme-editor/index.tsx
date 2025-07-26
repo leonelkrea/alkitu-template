@@ -3,32 +3,60 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
 import { useThemeEditor } from '../context/ThemeEditorContext';
-import { Palette, Type, Building, Square, Spacing, Shadow, Scroll } from 'lucide-react';
+import { Palette, Type, Building, Square, Grid, Zap, Scroll } from 'lucide-react';
+import { ColorsEditor } from './colors';
+import { TypographyEditor } from './typography';
+import { BrandEditor } from './brand';
+import { BordersEditor } from './borders';
+import { SpacingEditor } from './spacing';
+import { ShadowsEditor } from './shadows';
+import { ScrollEditor } from './scroll';
 
 export function ThemeEditor() {
-  const { state, setEditorSection } = useThemeEditor();
+  const { state, setEditorSection, updateTheme } = useThemeEditor();
+
 
   const sections = [
     { id: 'colors', label: 'Colors', icon: Palette },
     { id: 'typography', label: 'Typography', icon: Type },
     { id: 'brand', label: 'Brand', icon: Building },
     { id: 'borders', label: 'Borders', icon: Square },
-    { id: 'spacing', label: 'Spacing', icon: Spacing },
-    { id: 'shadows', label: 'Shadows', icon: Shadow },
+    { id: 'spacing', label: 'Spacing', icon: Grid },
+    { id: 'shadows', label: 'Shadows', icon: Zap },
     { id: 'scroll', label: 'Scroll', icon: Scroll }
   ];
 
+  const handleColorsChange = (colors: any) => {
+    updateTheme({ ...state.currentTheme, colors });
+  };
+
+  const handleTypographyChange = (typography: any) => {
+    updateTheme({ ...state.currentTheme, typography });
+  };
+
+  const handleBrandChange = (brand: any) => {
+    updateTheme({ ...state.currentTheme, brand });
+  };
+
+  const handleBordersChange = (borders: any) => {
+    updateTheme({ ...state.currentTheme, borders });
+  };
+
+  const handleSpacingChange = (spacing: any) => {
+    updateTheme({ ...state.currentTheme, spacing });
+  };
+
+  const handleShadowsChange = (shadows: any) => {
+    updateTheme({ ...state.currentTheme, shadows });
+  };
+
+  const handleScrollChange = (scroll: any) => {
+    updateTheme({ ...state.currentTheme, scroll });
+  };
+
   return (
     <div className="h-full bg-card">
-      <div className="p-4 border-b">
-        <h3 className="text-sm font-medium">Theme Editor</h3>
-        <p className="text-xs text-muted-foreground mt-1">
-          Customize theme properties
-        </p>
-      </div>
-      
       <div className="p-4">
         <Tabs 
           value={state.editor.activeSection} 
@@ -50,26 +78,14 @@ export function ThemeEditor() {
 
           {sections.map(({ id, label }) => (
             <TabsContent key={id} value={id} className="mt-4">
-              <Card className="p-4">
-                <h4 className="text-sm font-medium mb-2">{label} Editor</h4>
-                <p className="text-xs text-muted-foreground mb-4">
-                  Configure {label.toLowerCase()} settings for your theme
-                </p>
-                <div className="h-32 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">
-                    {label} controls will be here
-                  </span>
-                </div>
-              </Card>
+              <div className="h-24 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+                <span className="text-xs text-muted-foreground">
+                  {label} editor content will be here
+                </span>
+              </div>
             </TabsContent>
           ))}
         </Tabs>
-
-        <div className="mt-4">
-          <Badge variant="default" className="w-full justify-center">
-            🔵 Theme Editor Block
-          </Badge>
-        </div>
       </div>
     </div>
   );

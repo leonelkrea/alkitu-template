@@ -67,8 +67,8 @@ export function ResizableLayout({ children, className }: ResizableLayoutProps) {
       {/* Resizer */}
       <div
         className={cn(
-          "w-1 bg-border hover:bg-primary/20 cursor-col-resize transition-colors",
-          isResizing && "bg-primary/40"
+          "w-px bg-border hover:bg-border cursor-col-resize transition-colors",
+          isResizing && "bg-border"
         )}
         onMouseDown={handleMouseDown}
       />

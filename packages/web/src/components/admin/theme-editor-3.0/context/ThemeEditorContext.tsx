@@ -2,11 +2,12 @@
 
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { ThemeData, ThemeMode, EditorState, EditorSection, ViewportState, ViewportSize, PreviewState, PreviewSection } from '../types';
+import { DEFAULT_THEME } from '../constants/default-themes';
 
 // State interface
 interface ThemeEditorState {
   // Theme data
-  currentTheme: ThemeData | null;
+  currentTheme: ThemeData;
   themeMode: ThemeMode;
   
   // Editor state
@@ -36,7 +37,7 @@ type ThemeEditorAction =
 
 // Initial state
 const initialState: ThemeEditorState = {
-  currentTheme: null,
+  currentTheme: DEFAULT_THEME,
   themeMode: 'light',
   editor: {
     activeSection: 'colors',
@@ -123,6 +124,7 @@ interface ThemeEditorContextType {
   
   // Helper actions
   setTheme: (theme: ThemeData) => void;
+  updateTheme: (theme: ThemeData) => void;
   setThemeMode: (mode: ThemeMode) => void;
   setEditorSection: (section: EditorSection) => void;
   setViewport: (viewport: ViewportSize) => void;
@@ -145,6 +147,10 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
   
   // Helper actions
   const setTheme = (theme: ThemeData) => dispatch({ type: 'SET_THEME', payload: theme });
+  const updateTheme = (theme: ThemeData) => {
+    dispatch({ type: 'SET_THEME', payload: theme });
+    dispatch({ type: 'TOGGLE_UNSAVED_CHANGES', payload: true });
+  };
   const setThemeMode = (mode: ThemeMode) => dispatch({ type: 'SET_THEME_MODE', payload: mode });
   const setEditorSection = (section: EditorSection) => dispatch({ type: 'SET_EDITOR_SECTION', payload: section });
   const setViewport = (viewport: ViewportSize) => dispatch({ type: 'SET_VIEWPORT', payload: viewport });
@@ -158,6 +164,7 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     state,
     dispatch,
     setTheme,
+    updateTheme,
     setThemeMode,
     setEditorSection,
     setViewport,

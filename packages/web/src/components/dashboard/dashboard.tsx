@@ -153,6 +153,10 @@ const getTransformedData = (t: any) => ({
           url: '/dashboard/billing',
         },
         {
+          title: t?.('nav.themes3') || 'Temas 3.0',
+          url: 'http://localhost:3000/es/dashboard/settings/themes-3.0',
+        },
+        {
           title: t?.('nav.profile') || 'Mi Perfil',
           url: '/dashboard/settings/profile',
         },

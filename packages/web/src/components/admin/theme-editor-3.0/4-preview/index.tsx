@@ -11,6 +11,17 @@ import { Palette, Type, Building, Atom, Layers, Layout } from 'lucide-react';
 export function Preview() {
   const { state, setPreviewSection } = useThemeEditor();
 
+  // Early return if theme is not loaded
+  if (!state?.preview) {
+    return (
+      <div className="h-full bg-card flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-sm text-muted-foreground">Loading preview...</div>
+        </div>
+      </div>
+    );
+  }
+
   const sections = [
     { id: 'colors', label: 'Colors', icon: Palette },
     { id: 'typography', label: 'Typography', icon: Type },
@@ -22,13 +33,6 @@ export function Preview() {
 
   return (
     <div className="h-full bg-card">
-      <div className="p-4 border-b">
-        <h3 className="text-sm font-medium">Preview</h3>
-        <p className="text-xs text-muted-foreground mt-1">
-          Live preview of theme changes
-        </p>
-      </div>
-      
       <div className="p-4">
         <Tabs 
           value={state.preview.activeSection} 
@@ -51,35 +55,15 @@ export function Preview() {
           {sections.map(({ id, label }) => (
             <TabsContent key={id} value={id} className="mt-4">
               <Card className="p-4">
-                <h4 className="text-sm font-medium mb-2">{label} Preview</h4>
-                <p className="text-xs text-muted-foreground mb-4">
-                  Live preview of {label.toLowerCase()} components
-                </p>
-                
-                {/* Sample preview content */}
-                <div className="space-y-4">
-                  <div className="flex gap-2">
-                    <Button size="sm">Primary</Button>
-                    <Button variant="secondary" size="sm">Secondary</Button>
-                    <Button variant="outline" size="sm">Outline</Button>
-                  </div>
-                  
-                  <div className="h-24 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
-                    <span className="text-xs text-muted-foreground">
-                      {label} showcase will be here
-                    </span>
-                  </div>
+                <div className="h-24 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+                  <span className="text-xs text-muted-foreground">
+                    {label} showcase will be here
+                  </span>
                 </div>
               </Card>
             </TabsContent>
           ))}
         </Tabs>
-
-        <div className="mt-4">
-          <Badge variant="outline" className="w-full justify-center border-yellow-500 text-yellow-700">
-            🟡 Preview Block
-          </Badge>
-        </div>
       </div>
     </div>
   );
