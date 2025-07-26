@@ -125,7 +125,7 @@ const DEFAULT_DARK_COLORS: import('../types/theme.types').ThemeColors = {
 export const DEFAULT_THEME: ThemeData = {
   id: 'default',
   name: 'Default',
-  description: 'Default theme',
+  description: '',
   version: '1.0.0',
   author: 'Theme Editor 3.0',
   createdAt: new Date().toISOString(),

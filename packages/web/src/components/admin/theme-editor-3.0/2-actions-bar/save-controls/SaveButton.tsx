@@ -64,7 +64,7 @@ export function SaveButton({
     <Button
       variant={getVariant()}
       size="sm"
-      className={`h-8 w-8 p-0 ${className} ${justSaved ? 'bg-green-600 hover:bg-green-700' : ''}`}
+      className={`h-8 w-8 p-0 ${className} ${justSaved ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : ''}`}
       onClick={handleSave}
       disabled={isSaving}
       title={getTitle()}
