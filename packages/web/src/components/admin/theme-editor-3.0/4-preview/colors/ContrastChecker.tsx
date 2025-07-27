@@ -33,9 +33,9 @@ function ContrastCard({ pair, colors }: ContrastCardProps) {
   };
   
   const getGradeColor = (grade: string) => {
-    if (grade === 'AAA') return 'text-green-600 dark:text-green-400';
-    if (grade === 'AA') return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-red-600 dark:text-red-400';
+    if (grade === 'AAA') return 'text-primary';
+    if (grade === 'AA') return 'text-muted-foreground';
+    return 'text-destructive';
   };
   
   return (
@@ -157,7 +157,7 @@ export function ContrastChecker() {
         <Badge 
           variant="outline" 
           className={`cursor-pointer flex items-center gap-1 ${
-            contrastIssues > 0 ? 'text-red-600 dark:text-red-400 border-red-300 dark:border-red-600' : ''
+            contrastIssues > 0 ? 'text-destructive border-destructive/30' : ''
           }`}
         >
           <AlertTriangle className="h-3 w-3" />

@@ -293,7 +293,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       onClick={() => handleCopy('css')}
                     >
                       {copiedFormat === 'css' ? (
-                        <Check className="h-3 w-3 mr-1 text-green-500" />
+                        <Check className="h-3 w-3 mr-1 text-primary" />
                       ) : (
                         <Copy className="h-3 w-3 mr-1" />
                       )}
@@ -319,7 +319,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       onClick={() => handleCopy('tailwind')}
                     >
                       {copiedFormat === 'tailwind' ? (
-                        <Check className="h-3 w-3 mr-1 text-green-500" />
+                        <Check className="h-3 w-3 mr-1 text-primary" />
                       ) : (
                         <Copy className="h-3 w-3 mr-1" />
                       )}
@@ -345,7 +345,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       onClick={() => handleCopy('json')}
                     >
                       {copiedFormat === 'json' ? (
-                        <Check className="h-3 w-3 mr-1 text-green-500" />
+                        <Check className="h-3 w-3 mr-1 text-primary" />
                       ) : (
                         <Copy className="h-3 w-3 mr-1" />
                       )}

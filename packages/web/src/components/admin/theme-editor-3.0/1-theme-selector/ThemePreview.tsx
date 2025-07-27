@@ -36,7 +36,7 @@ export function ThemePreview({ theme, size = 'md', className = '' }: ThemePrevie
       {colors.slice(0, 3).map((color, index) => (
         <div
           key={index}
-          className={`${sizeClasses[size]} rounded-full border border-white/20 shadow-sm`}
+          className={`${sizeClasses[size]} rounded-full border border-border shadow-sm`}
           style={{ backgroundColor: color }}
           title={`Color ${index + 1}: ${color}`}
         />

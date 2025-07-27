@@ -19,7 +19,7 @@ export function ApplyBubblegumTheme() {
       onClick={handleApplyBubblegumTheme}
       variant="outline"
       size="sm"
-      className="flex items-center gap-2 bg-gradient-to-r from-pink-50 to-cyan-50 hover:from-pink-100 hover:to-cyan-100 border-pink-200 text-pink-700 hover:text-pink-800 dark:from-pink-950/20 dark:to-cyan-950/20 dark:border-pink-800 dark:text-pink-300 dark:hover:text-pink-200"
+      className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 border-primary/30 text-primary hover:text-primary"
     >
       <Palette className="h-4 w-4" />
       Apply Bubblegum Theme

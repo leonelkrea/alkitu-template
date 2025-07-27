@@ -131,7 +131,7 @@ function ColorCard({ item, colors }: { item: ColorShowcaseItem; colors: ThemeCol
                 onClick={handleCopy}
               >
                 {copied ? (
-                  <CheckCircle className="h-3 w-3 text-green-500" />
+                  <CheckCircle className="h-3 w-3 text-primary" />
                 ) : (
                   <Copy className="h-3 w-3" />
                 )}
