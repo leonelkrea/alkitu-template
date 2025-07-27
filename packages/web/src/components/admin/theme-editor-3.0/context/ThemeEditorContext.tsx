@@ -4,6 +4,7 @@ import React, { createContext, useContext, useReducer, useEffect, ReactNode } fr
 import { ThemeData, ThemeWithCurrentColors, ThemeMode, EditorState, EditorSection, ViewportState, ViewportSize, PreviewState, PreviewSection } from '../types';
 import { DEFAULT_THEME } from '../constants/default-themes';
 import { applyThemeToRoot, applyThemeMode, applyModeSpecificColors } from '../utils/css-variables';
+import { applyScrollbarStyles } from '../utils/scrollbar-styles';
 
 // State interface
 interface ThemeEditorState {
@@ -105,8 +106,15 @@ function themeEditorReducer(state: ThemeEditorState, action: ThemeEditorAction):
       // Recompute current theme if we're updating colors for the active mode
       const shouldUpdateCurrent = mode === state.themeMode;
       const newCurrentForColorUpdate = shouldUpdateCurrent 
-        ? { ...state.currentTheme, colors }
-        : state.currentTheme;
+        ? { 
+            ...state.currentTheme, 
+            colors,
+            [mode === 'dark' ? 'darkColors' : 'lightColors']: colors
+          }
+        : {
+            ...state.currentTheme,
+            [mode === 'dark' ? 'darkColors' : 'lightColors']: colors
+          };
       
       return {
         ...state,
@@ -191,6 +199,7 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     const initialColors = state.themeMode === 'dark' ? DEFAULT_THEME.darkColors : DEFAULT_THEME.lightColors;
     applyModeSpecificColors(initialColors);
     applyThemeMode(state.themeMode);
+    applyScrollbarStyles();
   }, []);
   
   // Apply colors and mode when theme mode changes
@@ -198,6 +207,7 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     const currentColors = state.themeMode === 'dark' ? state.baseTheme.darkColors : state.baseTheme.lightColors;
     applyModeSpecificColors(currentColors);
     applyThemeMode(state.themeMode);
+    applyScrollbarStyles();
   }, [state.themeMode, state.baseTheme]);
   
   // Helper actions
@@ -216,6 +226,7 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     });
     // Apply colors immediately for live preview
     applyModeSpecificColors(colors);
+    applyScrollbarStyles();
   };
   
   const setEditorSection = (section: EditorSection) => dispatch({ type: 'SET_EDITOR_SECTION', payload: section });

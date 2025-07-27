@@ -6,6 +6,7 @@ import { useThemeEditor } from '../context/ThemeEditorContext';
 import { useThemeUpdates } from '../hooks/useThemeUpdates';
 import { EditorSection } from '../types';
 import { Palette, Type, Building, Square, Grid, Zap, Scroll } from 'lucide-react';
+import { ColorEditor } from './colors/ColorEditor';
 
 export function ThemeEditor() {
   const { state, setEditorSection } = useThemeEditor();
@@ -22,14 +23,14 @@ export function ThemeEditor() {
   ];
 
   return (
-    <div className="h-full bg-card">
-      <div className="p-4">
+    <div className="h-full bg-card flex flex-col">
+      <div className="h-full flex flex-col p-4">
         <Tabs 
           value={state.editor.activeSection} 
           onValueChange={(value) => setEditorSection(value as EditorSection)}
-          className="w-full"
+          className="w-full h-full flex flex-col"
         >
-          <TabsList className="grid w-full grid-cols-4 gap-1 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-4 gap-1 h-auto p-1 flex-shrink-0">
             {sections.map(({ id, label, icon: Icon }) => (
               <TabsTrigger 
                 key={id} 
@@ -42,12 +43,20 @@ export function ThemeEditor() {
             ))}
           </TabsList>
 
-          {sections.map(({ id, label }) => (
-            <TabsContent key={id} value={id} className="mt-4">
-              <div className="h-24 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
-                <span className="text-xs text-muted-foreground">
-                  {label} editor content will be here
-                </span>
+          <TabsContent value="colors" className="mt-4 flex-1 min-h-0 overflow-hidden">
+            <div className="h-full overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-background">
+              <ColorEditor />
+            </div>
+          </TabsContent>
+
+          {sections.slice(1).map(({ id, label }) => (
+            <TabsContent key={id} value={id} className="mt-4 flex-1 min-h-0 overflow-hidden">
+              <div className="h-full overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-background">
+                <div className="h-24 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+                  <span className="text-xs text-muted-foreground">
+                    {label} editor content will be here
+                  </span>
+                </div>
               </div>
             </TabsContent>
           ))}

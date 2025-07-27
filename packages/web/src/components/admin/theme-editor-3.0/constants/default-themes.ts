@@ -1,5 +1,6 @@
 // Theme Editor 3.0 - Default Themes with OKLCH colors
 import { ThemeData, ColorToken } from '../types/theme.types';
+import { BUBBLEGUM_THEME as COMPLETE_BUBBLEGUM_THEME } from './bubblegum-theme';
 
 // Helper function to create color tokens
 function createColorToken(name: string, value: string, l: number, c: number, h: number, description?: string): ColorToken {
@@ -11,7 +12,7 @@ function createColorToken(name: string, value: string, l: number, c: number, h: 
   };
 }
 
-// Light mode colors (from CSS variables provided)
+// Light mode colors (original default theme)
 const DEFAULT_LIGHT_COLORS: import('../types/theme.types').ThemeColors = {
   // Base colors
   background: createColorToken('background', 'oklch(1 0 0)', 1, 0, 0),
@@ -63,10 +64,14 @@ const DEFAULT_LIGHT_COLORS: import('../types/theme.types').ThemeColors = {
   sidebarAccent: createColorToken('sidebar-accent', 'oklch(0.9700 0 0)', 0.9700, 0, 0),
   sidebarAccentForeground: createColorToken('sidebar-accent-foreground', 'oklch(0.2050 0 0)', 0.2050, 0, 0),
   sidebarBorder: createColorToken('sidebar-border', 'oklch(0.9220 0 0)', 0.9220, 0, 0),
-  sidebarRing: createColorToken('sidebar-ring', 'oklch(0.7080 0 0)', 0.7080, 0, 0)
+  sidebarRing: createColorToken('sidebar-ring', 'oklch(0.7080 0 0)', 0.7080, 0, 0),
+  
+  // Scrollbar colors
+  scrollbarTrack: createColorToken('scrollbar-track', 'oklch(1 0 0)', 1, 0, 0),
+  scrollbarThumb: createColorToken('scrollbar-thumb', 'oklch(0.9220 0 0)', 0.9220, 0, 0)
 };
 
-// Dark mode colors (from .dark CSS variables provided)
+// Dark mode colors (original default theme)
 const DEFAULT_DARK_COLORS: import('../types/theme.types').ThemeColors = {
   // Base colors
   background: createColorToken('background', 'oklch(0.1450 0 0)', 0.1450, 0, 0),
@@ -118,7 +123,11 @@ const DEFAULT_DARK_COLORS: import('../types/theme.types').ThemeColors = {
   sidebarAccent: createColorToken('sidebar-accent', 'oklch(0.2690 0 0)', 0.2690, 0, 0),
   sidebarAccentForeground: createColorToken('sidebar-accent-foreground', 'oklch(0.9850 0 0)', 0.9850, 0, 0),
   sidebarBorder: createColorToken('sidebar-border', 'oklch(0.2750 0 0)', 0.2750, 0, 0),
-  sidebarRing: createColorToken('sidebar-ring', 'oklch(0.4390 0 0)', 0.4390, 0, 0)
+  sidebarRing: createColorToken('sidebar-ring', 'oklch(0.4390 0 0)', 0.4390, 0, 0),
+  
+  // Scrollbar colors
+  scrollbarTrack: createColorToken('scrollbar-track', 'oklch(0.1450 0 0)', 0.1450, 0, 0),
+  scrollbarThumb: createColorToken('scrollbar-thumb', 'oklch(0.2750 0 0)', 0.2750, 0, 0)
 };
 
 // Default Theme - Dual configuration structure
@@ -136,9 +145,9 @@ export const DEFAULT_THEME: ThemeData = {
   darkColors: DEFAULT_DARK_COLORS,
   typography: {
     fontFamilies: {
-      sans: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, \'Noto Sans\', sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\', \'Noto Color Emoji\'',
-      serif: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-      mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+      sans: 'ui-sans-serif, system-ui, sans-serif',
+      serif: 'ui-serif, Georgia, serif',
+      mono: 'ui-monospace, SFMono-Regular, monospace'
     },
     trackingNormal: '0em'
   },
@@ -228,15 +237,11 @@ export const BOLD_TECH_THEME: ThemeData = {
 };
 
 export const BUBBLEGUM_THEME: ThemeData = {
-  ...DEFAULT_THEME,
+  ...COMPLETE_BUBBLEGUM_THEME,
   id: 'bubblegum',
   name: 'Bubblegum',
-  description: 'Playful pink theme',
-  ...createThemedVariants(DEFAULT_LIGHT_COLORS, DEFAULT_DARK_COLORS, {
-    primary: createColorToken('primary', 'oklch(0.6436 0.1897 342.5)', 0.6436, 0.1897, 342.5),
-    accent: createColorToken('accent', 'oklch(0.9346 0.0525 348.4)', 0.9346, 0.0525, 348.4)
-  }),
-  tags: ['pink', 'playful', 'fun']
+  description: 'A vibrant, candy-colored theme with pink and cyan accents',
+  tags: ['pink', 'playful', 'fun', 'vibrant', 'candy']
 };
 
 export const CAFFEINE_THEME: ThemeData = {

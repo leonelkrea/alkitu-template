@@ -83,6 +83,15 @@ export const COLOR_SECTIONS: ColorSection[] = [
       'sidebarBorder',
       'sidebarRing'
     ]
+  },
+  {
+    id: 'scrollbar',
+    title: 'Scrollbar Colors',
+    description: 'Colors for scrollbar track and thumb elements',
+    colorKeys: [
+      'scrollbarTrack',
+      'scrollbarThumb'
+    ]
   }
 ];
 
@@ -119,16 +128,18 @@ export const CSS_VARIABLE_MAP: Record<keyof import('./theme.types').ThemeColors,
   sidebarAccent: '--sidebar-accent',
   sidebarAccentForeground: '--sidebar-accent-foreground',
   sidebarBorder: '--sidebar-border',
-  sidebarRing: '--sidebar-ring'
+  sidebarRing: '--sidebar-ring',
+  scrollbarTrack: '--scrollbar-track',
+  scrollbarThumb: '--scrollbar-thumb'
 };
 
-// Human readable labels for each color
+// Human readable labels for each color (matching JSON structure exactly)
 export const COLOR_LABELS: Record<keyof import('./theme.types').ThemeColors, string> = {
   background: 'Background',
   foreground: 'Foreground',
-  card: 'Card',
+  card: 'Card Background',
   cardForeground: 'Card Foreground',
-  popover: 'Popover',
+  popover: 'Popover Background',
   popoverForeground: 'Popover Foreground',
   primary: 'Primary',
   primaryForeground: 'Primary Foreground',
@@ -148,12 +159,14 @@ export const COLOR_LABELS: Record<keyof import('./theme.types').ThemeColors, str
   chart3: 'Chart 3',
   chart4: 'Chart 4',
   chart5: 'Chart 5',
-  sidebar: 'Sidebar',
+  sidebar: 'Sidebar Background',
   sidebarForeground: 'Sidebar Foreground',
   sidebarPrimary: 'Sidebar Primary',
   sidebarPrimaryForeground: 'Sidebar Primary Foreground',
   sidebarAccent: 'Sidebar Accent',
   sidebarAccentForeground: 'Sidebar Accent Foreground',
   sidebarBorder: 'Sidebar Border',
-  sidebarRing: 'Sidebar Ring'
+  sidebarRing: 'Sidebar Ring',
+  scrollbarTrack: 'Scrollbar Track',
+  scrollbarThumb: 'Scrollbar Thumb'
 };

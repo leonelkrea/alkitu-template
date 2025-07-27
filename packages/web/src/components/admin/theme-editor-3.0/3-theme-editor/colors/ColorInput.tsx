@@ -8,6 +8,8 @@ import { Shuffle } from 'lucide-react';
 import { ColorToken, OklchColor } from '../../types/theme.types';
 import { oklchToString, parseOklchString } from '../../utils/css-variables';
 import { OklchColorPicker } from './OklchColorPicker';
+import { HsvColorPicker } from './HsvColorPicker';
+import { oklchToHex, isValidHex, hexToOklch } from '../../utils/color-conversions';
 
 interface ColorInputProps {
   color: ColorToken;
@@ -21,47 +23,47 @@ export function ColorInput({
   className = ""
 }: ColorInputProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(color.value);
+  const [inputValue, setInputValue] = useState(() => oklchToHex(color.oklch));
 
-  // Update input value when color prop changes
+  // Update input value when color prop changes (show hex instead of oklch)
   useEffect(() => {
-    setInputValue(color.value);
-  }, [color.value]);
+    setInputValue(oklchToHex(color.oklch));
+  }, [color.oklch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    
-    // Try to parse the input value
-    const parsedOklch = parseOklchString(newValue);
-    if (parsedOklch) {
-      const newColor: ColorToken = {
-        ...color,
-        value: newValue,
-        oklch: parsedOklch
-      };
-      onChange(newColor);
-    }
+    // Don't call onChange on every keystroke to avoid infinite loops
+    // Wait for blur or enter key for validation
   };
 
   const handleInputBlur = () => {
-    // If the input value is not a valid OKLCH string, revert to the original value
-    const parsedOklch = parseOklchString(inputValue);
-    if (!parsedOklch) {
-      setInputValue(color.value);
+    // Try to parse as hex input on blur
+    if (isValidHex(inputValue)) {
+      const parsedOklch = hexToOklch(inputValue);
+      if (parsedOklch) {
+        const newColor: ColorToken = {
+          ...color,
+          value: `oklch(${parsedOklch.l.toFixed(4)} ${parsedOklch.c.toFixed(4)} ${parsedOklch.h.toFixed(4)})`,
+          oklch: parsedOklch
+        };
+        onChange(newColor);
+      }
+    } else {
+      // Revert to current color's hex value if invalid
+      setInputValue(oklchToHex(color.oklch));
     }
   };
 
-  const handlePickerChange = (newOklch: OklchColor) => {
-    const newValue = oklchToString(newOklch);
-    const newColor: ColorToken = {
-      ...color,
-      value: newValue,
-      oklch: newOklch
-    };
-    
-    setInputValue(newValue);
-    onChange(newColor);
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleInputBlur();
+    }
+  };
+
+  const handlePickerChange = (newColorToken: ColorToken) => {
+    setInputValue(oklchToHex(newColorToken.oklch));
+    onChange(newColorToken);
   };
 
   const handleRandomColor = () => {
@@ -72,16 +74,18 @@ export function ColorInput({
       h: Math.random() * 360 // 0 to 360
     };
     
-    handlePickerChange(randomOklch);
+    const randomColorToken: ColorToken = {
+      ...color,
+      value: oklchToString(randomOklch),
+      oklch: randomOklch
+    };
+    
+    handlePickerChange(randomColorToken);
   };
 
-  // Get color for preview swatch
+  // Get color for preview swatch (always show as hex)
   const getColorPreview = (): string => {
-    // For CSS variables like var(--primary), show a fallback color
-    if (color.value.startsWith('var(')) {
-      return oklchToString(color.oklch);
-    }
-    return color.value;
+    return oklchToHex(color.oklch);
   };
 
   return (
@@ -102,8 +106,8 @@ export function ColorInput({
         <PopoverContent className="w-80 p-4" align="start">
           <div className="space-y-4">
             <div className="text-sm font-medium">Color Picker</div>
-            <OklchColorPicker
-              oklch={color.oklch}
+            <HsvColorPicker
+              colorToken={color}
               onChange={handlePickerChange}
             />
           </div>
@@ -116,8 +120,9 @@ export function ColorInput({
         value={inputValue}
         onChange={handleInputChange}
         onBlur={handleInputBlur}
-        placeholder="oklch(0.5 0.1 180)"
-        className="flex-1 font-mono text-xs"
+        onKeyDown={handleInputKeyDown}
+        placeholder="#000000"
+        className="flex-1 font-mono text-xs text-foreground bg-input border-border"
       />
 
       {/* Random Color Button */}

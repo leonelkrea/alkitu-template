@@ -1,25 +1,21 @@
 // Theme Editor 3.0 - CSS Variables Management
 import { ThemeData, ThemeColors, OklchColor } from '../types/theme.types';
 import { CSS_VARIABLE_MAP } from '../types/color-sections.types';
+import { oklchToHex } from './color-conversions';
 
 /**
  * Converts OKLCH color object to CSS oklch() string
  */
 export function oklchToString(oklch: OklchColor): string {
-  const { l, c, h, a = 1 } = oklch;
-  
-  if (a === 1) {
-    return `oklch(${l.toFixed(4)} ${c.toFixed(4)} ${h.toFixed(4)})`;
-  }
-  
-  return `oklch(${l.toFixed(4)} ${c.toFixed(4)} ${h.toFixed(4)} / ${a.toFixed(2)})`;
+  const { l, c, h } = oklch;
+  return `oklch(${l.toFixed(4)} ${c.toFixed(4)} ${h.toFixed(4)})`;
 }
 
 /**
  * Parses OKLCH string to OKLCH color object
  */
 export function parseOklchString(value: string): OklchColor | null {
-  // Match oklch(l c h) or oklch(l c h / a)
+  // Match oklch(l c h) - no alpha support
   const match = value.match(/oklch\(([^)]+)\)/);
   if (!match) return null;
   
@@ -31,14 +27,6 @@ export function parseOklchString(value: string): OklchColor | null {
   const h = parseFloat(parts[2]);
   
   if (isNaN(l) || isNaN(c) || isNaN(h)) return null;
-  
-  // Check for alpha value
-  if (parts.length > 3 && parts[3] === '/' && parts[4]) {
-    const a = parseFloat(parts[4]);
-    if (!isNaN(a)) {
-      return { l, c, h, a };
-    }
-  }
   
   return { l, c, h };
 }
@@ -156,7 +144,8 @@ export function generateThemeCSS(theme: ThemeData, includeLight = true, includeD
     Object.entries(theme.lightColors).forEach(([colorKey, colorToken]) => {
       const cssVariable = CSS_VARIABLE_MAP[colorKey as keyof ThemeColors];
       if (cssVariable) {
-        css += `  ${cssVariable}: ${colorToken.value};\n`;
+        const hexValue = oklchToHex(colorToken.oklch);
+        css += `  ${cssVariable}: ${colorToken.value}; /* ${hexValue} */\n`;
       }
     });
     
@@ -192,7 +181,8 @@ export function generateThemeCSS(theme: ThemeData, includeLight = true, includeD
     Object.entries(theme.darkColors).forEach(([colorKey, colorToken]) => {
       const cssVariable = CSS_VARIABLE_MAP[colorKey as keyof ThemeColors];
       if (cssVariable) {
-        css += `  ${cssVariable}: ${colorToken.value};\n`;
+        const hexValue = oklchToHex(colorToken.oklch);
+        css += `  ${cssVariable}: ${colorToken.value}; /* ${hexValue} */\n`;
       }
     });
     

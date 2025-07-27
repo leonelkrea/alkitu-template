@@ -3,7 +3,6 @@ export interface OklchColor {
   l: number; // Lightness (0-1)
   c: number; // Chroma (0-0.37+)
   h: number; // Hue (0-360)
-  a?: number; // Alpha (0-1)
 }
 
 export interface ColorToken {
@@ -65,6 +64,10 @@ export interface ThemeColors {
   sidebarAccentForeground: ColorToken;
   sidebarBorder: ColorToken;
   sidebarRing: ColorToken;
+  
+  // Scrollbar colors
+  scrollbarTrack: ColorToken;
+  scrollbarThumb: ColorToken;
 }
 
 export interface ThemeTypography {
