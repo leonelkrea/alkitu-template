@@ -1,57 +1,31 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload } from 'lucide-react';
 import { ThemeData } from '../../types/theme.types';
+import { ImportCustomCSSModal } from './ImportCustomCSSModal';
 
 interface ImportButtonProps {
   onImport: (theme: ThemeData) => void;
   onError?: (error: string) => void;
+  existingThemes: ThemeData[];
   className?: string;
 }
 
-export function ImportButton({ onImport, onError, className = "" }: ImportButtonProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+export function ImportButton({ onImport, onError, existingThemes, className = "" }: ImportButtonProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClick = () => {
-    fileInputRef.current?.click();
+    setIsModalOpen(true);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        const theme = JSON.parse(content) as ThemeData;
-        
-        // Basic validation - check for new dual structure
-        if (!theme.id || !theme.name || (!theme.lightColors && !theme.colors)) {
-          throw new Error('Invalid theme file format');
-        }
-        
-        // If it's an old format theme (with colors only), convert to new format
-        if (theme.colors && !theme.lightColors) {
-          theme.lightColors = theme.colors;
-          theme.darkColors = theme.colors; // Use same colors for both modes
-          delete (theme as any).colors; // Remove old property
-        }
-        
-        onImport(theme);
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to import theme';
-        onError?.(message);
-      }
-    };
-    
-    reader.readAsText(file);
-    
-    // Reset input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+  const handleImport = (theme: ThemeData) => {
+    try {
+      onImport(theme);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to import theme';
+      onError?.(message);
     }
   };
 
@@ -62,17 +36,16 @@ export function ImportButton({ onImport, onError, className = "" }: ImportButton
         size="sm"
         className={`h-8 w-8 p-0 ${className}`}
         onClick={handleClick}
-        title="Import theme from JSON file"
+        title="Import theme from CSS"
       >
         <Upload className="h-3 w-3" />
       </Button>
       
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".json"
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
+      <ImportCustomCSSModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        onImport={handleImport}
+        existingThemes={existingThemes}
       />
     </>
   );

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Check, X } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { ThemeWithCurrentColors } from '../../types/theme.types';
 import { generateThemeCSS } from '../../utils/css-variables';
 import { oklchToHex, oklchToRgb } from '../../utils/color-conversions';
@@ -198,7 +198,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
           return (
             <>
               <span className="text-primary">{parts[0]}</span>
-              {parts[1] && <><span className="text-foreground">:</span><span className="text-secondary font-medium">{parts[1]}</span></>}
+              {parts[1] && <><span className="text-foreground">:</span><span className="text-muted-foreground font-medium">{parts[1]}</span></>}
             </>
           );
         }
@@ -210,7 +210,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
           const value = line.substring(colonIndex);
           return (
             <>
-              <span className="text-primary font-medium">{key}</span>
+              <span className="text-muted-foreground font-medium">{key}</span>
               <span className="text-foreground">:</span>
               <span className="text-primary">{value}</span>
             </>
@@ -233,7 +233,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
       <div className="font-mono text-sm leading-relaxed">
         {lines.map((line, index) => (
           <div key={index} className="flex items-start min-w-0">
-            <span className="text-muted-foreground mr-3 select-none min-w-[4ch] flex-shrink-0 text-right sticky left-0 bg-card z-10 pr-2 border-r border-border/50">
+            <span className="text-muted-foreground mr-3 select-none min-w-[4ch] flex-shrink-0 text-right sticky left-0  z-10 pr-2 border-r border-border/0">
               {(index + 1).toString().padStart(3, ' ')}
             </span>
             <span className="flex-1 whitespace-pre-wrap break-all min-w-0 pl-2">
@@ -248,16 +248,8 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] w-full max-h-[90vh] bg-background border-border overflow-hidden flex flex-col">
-        <DialogHeader className="flex flex-row items-center justify-between pb-4 flex-shrink-0">
+        <DialogHeader className="pb-4 flex-shrink-0">
           <DialogTitle className="text-foreground text-lg font-semibold">Theme Code</DialogTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-muted"
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </DialogHeader>
 
         <div className="flex flex-col min-h-0 flex-1 gap-4">
@@ -297,7 +289,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-7 px-2 text-xs"
+                      className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
                       onClick={() => handleCopy('css')}
                     >
                       {copiedFormat === 'css' ? (
@@ -308,7 +300,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       {copiedFormat === 'css' ? 'Copied' : 'Copy'}
                     </Button>
                   </div>
-                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-primary-foreground text-primary">
+                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-muted/50 text-foreground">
                     <div className="overflow-x-auto min-w-0">
                       {formatCode(generateCSS(), 'css')}
                     </div>
@@ -323,7 +315,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-7 px-2 text-xs"
+                      className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
                       onClick={() => handleCopy('tailwind')}
                     >
                       {copiedFormat === 'tailwind' ? (
@@ -334,7 +326,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       {copiedFormat === 'tailwind' ? 'Copied' : 'Copy'}
                     </Button>
                   </div>
-                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-primary-foreground text-primary">
+                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-muted/50 text-foreground">
                     <div className="overflow-x-auto min-w-0">
                       {formatCode(generateTailwind(), 'javascript')}
                     </div>
@@ -349,7 +341,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-7 px-2 text-xs"
+                      className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
                       onClick={() => handleCopy('json')}
                     >
                       {copiedFormat === 'json' ? (
@@ -360,7 +352,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       {copiedFormat === 'json' ? 'Copied' : 'Copy'}
                     </Button>
                   </div>
-                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-primary-foreground text-primary">
+                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-muted/50 text-foreground">
                     <div className="overflow-x-auto min-w-0">
                       {formatCode(generateJSON(), 'json')}
                     </div>

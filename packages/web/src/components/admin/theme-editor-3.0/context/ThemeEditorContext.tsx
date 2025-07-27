@@ -196,20 +196,20 @@ function themeEditorReducer(state: ThemeEditorState, action: ThemeEditorAction):
       };
     
     case 'UPDATE_CURRENT_COLORS':
-      // Update colors for the current mode in the base theme
+      // Add current state to history BEFORE making changes
       const { mode, colors } = action.payload;
+      const previousHistoryEntry: HistoryEntry = {
+        baseTheme: state.baseTheme, // Save current state before changing
+        themeMode: state.themeMode,
+        timestamp: Date.now()
+      };
+      const updatedHistory = addToHistory(state.history, previousHistoryEntry);
+      
+      // Update colors for the current mode in the base theme
       const updatedBaseTheme = {
         ...state.baseTheme,
         [mode === 'dark' ? 'darkColors' : 'lightColors']: colors
       };
-      
-      // Add current state to history before making changes
-      const newHistoryEntry: HistoryEntry = {
-        baseTheme: updatedBaseTheme,
-        themeMode: state.themeMode,
-        timestamp: Date.now()
-      };
-      const updatedHistory = addToHistory(state.history, newHistoryEntry);
       
       // Recompute current theme if we're updating colors for the active mode
       const shouldUpdateCurrent = mode === state.themeMode;
@@ -364,6 +364,13 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     applyThemeMode(state.themeMode);
     applyScrollbarStyles();
   }, [state.themeMode, state.baseTheme]);
+
+  // Apply CSS changes when undo/redo affects the base theme (for immediate visual feedback)
+  useEffect(() => {
+    const currentColors = state.themeMode === 'dark' ? state.baseTheme.darkColors : state.baseTheme.lightColors;
+    applyModeSpecificColors(currentColors);
+    applyScrollbarStyles();
+  }, [state.baseTheme.lightColors, state.baseTheme.darkColors, state.themeMode]);
   
   // Helper actions
   const setTheme = (theme: ThemeData) => {

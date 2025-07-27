@@ -7,6 +7,7 @@ import { ThemeData, ThemeExportFormat } from '../../types/theme.types';
 
 interface ImportExportProps {
   theme: ThemeData;
+  existingThemes: ThemeData[];
   onImport: (theme: ThemeData) => void;
   onExport?: (format: ThemeExportFormat) => void;
   onImportError?: (error: string) => void;
@@ -15,6 +16,7 @@ interface ImportExportProps {
 
 export function ImportExport({
   theme,
+  existingThemes,
   onImport,
   onExport,
   onImportError,
@@ -25,6 +27,7 @@ export function ImportExport({
       <ImportButton 
         onImport={onImport}
         onError={onImportError}
+        existingThemes={existingThemes}
       />
       <CodeButton 
         theme={theme}

@@ -61,6 +61,7 @@ export function ActionsBar() {
         <div className="flex gap-1">
           <ImportExport
             theme={currentTheme}
+            existingThemes={state.availableThemes}
             onImport={handleImport}
             onImportError={handleImportError}
           />
