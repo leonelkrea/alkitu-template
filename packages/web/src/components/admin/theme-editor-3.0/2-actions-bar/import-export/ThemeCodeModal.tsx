@@ -197,7 +197,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
           const parts = line.split(':');
           return (
             <>
-              <span className="text-accent font-medium">{parts[0]}</span>
+              <span className="text-primary">{parts[0]}</span>
               {parts[1] && <><span className="text-foreground">:</span><span className="text-secondary font-medium">{parts[1]}</span></>}
             </>
           );
@@ -212,7 +212,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
             <>
               <span className="text-primary font-medium">{key}</span>
               <span className="text-foreground">:</span>
-              <span className="text-accent">{value}</span>
+              <span className="text-primary">{value}</span>
             </>
           );
         }
@@ -222,7 +222,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
           return <span className="text-primary font-semibold">{line}</span>;
         }
         if (line.includes('colors:')) {
-          return <span className="text-accent font-medium">{line}</span>;
+          return <span className="text-primary">{line}</span>;
         }
       }
       
@@ -308,7 +308,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       {copiedFormat === 'css' ? 'Copied' : 'Copy'}
                     </Button>
                   </div>
-                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0">
+                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-primary-foreground text-primary">
                     <div className="overflow-x-auto min-w-0">
                       {formatCode(generateCSS(), 'css')}
                     </div>
@@ -334,7 +334,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       {copiedFormat === 'tailwind' ? 'Copied' : 'Copy'}
                     </Button>
                   </div>
-                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0">
+                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-primary-foreground text-primary">
                     <div className="overflow-x-auto min-w-0">
                       {formatCode(generateTailwind(), 'javascript')}
                     </div>
@@ -360,7 +360,7 @@ ${Object.entries(lightColors).map(([key, value]) => `        '${key}': 'hsl(var(
                       {copiedFormat === 'json' ? 'Copied' : 'Copy'}
                     </Button>
                   </div>
-                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0">
+                  <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-scrollbarThumb scrollbar-track-scrollbarTrack min-h-0 bg-primary-foreground text-primary">
                     <div className="overflow-x-auto min-w-0">
                       {formatCode(generateJSON(), 'json')}
                     </div>

@@ -27,29 +27,33 @@ export function useActionsBarLogic(): ActionsBarLogic {
     setError,
     markSaved,
     addTheme,
-    updateTheme
+    updateTheme,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    undoCount,
+    redoCount
   } = useThemeEditor();
 
   // Get current theme or default (evita repetición del fallback)
   const currentTheme = state.currentTheme || DEFAULT_THEMES[0];
 
-  // Mock history state (centralizamos el estado mock)
+  // Real history state from context
   const historyState: HistoryState = {
-    canUndo: false,
-    canRedo: false,
-    undoCount: 0,
-    redoCount: 0
+    canUndo,
+    canRedo,
+    undoCount,
+    redoCount
   };
 
   // Handlers centralizados con tipos específicos
   const handleUndo: UndoHandler = () => {
-    // TODO: Implement undo functionality
-    console.log('Undo');
+    undo();
   };
 
   const handleRedo: RedoHandler = () => {
-    // TODO: Implement redo functionality
-    console.log('Redo');
+    redo();
   };
 
   const handleImport: ThemeImportHandler = (theme) => {
@@ -79,8 +83,9 @@ export function useActionsBarLogic(): ActionsBarLogic {
   };
 
   const handleReset: ResetHandler = () => {
-    // Reset to default theme
-    setTheme(DEFAULT_THEMES[0]);
+    // Reset current theme to its original values
+    const originalTheme = DEFAULT_THEMES.find(t => t.id === currentTheme.id) || DEFAULT_THEMES[0];
+    setTheme(originalTheme);
     markSaved();
   };
 

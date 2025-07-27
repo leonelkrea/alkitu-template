@@ -6,6 +6,20 @@ import { DEFAULT_THEME, DEFAULT_THEMES } from '../constants/default-themes';
 import { applyThemeToRoot, applyThemeMode, applyModeSpecificColors } from '../utils/css-variables';
 import { applyScrollbarStyles } from '../utils/scrollbar-styles';
 
+// History interface for undo/redo functionality
+interface HistoryEntry {
+  baseTheme: ThemeData;
+  themeMode: ThemeMode;
+  timestamp: number;
+}
+
+interface HistoryState {
+  past: HistoryEntry[];
+  present: HistoryEntry;
+  future: HistoryEntry[];
+  maxHistory: number;
+}
+
 // State interface
 interface ThemeEditorState {
   // Theme data
@@ -13,6 +27,9 @@ interface ThemeEditorState {
   currentTheme: ThemeWithCurrentColors; // Theme with current colors based on mode
   availableThemes: ThemeData[];      // List of available themes
   themeMode: ThemeMode;
+  
+  // History for undo/redo
+  history: HistoryState;
   
   // Editor state
   editor: EditorState;
@@ -51,7 +68,86 @@ type ThemeEditorAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'TOGGLE_UNSAVED_CHANGES'; payload: boolean }
-  | { type: 'ADD_THEME'; payload: ThemeData };
+  | { type: 'ADD_THEME'; payload: ThemeData }
+  | { type: 'UNDO' }
+  | { type: 'REDO' };
+
+// Helper function to create initial history state
+function createInitialHistoryState(theme: ThemeData, mode: ThemeMode): HistoryState {
+  const initialEntry: HistoryEntry = {
+    baseTheme: theme,
+    themeMode: mode,
+    timestamp: Date.now()
+  };
+
+  return {
+    past: [],
+    present: initialEntry,
+    future: [],
+    maxHistory: 30
+  };
+}
+
+// Helper functions for history management
+function addToHistory(history: HistoryState, newEntry: HistoryEntry): HistoryState {
+  const newPast = [...history.past, history.present];
+  
+  // Limit history to maxHistory entries
+  if (newPast.length > history.maxHistory) {
+    newPast.shift(); // Remove oldest entry
+  }
+
+  return {
+    ...history,
+    past: newPast,
+    present: newEntry,
+    future: [] // Clear future when new action is performed
+  };
+}
+
+function canUndo(history: HistoryState): boolean {
+  return history.past.length > 0;
+}
+
+function canRedo(history: HistoryState): boolean {
+  return history.future.length > 0;
+}
+
+function performUndo(history: HistoryState): { history: HistoryState; entry: HistoryEntry } | null {
+  if (!canUndo(history)) return null;
+
+  const previous = history.past[history.past.length - 1];
+  const newPast = history.past.slice(0, -1);
+  const newFuture = [history.present, ...history.future];
+
+  return {
+    history: {
+      ...history,
+      past: newPast,
+      present: previous,
+      future: newFuture
+    },
+    entry: previous
+  };
+}
+
+function performRedo(history: HistoryState): { history: HistoryState; entry: HistoryEntry } | null {
+  if (!canRedo(history)) return null;
+
+  const next = history.future[0];
+  const newFuture = history.future.slice(1);
+  const newPast = [...history.past, history.present];
+
+  return {
+    history: {
+      ...history,
+      past: newPast,
+      present: next,
+      future: newFuture
+    },
+    entry: next
+  };
+}
 
 // Initial state
 const initialState: ThemeEditorState = {
@@ -59,6 +155,7 @@ const initialState: ThemeEditorState = {
   currentTheme: computeCurrentTheme(DEFAULT_THEME, 'light'),
   availableThemes: DEFAULT_THEMES,
   themeMode: 'light',
+  history: createInitialHistoryState(DEFAULT_THEME, 'light'),
   editor: {
     activeSection: 'colors',
     isEditing: false,
@@ -106,6 +203,14 @@ function themeEditorReducer(state: ThemeEditorState, action: ThemeEditorAction):
         [mode === 'dark' ? 'darkColors' : 'lightColors']: colors
       };
       
+      // Add current state to history before making changes
+      const newHistoryEntry: HistoryEntry = {
+        baseTheme: updatedBaseTheme,
+        themeMode: state.themeMode,
+        timestamp: Date.now()
+      };
+      const updatedHistory = addToHistory(state.history, newHistoryEntry);
+      
       // Recompute current theme if we're updating colors for the active mode
       const shouldUpdateCurrent = mode === state.themeMode;
       const newCurrentForColorUpdate = shouldUpdateCurrent 
@@ -123,6 +228,7 @@ function themeEditorReducer(state: ThemeEditorState, action: ThemeEditorAction):
         ...state,
         baseTheme: updatedBaseTheme,
         currentTheme: newCurrentForColorUpdate,
+        history: updatedHistory,
         editor: { ...state.editor, hasUnsavedChanges: true }
       };
     
@@ -172,6 +278,34 @@ function themeEditorReducer(state: ThemeEditorState, action: ThemeEditorAction):
         editor: { ...state.editor, hasUnsavedChanges: false }
       };
     
+    case 'UNDO':
+      const undoResult = performUndo(state.history);
+      if (!undoResult) return state;
+      
+      const undoCurrentTheme = computeCurrentTheme(undoResult.entry.baseTheme, undoResult.entry.themeMode);
+      return {
+        ...state,
+        baseTheme: undoResult.entry.baseTheme,
+        themeMode: undoResult.entry.themeMode,
+        currentTheme: undoCurrentTheme,
+        history: undoResult.history,
+        editor: { ...state.editor, hasUnsavedChanges: true }
+      };
+    
+    case 'REDO':
+      const redoResult = performRedo(state.history);
+      if (!redoResult) return state;
+      
+      const redoCurrentTheme = computeCurrentTheme(redoResult.entry.baseTheme, redoResult.entry.themeMode);
+      return {
+        ...state,
+        baseTheme: redoResult.entry.baseTheme,
+        themeMode: redoResult.entry.themeMode,
+        currentTheme: redoCurrentTheme,
+        history: redoResult.history,
+        editor: { ...state.editor, hasUnsavedChanges: true }
+      };
+    
     default:
       return state;
   }
@@ -195,6 +329,14 @@ interface ThemeEditorContextType {
   markUnsaved: () => void;
   markSaved: () => void;
   addTheme: (theme: ThemeData) => void;
+  
+  // History actions
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  undoCount: number;
+  redoCount: number;
 }
 
 const ThemeEditorContext = createContext<ThemeEditorContextType | undefined>(undefined);
@@ -259,6 +401,21 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     dispatch({ type: 'ADD_THEME', payload: theme });
   };
   
+  // History functions
+  const undo = () => {
+    dispatch({ type: 'UNDO' });
+  };
+  
+  const redo = () => {
+    dispatch({ type: 'REDO' });
+  };
+  
+  // History state computed from current state
+  const canUndoValue = canUndo(state.history);
+  const canRedoValue = canRedo(state.history);
+  const undoCount = state.history.past.length;
+  const redoCount = state.history.future.length;
+  
   const value: ThemeEditorContextType = {
     state,
     dispatch,
@@ -273,7 +430,13 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     setError,
     markUnsaved,
     markSaved,
-    addTheme
+    addTheme,
+    undo,
+    redo,
+    canUndo: canUndoValue,
+    canRedo: canRedoValue,
+    undoCount,
+    redoCount
   };
   
   return (

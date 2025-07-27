@@ -22,7 +22,7 @@ export function ResetButton({
       className={`h-8 w-8 p-0 ${className}`}
       onClick={onReset}
       disabled={!hasChanges}
-      title="Reset all changes"
+      title="Reset theme to original values"
     >
       <RotateCcw className="h-3 w-3" />
     </Button>

@@ -68,7 +68,7 @@ const DEFAULT_LIGHT_COLORS: import('../types/theme.types').ThemeColors = {
   
   // Scrollbar colors - Using precise conversions
   scrollbarTrack: createPreciseColorToken('Scrollbar Track', '#ffffff', 'Light mode scrollbar track background'),
-  scrollbarThumb: createPreciseColorToken('Scrollbar Thumb', '#FFE3E3', 'Light mode scrollbar thumb color')
+  scrollbarThumb: createPreciseColorToken('Scrollbar Thumb', '#cdcdcd', 'Light mode scrollbar thumb color')
 };
 
 // Dark mode colors (original default theme)

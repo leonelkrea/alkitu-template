@@ -21,8 +21,8 @@ interface ContrastCardProps {
 }
 
 function ContrastCard({ pair, colors }: ContrastCardProps) {
-  const bgColor = colors[pair.background]?.value || 'oklch(1 0 0)';
-  const fgColor = colors[pair.foreground]?.value || 'oklch(0 0 0)';
+  const bgColor = colors[pair.background]?.oklchString || colors[pair.background]?.value || 'oklch(1 0 0)';
+  const fgColor = colors[pair.foreground]?.oklchString || colors[pair.foreground]?.value || 'oklch(0 0 0)';
   
   const ratio = getContrastRatio(bgColor, fgColor);
   const { grade, largeTextGrade } = getContrastGrade(ratio);
@@ -134,6 +134,16 @@ export function ContrastChecker() {
     { background: 'sidebarAccent', foreground: 'sidebarAccentForeground', name: 'Sidebar Accent' },
   ];
 
+  // Calculate total contrast issues
+  const allPairs = [...contentContainers, ...interactiveElements, ...navigationFunctional];
+  const contrastIssues = allPairs.filter(pair => {
+    const bgColor = colors[pair.background]?.oklchString || colors[pair.background]?.value || 'oklch(1 0 0)';
+    const fgColor = colors[pair.foreground]?.oklchString || colors[pair.foreground]?.value || 'oklch(0 0 0)';
+    const ratio = getContrastRatio(bgColor, fgColor);
+    const { grade } = getContrastGrade(ratio);
+    return grade === 'Fail';
+  }).length;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -144,9 +154,14 @@ export function ContrastChecker() {
       {/* Filter Tabs */}
       <div className="flex items-center gap-2">
         <Badge variant="secondary" className="cursor-pointer">All</Badge>
-        <Badge variant="outline" className="cursor-pointer flex items-center gap-1">
+        <Badge 
+          variant="outline" 
+          className={`cursor-pointer flex items-center gap-1 ${
+            contrastIssues > 0 ? 'text-red-600 dark:text-red-400 border-red-300 dark:border-red-600' : ''
+          }`}
+        >
           <AlertTriangle className="h-3 w-3" />
-          Issues (1)
+          Issues ({contrastIssues})
         </Badge>
       </div>
 
