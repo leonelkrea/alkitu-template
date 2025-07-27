@@ -139,10 +139,6 @@ export function ContrastChecker() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">Contrast Checker</h3>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>WCAG 2.0 AA requires a contrast ratio of at least 4.5:1</span>
-          <button className="text-primary hover:underline">Learn more</button>
-        </div>
       </div>
 
       {/* Filter Tabs */}

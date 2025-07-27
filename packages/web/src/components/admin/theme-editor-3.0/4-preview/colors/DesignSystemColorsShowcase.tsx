@@ -88,7 +88,7 @@ function ColorCard({ item, colors }: { item: ColorShowcaseItem; colors: ThemeCol
   const cssVariable = CSS_VARIABLE_MAP[item.colorKey];
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(cssVariable);
+    navigator.clipboard.writeText(hexValue);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -110,26 +110,19 @@ function ColorCard({ item, colors }: { item: ColorShowcaseItem; colors: ThemeCol
         {/* Color Preview */}
         <div className="space-y-2">
           <div 
-            className="w-full h-16 rounded-md border border-border shadow-inner relative overflow-hidden"
+            className="w-full h-16 rounded-md border border-border shadow-inner"
             style={{ backgroundColor: hexValue }}
-          >
-            {/* Pattern overlay for visual texture */}
-            <div className="absolute inset-0 opacity-5"
-                 style={{
-                   backgroundImage: `linear-gradient(45deg, oklch(0 0 0) 25%, oklch(1 0 0) 25%), 
-                                    linear-gradient(-45deg, oklch(0 0 0) 25%, oklch(1 0 0) 25%), 
-                                    linear-gradient(45deg, oklch(1 0 0) 75%, oklch(0 0 0) 75%), 
-                                    linear-gradient(-45deg, oklch(1 0 0) 75%, oklch(0 0 0) 75%)`,
-                   backgroundSize: '8px 8px',
-                   backgroundPosition: '0 0, 0 4px, 4px -4px, -4px 0px'
-                 }} />
-          </div>
+          />
+          
           
           {/* Color Value & CSS Variable */}
           <div className="space-y-1">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-mono text-muted-foreground">
-                {cssVariable}
+            <div className="text-xs font-mono text-muted-foreground">
+              {cssVariable}
+            </div>
+            <div className="flex items-center justify-between bg-muted/30 px-2 py-1 rounded">
+              <span className="text-xs font-mono text-foreground">
+                {hexValue}
               </span>
               <Button
                 variant="ghost"
@@ -143,9 +136,6 @@ function ColorCard({ item, colors }: { item: ColorShowcaseItem; colors: ThemeCol
                   <Copy className="h-3 w-3" />
                 )}
               </Button>
-            </div>
-            <div className="text-xs font-mono text-foreground bg-muted/30 px-2 py-1 rounded">
-              {hexValue}
             </div>
           </div>
         </div>
@@ -211,14 +201,6 @@ export function DesignSystemColorsShowcase({ colors }: DesignSystemColorsShowcas
         </div>
       ))}
 
-      {/* CSS Variables Info */}
-      <div className="mt-8 p-4 bg-muted/30 rounded-lg border border-border">
-        <h4 className="text-sm font-medium text-foreground mb-2">CSS Variables</h4>
-        <p className="text-xs text-muted-foreground">
-          All colors are automatically synchronized as CSS custom properties on the :root element. 
-          Changes in the theme editor update these variables in real-time.
-        </p>
-      </div>
     </div>
   );
 }
