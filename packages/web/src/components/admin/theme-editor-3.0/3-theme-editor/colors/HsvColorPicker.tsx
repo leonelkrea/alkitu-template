@@ -5,18 +5,21 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ColorToken } from '../../types/theme.types';
 import { 
-  hexToHsv, 
+  // Legacy imports (still needed for some functions)
   hsvToHex, 
-  hsvToRgb, 
-  hexToRgb,
-  isValidHex,
-  formatHex,
-  oklchToRgb,
-  rgbToHsv,
-  rgbToOklch,
+  hsvToRgb,
   type HSVColor,
   type RGBColor
 } from '../../utils/color-conversions';
+
+// New precise conversion imports
+import {
+  updateColorTokenFromHex,
+  updateColorTokenFromRgb,
+  updateColorTokenFromHsv,
+  isValidHex as isValidHexV2,
+  formatHexDisplay
+} from '../../utils/color-conversions-v2';
 
 interface HsvColorPickerProps {
   colorToken: ColorToken;
@@ -25,49 +28,50 @@ interface HsvColorPickerProps {
 }
 
 export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPickerProps) {
-  // Initialize HSV from current color token's OKLCH value
-  const [hsv, setHsv] = useState<HSVColor>(() => {
-    const rgb = oklchToRgb(colorToken.oklch);
-    return rgbToHsv(rgb);
-  });
-  
-  const [rgb, setRgb] = useState<RGBColor>({ r: 0, g: 0, b: 0 });
-  const [hexInput, setHexInput] = useState<string>('#000000');
+  // Initialize state from current color token's precise values with safe defaults
+  const [hsv, setHsv] = useState<HSVColor>(() => colorToken?.hsv || { h: 0, s: 0, v: 0 });
+  const [rgb, setRgb] = useState<RGBColor>(() => colorToken?.rgb || { r: 0, g: 0, b: 0 });
+  const [hexInput, setHexInput] = useState<string>(() => colorToken?.hex || '#000000');
+  const [isEditingHex, setIsEditingHex] = useState(false);
   const [isDraggingHue, setIsDraggingHue] = useState(false);
   const [isDraggingSatVal, setIsDraggingSatVal] = useState(false);
   
   const hueBarRef = useRef<HTMLDivElement>(null);
   const satValRef = useRef<HTMLDivElement>(null);
 
-  // Update RGB and hex when HSV changes
+  // Update RGB and hex when HSV changes (but not when user is editing hex input)
   useEffect(() => {
     const newRgb = hsvToRgb(hsv);
     const newHex = hsvToHex(hsv);
     setRgb(newRgb);
-    setHexInput(newHex);
-  }, [hsv]);
-
-  // Sync with external colorToken changes
-  useEffect(() => {
-    const rgb = oklchToRgb(colorToken.oklch);
-    const newHsv = rgbToHsv(rgb);
     
-    // Only update if values are actually different to avoid infinite loops
-    if (Math.abs(newHsv.h - hsv.h) > 1 || Math.abs(newHsv.s - hsv.s) > 1 || Math.abs(newHsv.v - hsv.v) > 1) {
-      setHsv(newHsv);
+    // Only update hexInput if user is not currently editing it
+    if (!isEditingHex) {
+      setHexInput(newHex);
     }
-  }, [colorToken.oklch.l, colorToken.oklch.c, colorToken.oklch.h]);
+  }, [hsv, isEditingHex]);
 
-  // Notify parent of color changes
+  // Sync with external colorToken changes using precise values
+  useEffect(() => {
+    if (colorToken?.hsv && colorToken?.rgb && colorToken?.hex) {
+      // Only update if values are actually different to avoid infinite loops
+      if (Math.abs(colorToken.hsv.h - hsv.h) > 0.5 || 
+          Math.abs(colorToken.hsv.s - hsv.s) > 0.5 || 
+          Math.abs(colorToken.hsv.v - hsv.v) > 0.5) {
+        setHsv(colorToken.hsv);
+      }
+
+      // Update RGB and hex when external color changes
+      setRgb(colorToken.rgb);
+      if (!isEditingHex) {
+        setHexInput(colorToken.hex);
+      }
+    }
+  }, [colorToken?.hsv?.h, colorToken?.hsv?.s, colorToken?.hsv?.v, colorToken?.rgb?.r, colorToken?.rgb?.g, colorToken?.rgb?.b, colorToken?.hex, isEditingHex]);
+
+  // Notify parent of color changes using precise conversions
   const notifyChange = useCallback((newHsv: HSVColor) => {
-    const rgb = hsvToRgb(newHsv);
-    const oklch = rgbToOklch(rgb);
-    
-    const newColorToken: ColorToken = {
-      ...colorToken,
-      value: `oklch(${oklch.l.toFixed(4)} ${oklch.c.toFixed(4)} ${oklch.h.toFixed(4)})`,
-      oklch
-    };
+    const newColorToken = updateColorTokenFromHsv(colorToken, newHsv);
     onChange(newColorToken);
   }, [colorToken, onChange]);
 
@@ -79,7 +83,7 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
     const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
     const newHue = (x / rect.width) * 360;
     
-    const newHsv = { ...hsv, h: Math.round(newHue) };
+    const newHsv = { ...hsv, h: parseFloat(newHue.toFixed(1)) };
     setHsv(newHsv);
     notifyChange(newHsv);
   }, [hsv, notifyChange]);
@@ -97,8 +101,8 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
     
     const newHsv = { 
       ...hsv, 
-      s: Math.round(newSat), 
-      v: Math.round(newVal) 
+      s: parseFloat(newSat.toFixed(1)), 
+      v: parseFloat(newVal.toFixed(1)) 
     };
     setHsv(newHsv);
     notifyChange(newHsv);
@@ -143,32 +147,46 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
     };
   }, [isDraggingHue, isDraggingSatVal, handleHueInteraction, handleSatValInteraction]);
 
-  // Handle hex input changes
+  // Handle hex input changes using precise conversions
   const handleHexChange = (value: string) => {
     setHexInput(value);
+    setIsEditingHex(true);
     
-    if (isValidHex(value)) {
-      const newHsv = hexToHsv(value);
-      if (newHsv) {
-        setHsv(newHsv);
-        notifyChange(newHsv);
-      }
+    if (isValidHexV2(value)) {
+      const newColorToken = updateColorTokenFromHex(colorToken, value);
+      setHsv(newColorToken.hsv);
+      onChange(newColorToken);
     }
   };
 
-  // Handle RGB input changes
+  // Handle hex input focus and blur
+  const handleHexFocus = () => {
+    setIsEditingHex(true);
+  };
+
+  const handleHexBlur = () => {
+    setIsEditingHex(false);
+    // Sync hex input with current color token when user stops editing
+    setHexInput(colorToken?.hex || '#000000');
+  };
+
+  // Handle Enter key in hex input
+  const handleHexKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur(); // This will trigger handleHexBlur
+    }
+  };
+
+  // Handle RGB input changes using precise conversions
   const handleRgbChange = (component: 'r' | 'g' | 'b', value: string) => {
     const numValue = Math.max(0, Math.min(255, parseInt(value) || 0));
     const newRgb = { ...rgb, [component]: numValue };
     setRgb(newRgb);
     
-    const hex = `#${newRgb.r.toString(16).padStart(2, '0')}${newRgb.g.toString(16).padStart(2, '0')}${newRgb.b.toString(16).padStart(2, '0')}`;
-    const newHsv = hexToHsv(hex);
-    if (newHsv) {
-      setHsv(newHsv);
-      setHexInput(hex.toUpperCase());
-      notifyChange(newHsv);
-    }
+    const newColorToken = updateColorTokenFromRgb(colorToken, newRgb);
+    setHsv(newColorToken.hsv);
+    setHexInput(newColorToken.hex);
+    onChange(newColorToken);
   };
 
   // Calculate positions for indicators
@@ -225,18 +243,20 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
         </div>
       </div>
 
-      {/* Color Preview */}
+      {/* Color Preview with OKLCH */}
       <div className="flex items-center gap-3">
         <div
           className="w-12 h-8 rounded border border-border shadow-inner"
-          style={{ backgroundColor: hsvToHex(hsv) }}
+          style={{ backgroundColor: colorToken?.hex || '#000000' }}
         />
-        <div className="flex-1">
-          <Label className="text-xs text-muted-foreground mb-1 block">
-            Current Color
-          </Label>
+        <div className="flex-1 space-y-1">
+          <Label className="text-xs text-muted-foreground">Current Color</Label>
           <div className="text-sm font-mono text-foreground">
-            {formatHex(hsvToHex(hsv))}
+            {colorToken?.hex || '#000000'}
+          </div>
+          {/* 🆕 NUEVA SECCIÓN OKLCH */}
+          <div className="text-xs font-mono text-muted-foreground bg-muted/20 px-2 py-1 rounded">
+            {colorToken?.oklchString || 'oklch(0 0 0)'}
           </div>
         </div>
       </div>
@@ -249,6 +269,9 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
         <Input
           value={hexInput}
           onChange={(e) => handleHexChange(e.target.value)}
+          onFocus={handleHexFocus}
+          onBlur={handleHexBlur}
+          onKeyDown={handleHexKeyDown}
           className="font-mono text-sm text-foreground bg-input border-border"
           placeholder="#000000"
         />
@@ -266,7 +289,7 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
               type="number"
               min="0"
               max="255"
-              value={rgb.r}
+              value={rgb?.r || 0}
               onChange={(e) => handleRgbChange('r', e.target.value)}
               className="text-center text-sm text-foreground bg-input border-border"
             />
@@ -277,7 +300,7 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
               type="number"
               min="0"
               max="255"
-              value={rgb.g}
+              value={rgb?.g || 0}
               onChange={(e) => handleRgbChange('g', e.target.value)}
               className="text-center text-sm text-foreground bg-input border-border"
             />
@@ -288,7 +311,7 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
               type="number"
               min="0"
               max="255"
-              value={rgb.b}
+              value={rgb?.b || 0}
               onChange={(e) => handleRgbChange('b', e.target.value)}
               className="text-center text-sm text-foreground bg-input border-border"
             />
@@ -305,19 +328,46 @@ export function HsvColorPicker({ colorToken, onChange, className }: HsvColorPick
           <div className="text-center">
             <Label className="text-xs block">H</Label>
             <div className="text-sm font-mono text-foreground bg-muted/30 px-2 py-1 rounded">
-              {hsv.h}°
+              {(hsv?.h || 0).toFixed(1)}°
             </div>
           </div>
           <div className="text-center">
             <Label className="text-xs block">S</Label>
             <div className="text-sm font-mono text-foreground bg-muted/30 px-2 py-1 rounded">
-              {hsv.s}%
+              {(hsv?.s || 0).toFixed(1)}%
             </div>
           </div>
           <div className="text-center">
             <Label className="text-xs block">V</Label>
             <div className="text-sm font-mono text-foreground bg-muted/30 px-2 py-1 rounded">
-              {hsv.v}%
+              {(hsv?.v || 0).toFixed(1)}%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 🆕 NUEVA SECCIÓN: OKLCH Values (Source of Truth) */}
+      <div className="space-y-2">
+        <Label className="text-xs text-muted-foreground">
+          OKLCH Values (Source of Truth)
+        </Label>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="text-center">
+            <Label className="text-xs block">L</Label>
+            <div className="text-sm font-mono text-foreground bg-primary/10 px-2 py-1 rounded border border-primary/20">
+              {(colorToken?.oklch?.l || 0).toFixed(4)}
+            </div>
+          </div>
+          <div className="text-center">
+            <Label className="text-xs block">C</Label>
+            <div className="text-sm font-mono text-foreground bg-primary/10 px-2 py-1 rounded border border-primary/20">
+              {(colorToken?.oklch?.c || 0).toFixed(4)}
+            </div>
+          </div>
+          <div className="text-center">
+            <Label className="text-xs block">H</Label>
+            <div className="text-sm font-mono text-foreground bg-primary/10 px-2 py-1 rounded border border-primary/20">
+              {(colorToken?.oklch?.h || 0).toFixed(2)}°
             </div>
           </div>
         </div>

@@ -1,14 +1,14 @@
-// Theme Editor 3.0 - Default Themes with OKLCH colors
+// Theme Editor 3.0 - Default Themes V2 with Precise Colors
 import { ThemeData, ColorToken } from '../types/theme.types';
-import { BUBBLEGUM_THEME as COMPLETE_BUBBLEGUM_THEME } from './bubblegum-theme';
+import { createPreciseColorToken } from '../utils/color-conversions-v2';
 
-// Helper function to create color tokens
+// Legacy helper function (deprecated - use createPreciseColorToken instead)
 function createColorToken(name: string, value: string, l: number, c: number, h: number, description?: string): ColorToken {
+  // Convert to precise token for backward compatibility
+  const preciseToken = createPreciseColorToken(name, { l, c, h }, description);
   return {
-    name,
-    value,
-    oklch: { l, c, h },
-    description
+    ...preciseToken,
+    value // Keep legacy value for compatibility
   };
 }
 
@@ -66,9 +66,9 @@ const DEFAULT_LIGHT_COLORS: import('../types/theme.types').ThemeColors = {
   sidebarBorder: createColorToken('sidebar-border', 'oklch(0.9220 0 0)', 0.9220, 0, 0),
   sidebarRing: createColorToken('sidebar-ring', 'oklch(0.7080 0 0)', 0.7080, 0, 0),
   
-  // Scrollbar colors
-  scrollbarTrack: createColorToken('scrollbar-track', 'oklch(1 0 0)', 1, 0, 0),
-  scrollbarThumb: createColorToken('scrollbar-thumb', 'oklch(0.9220 0 0)', 0.9220, 0, 0)
+  // Scrollbar colors - Using precise conversions
+  scrollbarTrack: createPreciseColorToken('Scrollbar Track', '#ffffff', 'Light mode scrollbar track background'),
+  scrollbarThumb: createPreciseColorToken('Scrollbar Thumb', '#FFE3E3', 'Light mode scrollbar thumb color')
 };
 
 // Dark mode colors (original default theme)
@@ -125,9 +125,9 @@ const DEFAULT_DARK_COLORS: import('../types/theme.types').ThemeColors = {
   sidebarBorder: createColorToken('sidebar-border', 'oklch(0.2750 0 0)', 0.2750, 0, 0),
   sidebarRing: createColorToken('sidebar-ring', 'oklch(0.4390 0 0)', 0.4390, 0, 0),
   
-  // Scrollbar colors
-  scrollbarTrack: createColorToken('scrollbar-track', 'oklch(0.1450 0 0)', 0.1450, 0, 0),
-  scrollbarThumb: createColorToken('scrollbar-thumb', 'oklch(0.2750 0 0)', 0.2750, 0, 0)
+  // Scrollbar colors - Using precise conversions  
+  scrollbarTrack: createPreciseColorToken('Scrollbar Track', '#0A0A0A', 'Dark mode scrollbar track background'),
+  scrollbarThumb: createPreciseColorToken('Scrollbar Thumb', '#2E2929', 'Dark mode scrollbar thumb color')
 };
 
 // Default Theme - Dual configuration structure
@@ -579,11 +579,123 @@ export const BOLD_TECH_THEME: ThemeData = {
 };
 
 export const BUBBLEGUM_THEME: ThemeData = {
-  ...COMPLETE_BUBBLEGUM_THEME,
   id: 'bubblegum',
   name: 'Bubblegum',
   description: 'A vibrant, candy-colored theme with pink and cyan accents',
-  tags: ['pink', 'playful', 'fun', 'vibrant', 'candy']
+  version: '1.0.0',
+  author: 'Theme Editor 3.0',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  
+  lightColors: {
+    background: createPreciseColorToken('background', '#f6e6ee'),
+    foreground: createPreciseColorToken('foreground', '#737373'),
+    card: createPreciseColorToken('card', '#fdedc9'),
+    cardForeground: createPreciseColorToken('card-foreground', '#737373'),
+    popover: createPreciseColorToken('popover', '#ffffff'),
+    popoverForeground: createPreciseColorToken('popover-foreground', '#737373'),
+    primary: createPreciseColorToken('primary', '#d04f99'),
+    primaryForeground: createPreciseColorToken('primary-foreground', '#ffffff'),
+    secondary: createPreciseColorToken('secondary', '#8acfd1'),
+    secondaryForeground: createPreciseColorToken('secondary-foreground', '#525252'),
+    accent: createPreciseColorToken('accent', '#fbe2a7'),
+    accentForeground: createPreciseColorToken('accent-foreground', '#525252'),
+    muted: createPreciseColorToken('muted', '#b2e1eb'),
+    mutedForeground: createPreciseColorToken('muted-foreground', '#898989'),
+    destructive: createPreciseColorToken('destructive', '#f96f70'),
+    destructiveForeground: createPreciseColorToken('destructive-foreground', '#ffffff'),
+    border: createPreciseColorToken('border', '#f4cee4'),
+    input: createPreciseColorToken('input', '#f4cee4'),
+    ring: createPreciseColorToken('ring', '#d04f99'),
+    chart1: createPreciseColorToken('chart-1', '#d04f99'),
+    chart2: createPreciseColorToken('chart-2', '#8acfd1'),
+    chart3: createPreciseColorToken('chart-3', '#fbe2a7'),
+    chart4: createPreciseColorToken('chart-4', '#f96f70'),
+    chart5: createPreciseColorToken('chart-5', '#7dd3c2'),
+    sidebar: createPreciseColorToken('sidebar', '#f8f0f4'),
+    sidebarForeground: createPreciseColorToken('sidebar-foreground', '#737373'),
+    sidebarPrimary: createPreciseColorToken('sidebar-primary', '#d04f99'),
+    sidebarPrimaryForeground: createPreciseColorToken('sidebar-primary-foreground', '#ffffff'),
+    sidebarAccent: createPreciseColorToken('sidebar-accent', '#fbe2a7'),
+    sidebarAccentForeground: createPreciseColorToken('sidebar-accent-foreground', '#525252'),
+    sidebarBorder: createPreciseColorToken('sidebar-border', '#f4cee4'),
+    sidebarRing: createPreciseColorToken('sidebar-ring', '#d04f99'),
+    scrollbarTrack: createPreciseColorToken('scrollbar-track', '#f6e6ee'),
+    scrollbarThumb: createPreciseColorToken('scrollbar-thumb', '#f4cee4')
+  },
+  
+  darkColors: {
+    background: createPreciseColorToken('background', '#2d1b26'),
+    foreground: createPreciseColorToken('foreground', '#f0d5e5'),
+    card: createPreciseColorToken('card', '#3d2832'),
+    cardForeground: createPreciseColorToken('card-foreground', '#f0d5e5'),
+    popover: createPreciseColorToken('popover', '#3d2832'),
+    popoverForeground: createPreciseColorToken('popover-foreground', '#f0d5e5'),
+    primary: createPreciseColorToken('primary', '#e85da8'),
+    primaryForeground: createPreciseColorToken('primary-foreground', '#2d1b26'),
+    secondary: createPreciseColorToken('secondary', '#5a9fa3'),
+    secondaryForeground: createPreciseColorToken('secondary-foreground', '#f0d5e5'),
+    accent: createPreciseColorToken('accent', '#4a3d2f'),
+    accentForeground: createPreciseColorToken('accent-foreground', '#d4b88a'),
+    muted: createPreciseColorToken('muted', '#3d2832'),
+    mutedForeground: createPreciseColorToken('muted-foreground', '#c7a5bb'),
+    destructive: createPreciseColorToken('destructive', '#f96f70'),
+    destructiveForeground: createPreciseColorToken('destructive-foreground', '#2d1b26'),
+    border: createPreciseColorToken('border', '#4d3140'),
+    input: createPreciseColorToken('input', '#4d3140'),
+    ring: createPreciseColorToken('ring', '#e85da8'),
+    chart1: createPreciseColorToken('chart-1', '#e85da8'),
+    chart2: createPreciseColorToken('chart-2', '#5a9fa3'),
+    chart3: createPreciseColorToken('chart-3', '#d4b88a'),
+    chart4: createPreciseColorToken('chart-4', '#f96f70'),
+    chart5: createPreciseColorToken('chart-5', '#4dbfa8'),
+    sidebar: createPreciseColorToken('sidebar', '#251520'),
+    sidebarForeground: createPreciseColorToken('sidebar-foreground', '#f0d5e5'),
+    sidebarPrimary: createPreciseColorToken('sidebar-primary', '#e85da8'),
+    sidebarPrimaryForeground: createPreciseColorToken('sidebar-primary-foreground', '#2d1b26'),
+    sidebarAccent: createPreciseColorToken('sidebar-accent', '#4a3d2f'),
+    sidebarAccentForeground: createPreciseColorToken('sidebar-accent-foreground', '#d4b88a'),
+    sidebarBorder: createPreciseColorToken('sidebar-border', '#4d3140'),
+    sidebarRing: createPreciseColorToken('sidebar-ring', '#e85da8'),
+    scrollbarTrack: createPreciseColorToken('scrollbar-track', '#2d1b26'),
+    scrollbarThumb: createPreciseColorToken('scrollbar-thumb', '#4d3140')
+  },
+  
+  typography: {
+    fontFamilies: {
+      sans: 'Inter, sans-serif',
+      serif: 'Georgia, serif',
+      mono: 'Fira Code, monospace'
+    },
+    trackingNormal: '0em'
+  },
+  brand: {
+    name: 'Bubblegum Brand',
+    primaryColor: createPreciseColorToken('brand-primary', '#d04f99'),
+    secondaryColor: createPreciseColorToken('brand-secondary', '#8acfd1')
+  },
+  spacing: { spacing: '0.25rem' },
+  borders: {
+    radius: '0.5rem',
+    radiusSm: 'calc(var(--radius) - 4px)',
+    radiusMd: 'calc(var(--radius) - 2px)', 
+    radiusLg: 'var(--radius)',
+    radiusXl: 'calc(var(--radius) + 4px)'
+  },
+  shadows: {
+    shadow2xs: '0 1px 3px 0px hsl(340 50% 70% / 0.05)',
+    shadowXs: '0 1px 3px 0px hsl(340 50% 70% / 0.05)',
+    shadowSm: '0 1px 3px 0px hsl(340 50% 70% / 0.10), 0 1px 2px -1px hsl(340 50% 70% / 0.10)',
+    shadow: '0 1px 3px 0px hsl(340 50% 70% / 0.10), 0 1px 2px -1px hsl(340 50% 70% / 0.10)',
+    shadowMd: '0 1px 3px 0px hsl(340 50% 70% / 0.10), 0 2px 4px -1px hsl(340 50% 70% / 0.10)',
+    shadowLg: '0 1px 3px 0px hsl(340 50% 70% / 0.10), 0 4px 6px -1px hsl(340 50% 70% / 0.10)',
+    shadowXl: '0 1px 3px 0px hsl(340 50% 70% / 0.10), 0 8px 10px -1px hsl(340 50% 70% / 0.10)',
+    shadow2xl: '0 1px 3px 0px hsl(340 50% 70% / 0.25)'
+  },
+  scroll: { width: '8px', behavior: 'smooth', smooth: true, hide: false },
+  tags: ['pink', 'playful', 'fun', 'vibrant', 'candy'],
+  isPublic: true,
+  isFavorite: false
 };
 
 export const CAFFEINE_THEME: ThemeData = {

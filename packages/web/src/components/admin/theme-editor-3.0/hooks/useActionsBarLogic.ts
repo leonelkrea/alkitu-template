@@ -25,7 +25,9 @@ export function useActionsBarLogic(): ActionsBarLogic {
     setThemeMode,
     setTheme,
     setError,
-    markSaved
+    markSaved,
+    addTheme,
+    updateTheme
   } = useThemeEditor();
 
   // Get current theme or default (evita repetición del fallback)
@@ -59,8 +61,20 @@ export function useActionsBarLogic(): ActionsBarLogic {
   };
 
   const handleSave: ThemeSaveHandler = (theme) => {
+    // Check if it's a new theme or updating existing
+    const isNewTheme = !state.availableThemes.find(t => t.id === theme.id);
+    
+    if (isNewTheme) {
+      // Add as new theme
+      addTheme(theme);
+      console.log('Added new theme:', theme.name);
+    } else {
+      // Update existing theme
+      updateTheme(theme);
+      console.log('Updated theme:', theme.name);
+    }
+    
     // TODO: Implement save to localStorage/API
-    console.log('Saving theme:', theme.name);
     markSaved();
   };
 

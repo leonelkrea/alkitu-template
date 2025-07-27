@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Save, Heart, Check } from 'lucide-react';
 import { ThemeData } from '../../types/theme.types';
+import { SaveThemeDialog } from './SaveThemeDialog';
+import { useThemeEditor } from '../../context/ThemeEditorContext';
 
 interface SaveButtonProps {
   theme: ThemeData;
@@ -18,19 +20,22 @@ export function SaveButton({
   hasUnsavedChanges = false,
   className = ""
 }: SaveButtonProps) {
+  const { state } = useThemeEditor();
   const [isSaving, setIsSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
 
-  const handleSave = async () => {
+  // Get list of existing theme names
+  const existingThemeNames = (state.availableThemes || []).map(t => t.name);
+
+  const handleSaveClick = () => {
+    setShowSaveDialog(true);
+  };
+
+  const handleSaveTheme = async (updatedTheme: ThemeData, isNewTheme: boolean) => {
     setIsSaving(true);
     
     try {
-      // Update theme timestamp
-      const updatedTheme = {
-        ...theme,
-        updatedAt: new Date().toISOString()
-      };
-      
       await onSave(updatedTheme);
       
       setJustSaved(true);
@@ -61,15 +66,25 @@ export function SaveButton({
   };
 
   return (
-    <Button
-      variant={getVariant()}
-      size="sm"
-      className={`h-8 w-8 p-0 ${className} ${justSaved ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : ''}`}
-      onClick={handleSave}
-      disabled={isSaving}
-      title={getTitle()}
-    >
-      {getIcon()}
-    </Button>
+    <>
+      <Button
+        variant={getVariant()}
+        size="sm"
+        className={`h-8 w-8 p-0 ${className} ${justSaved ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : ''}`}
+        onClick={handleSaveClick}
+        disabled={isSaving}
+        title={getTitle()}
+      >
+        {getIcon()}
+      </Button>
+      
+      <SaveThemeDialog
+        open={showSaveDialog}
+        onOpenChange={setShowSaveDialog}
+        currentTheme={theme}
+        existingThemeNames={existingThemeNames}
+        onSave={handleSaveTheme}
+      />
+    </>
   );
 }

@@ -38,8 +38,41 @@ export function ColorEditor() {
       [colorKey]: newColorToken
     };
 
+    // If this color has linked colors, update them too
+    if (newColorToken.linkedColors && newColorToken.linkedColors.length > 0) {
+      newColorToken.linkedColors.forEach(linkedColorKey => {
+        if (updatedColors[linkedColorKey as keyof ThemeColors]) {
+          updatedColors[linkedColorKey as keyof ThemeColors] = {
+            ...updatedColors[linkedColorKey as keyof ThemeColors],
+            ...newColorToken,
+            name: updatedColors[linkedColorKey as keyof ThemeColors].name,
+            linkedTo: colorKey
+          };
+        }
+      });
+    }
+
     // This will automatically apply CSS variables for live preview
     updateCurrentModeColors(updatedColors);
+  };
+
+  // Handle link changes
+  const handleLinkChange = (colorName: string, linkedColors: string[]) => {
+    if (!currentColors) return;
+    
+    const colorKey = Object.keys(currentColors).find(key => key === colorName) as keyof ThemeColors;
+    if (!colorKey) return;
+    
+    const colorToken = currentColors[colorKey];
+    if (!colorToken) return;
+    
+    // Update the color token with new linked colors
+    const updatedColorToken = {
+      ...colorToken,
+      linkedColors
+    };
+    
+    handleColorChange(colorKey, updatedColorToken);
   };
 
   return (
@@ -78,6 +111,10 @@ export function ColorEditor() {
                       name: colorKey,
                       value: 'oklch(0.5 0 0)',
                       oklch: { l: 0.5, c: 0, h: 0 },
+                      oklchString: 'oklch(0.5000 0.0000 0.00)',
+                      hex: '#808080',
+                      rgb: { r: 128, g: 128, b: 128 },
+                      hsv: { h: 0, s: 0, v: 50 },
                       description: `Default ${label} color`
                     };
                     
@@ -89,6 +126,9 @@ export function ColorEditor() {
                         <ColorInput
                           color={defaultColorToken}
                           onChange={(newColor) => handleColorChange(colorKey, newColor)}
+                          allColors={currentColors}
+                          onLinkChange={handleLinkChange}
+                          mode={state.themeMode}
                         />
                       </div>
                     );
@@ -102,6 +142,9 @@ export function ColorEditor() {
                       <ColorInput
                         color={colorToken}
                         onChange={(newColor) => handleColorChange(colorKey, newColor)}
+                        allColors={currentColors}
+                        onLinkChange={handleLinkChange}
+                        mode={state.themeMode}
                       />
                     </div>
                   );

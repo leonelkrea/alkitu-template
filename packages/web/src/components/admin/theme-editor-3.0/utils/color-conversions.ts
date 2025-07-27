@@ -86,9 +86,9 @@ export function rgbToHsv(rgb: RGBColor): HSVColor {
   }
   
   return {
-    h: Math.round(h),
-    s: Math.round(s * 100),
-    v: Math.round(v * 100)
+    h: parseFloat(h.toFixed(1)), // Mayor precisión en hue
+    s: parseFloat((s * 100).toFixed(1)), // Mayor precisión en saturación
+    v: parseFloat((v * 100).toFixed(1)) // Mayor precisión en valor
   };
 }
 

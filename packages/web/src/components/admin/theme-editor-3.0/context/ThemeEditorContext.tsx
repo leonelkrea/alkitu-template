@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { ThemeData, ThemeWithCurrentColors, ThemeMode, EditorState, EditorSection, ViewportState, ViewportSize, PreviewState, PreviewSection } from '../types';
-import { DEFAULT_THEME } from '../constants/default-themes';
+import { DEFAULT_THEME, DEFAULT_THEMES } from '../constants/default-themes';
 import { applyThemeToRoot, applyThemeMode, applyModeSpecificColors } from '../utils/css-variables';
 import { applyScrollbarStyles } from '../utils/scrollbar-styles';
 
@@ -11,6 +11,7 @@ interface ThemeEditorState {
   // Theme data
   baseTheme: ThemeData;              // Base theme with dual configs
   currentTheme: ThemeWithCurrentColors; // Theme with current colors based on mode
+  availableThemes: ThemeData[];      // List of available themes
   themeMode: ThemeMode;
   
   // Editor state
@@ -49,12 +50,14 @@ type ThemeEditorAction =
   | { type: 'SET_PREVIEW_SECTION'; payload: PreviewSection }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'TOGGLE_UNSAVED_CHANGES'; payload: boolean };
+  | { type: 'TOGGLE_UNSAVED_CHANGES'; payload: boolean }
+  | { type: 'ADD_THEME'; payload: ThemeData };
 
 // Initial state
 const initialState: ThemeEditorState = {
   baseTheme: DEFAULT_THEME,
   currentTheme: computeCurrentTheme(DEFAULT_THEME, 'light'),
+  availableThemes: DEFAULT_THEMES,
   themeMode: 'light',
   editor: {
     activeSection: 'colors',
@@ -160,6 +163,15 @@ function themeEditorReducer(state: ThemeEditorState, action: ThemeEditorAction):
         editor: { ...state.editor, hasUnsavedChanges: action.payload }
       };
     
+    case 'ADD_THEME':
+      return {
+        ...state,
+        availableThemes: [...state.availableThemes, action.payload],
+        currentTheme: computeCurrentTheme(action.payload, state.themeMode),
+        baseTheme: action.payload,
+        editor: { ...state.editor, hasUnsavedChanges: false }
+      };
+    
     default:
       return state;
   }
@@ -182,6 +194,7 @@ interface ThemeEditorContextType {
   setError: (error: string | null) => void;
   markUnsaved: () => void;
   markSaved: () => void;
+  addTheme: (theme: ThemeData) => void;
 }
 
 const ThemeEditorContext = createContext<ThemeEditorContextType | undefined>(undefined);
@@ -242,6 +255,10 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     markUnsaved();
   };
   
+  const addTheme = (theme: ThemeData) => {
+    dispatch({ type: 'ADD_THEME', payload: theme });
+  };
+  
   const value: ThemeEditorContextType = {
     state,
     dispatch,
@@ -255,7 +272,8 @@ export function ThemeEditorProvider({ children }: ThemeEditorProviderProps) {
     setLoading,
     setError,
     markUnsaved,
-    markSaved
+    markSaved,
+    addTheme
   };
   
   return (

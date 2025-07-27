@@ -40,15 +40,20 @@ export function applyThemeColorsToRoot(colors: ThemeColors): void {
 }
 
 /**
- * Applies mode-specific colors to CSS root variables
+ * Applies mode-specific colors to CSS root variables V2
+ * Uses OKLCH strings as source of truth for precise color representation
  */
 export function applyModeSpecificColors(colors: ThemeColors): void {
   const root = document.documentElement;
   
   Object.entries(colors).forEach(([colorKey, colorToken]) => {
     const cssVariable = CSS_VARIABLE_MAP[colorKey as keyof ThemeColors];
-    if (cssVariable && colorToken.value) {
-      root.style.setProperty(cssVariable, colorToken.value);
+    if (cssVariable) {
+      // Prefer oklchString for precise colors, fallback to legacy value
+      const colorValue = colorToken.oklchString || colorToken.value;
+      if (colorValue) {
+        root.style.setProperty(cssVariable, colorValue);
+      }
     }
   });
 }

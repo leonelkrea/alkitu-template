@@ -5,53 +5,64 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Shuffle } from 'lucide-react';
-import { ColorToken, OklchColor } from '../../types/theme.types';
+import { ColorLinkButton } from './ColorLinkButton';
+import { ColorToken, OklchColor, ThemeColors } from '../../types/theme.types';
 import { oklchToString, parseOklchString } from '../../utils/css-variables';
+import { createPreciseColorToken } from '../../utils/color-conversions-v2';
 import { OklchColorPicker } from './OklchColorPicker';
 import { HsvColorPicker } from './HsvColorPicker';
 import { oklchToHex, isValidHex, hexToOklch } from '../../utils/color-conversions';
+import { updateColorTokenFromHex } from '../../utils/color-conversions-v2';
 
 interface ColorInputProps {
   color: ColorToken;
   onChange: (color: ColorToken) => void;
+  allColors: ThemeColors;
+  onLinkChange?: (colorName: string, linkedColors: string[]) => void;
+  mode: 'light' | 'dark';
   className?: string;
 }
 
 export function ColorInput({
   color,
   onChange,
+  allColors,
+  onLinkChange,
+  mode,
   className = ""
 }: ColorInputProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(() => oklchToHex(color.oklch));
+  const [inputValue, setInputValue] = useState(() => color?.hex || '#000000');
+  const [isEditingInput, setIsEditingInput] = useState(false);
 
-  // Update input value when color prop changes (show hex instead of oklch)
+  // Update input value when color prop changes (show hex) but not when user is editing
   useEffect(() => {
-    setInputValue(oklchToHex(color.oklch));
-  }, [color.oklch]);
+    if (!isEditingInput && color?.hex) {
+      setInputValue(color.hex);
+    }
+  }, [color?.hex, isEditingInput]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
+    setIsEditingInput(true);
     // Don't call onChange on every keystroke to avoid infinite loops
     // Wait for blur or enter key for validation
   };
 
+  const handleInputFocus = () => {
+    setIsEditingInput(true);
+  };
+
   const handleInputBlur = () => {
-    // Try to parse as hex input on blur
+    setIsEditingInput(false);
+    // Try to parse as hex input on blur using precise conversions
     if (isValidHex(inputValue)) {
-      const parsedOklch = hexToOklch(inputValue);
-      if (parsedOklch) {
-        const newColor: ColorToken = {
-          ...color,
-          value: `oklch(${parsedOklch.l.toFixed(4)} ${parsedOklch.c.toFixed(4)} ${parsedOklch.h.toFixed(4)})`,
-          oklch: parsedOklch
-        };
-        onChange(newColor);
-      }
+      const newColorToken = updateColorTokenFromHex(color, inputValue);
+      onChange(newColorToken);
     } else {
       // Revert to current color's hex value if invalid
-      setInputValue(oklchToHex(color.oklch));
+      setInputValue(color?.hex || '#000000');
     }
   };
 
@@ -62,30 +73,22 @@ export function ColorInput({
   };
 
   const handlePickerChange = (newColorToken: ColorToken) => {
-    setInputValue(oklchToHex(newColorToken.oklch));
+    // Update input value only if not currently editing
+    if (!isEditingInput && newColorToken?.hex) {
+      setInputValue(newColorToken.hex);
+    }
     onChange(newColorToken);
   };
 
-  const handleRandomColor = () => {
-    // Generate a random OKLCH color
-    const randomOklch: OklchColor = {
-      l: Math.random() * 0.8 + 0.2, // 0.2 to 1.0
-      c: Math.random() * 0.3, // 0 to 0.3
-      h: Math.random() * 360 // 0 to 360
-    };
-    
-    const randomColorToken: ColorToken = {
-      ...color,
-      value: oklchToString(randomOklch),
-      oklch: randomOklch
-    };
-    
-    handlePickerChange(randomColorToken);
+  const handleLinkChange = (linkedColors: string[]) => {
+    if (onLinkChange) {
+      onLinkChange(color.name, linkedColors);
+    }
   };
 
   // Get color for preview swatch (always show as hex)
   const getColorPreview = (): string => {
-    return oklchToHex(color.oklch);
+    return color?.hex || '#000000';
   };
 
   return (
@@ -105,7 +108,16 @@ export function ColorInput({
         </PopoverTrigger>
         <PopoverContent className="w-80 p-4" align="start">
           <div className="space-y-4">
-            <div className="text-sm font-medium">Color Picker</div>
+            {/* 🆕 HEADER CON OKLCH */}
+            <div className="space-y-2">
+              <div className="text-sm font-medium">Color Picker</div>
+              <div className="p-2 bg-muted/30 rounded">
+                <div className="text-xs text-muted-foreground">OKLCH Source</div>
+                <div className="text-xs font-mono text-foreground">
+                  {color?.oklchString || 'oklch(0 0 0)'}
+                </div>
+              </div>
+            </div>
             <HsvColorPicker
               colorToken={color}
               onChange={handlePickerChange}
@@ -119,22 +131,20 @@ export function ColorInput({
         type="text"
         value={inputValue}
         onChange={handleInputChange}
+        onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         onKeyDown={handleInputKeyDown}
         placeholder="#000000"
         className="flex-1 font-mono text-xs text-foreground bg-input border-border"
       />
 
-      {/* Random Color Button */}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleRandomColor}
-        className="px-2"
-      >
-        <Shuffle className="h-3 w-3" />
-        <span className="sr-only">Random color</span>
-      </Button>
+      {/* Color Link Button */}
+      <ColorLinkButton
+        currentColor={color}
+        allColors={allColors}
+        onLinkChange={handleLinkChange}
+        mode={mode}
+      />
     </div>
   );
 }

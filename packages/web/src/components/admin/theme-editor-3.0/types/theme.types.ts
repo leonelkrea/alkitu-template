@@ -1,15 +1,39 @@
-// Theme Editor 3.0 - Core Theme Types
+// Theme Editor 3.0 - Core Theme Types V2
+// Enhanced types for precise color handling
+
 export interface OklchColor {
   l: number; // Lightness (0-1)
-  c: number; // Chroma (0-0.37+)
+  c: number; // Chroma (0-0.5+) - Increased range for vivid colors
   h: number; // Hue (0-360)
+}
+
+export interface RGBColor {
+  r: number; // 0-255
+  g: number; // 0-255
+  b: number; // 0-255
+}
+
+export interface HSVColor {
+  h: number; // 0-360
+  s: number; // 0-100
+  v: number; // 0-100
 }
 
 export interface ColorToken {
   name: string;
-  value: string; // OKLCH string or CSS variable
-  oklch: OklchColor;
+  hex: string;           // NEW: Display principal (#RRGGBB)
+  oklch: OklchColor;     // Fuente de verdad numérica
+  oklchString: string;   // NEW: Para mostrar en UI "oklch(0.62 0.19 259.81)"
+  rgb: RGBColor;         // NEW: Para inputs RGB
+  hsv: HSVColor;         // NEW: Para color picker
   description?: string;
+  
+  // Color linking system
+  linkedTo?: string;     // Name of the parent color this is linked to
+  linkedColors?: string[]; // Names of colors that are linked to this color
+  
+  // Legacy compatibility
+  value: string;         // DEPRECATED: Use oklchString instead
 }
 
 export interface ThemeColors {
