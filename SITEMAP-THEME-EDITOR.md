@@ -332,8 +332,164 @@ theme-editor-3.0/
 - Soporte completo para modo claro y oscuro
 - Exportación compatible con Tailwind CSS v4
 
+## 🚨 REGLAS CRÍTICAS DE DESARROLLO
+
+### ⚠️ Reglas de Docker y Build
+- **NUNCA hacer build** - El proyecto se ejecuta con Docker
+- **NO usar comandos npm run build** - Docker maneja la compilación
+- **Desarrollo solo con npm run dev** - Hot reload en Docker
+
+### 🔒 Autocontención Total
+Este módulo debe ser **100% autocontenido** y no depender de archivos externos a la carpeta `theme-editor-3.0/`:
+
+#### ✅ Dependencias Permitidas
+- Componentes de `ui/` folder (re-exportados localmente)
+- React hooks nativos (`useState`, `useEffect`, etc.)
+- TypeScript tipos nativos
+- Utilidades estándar de JavaScript
+
+#### ❌ Dependencias PROHIBIDAS
+- Importaciones fuera de `theme-editor-3.0/`
+- Dependencias de otros componentes del proyecto
+- Contextos globales externos
+- Stores externos (Zustand, Redux, etc.)
+- APIs externas no autocontenidas
+
+### 📋 Auditoría de Dependencias
+Cada **2 semanas** realizar análisis de dependencias:
+1. **Buscar imports externos** con `grep -r "from ['\"]@/"`
+2. **Enumerar dependencias encontradas**
+3. **Proponer internalización** de cada dependencia
+4. **Documentar en este archivo** las dependencias actuales
+
+#### 🔍 Análisis Actual de Dependencias (Última revisión: 3 Agosto 2025)
+
+**🚨 DEPENDENCIAS EXTERNAS DETECTADAS:**
+
+1. **@/components/ui/*** (79 importaciones detectadas)
+   - **Estado:** ❌ CRÍTICO - Dependencia externa masiva
+   - **Archivos afectados:** Prácticamente todos los componentes
+   - **Solución:** Crear carpeta `ui/` con re-exports locales
+   - **Prioridad:** ALTA - Bloquea migración
+
+2. **@/lib/utils** (1 importación detectada)
+   - **Estado:** ❌ PENDIENTE - Función `cn` utilizada
+   - **Archivo afectado:** `layout/ResizableLayout.tsx`
+   - **Solución:** Crear `utils/cn.ts` interno
+   - **Prioridad:** MEDIA
+
+3. **culori** (1 importación detectada)
+   - **Estado:** ✅ PERMITIDO - Librería npm estándar
+   - **Archivo afectado:** `utils/color-conversions-v2.ts`
+   - **Nota:** Solo types, no implementación
+   - **Prioridad:** BAJA
+
+**📊 MÉTRICAS CRÍTICAS:**
+- **Total dependencias externas:** 81
+- **Componentes UI afectados:** 79 (98.8%)
+- **Autocontención actual:** 2% (CRÍTICO)
+- **Meta objetivo:** 100% autocontención
+
+**🎯 PLAN DE AUTOCONTENCIÓN:**
+
+```typescript
+// Estructura requerida para autocontención:
+theme-editor-3.0/
+├── ui/                          # ❌ PENDIENTE: Crear esta carpeta
+│   ├── button.tsx               # Re-export de @/components/ui/button
+│   ├── input.tsx                # Re-export de @/components/ui/input
+│   ├── card.tsx                 # Re-export de @/components/ui/card
+│   ├── tabs.tsx                 # Re-export de @/components/ui/tabs
+│   ├── dialog.tsx               # Re-export de @/components/ui/dialog
+│   ├── [... 25+ componentes más]
+│   └── index.ts                 # Export barrel
+├── utils/
+│   ├── cn.ts                    # ❌ PENDIENTE: Implementación local
+│   └── index.ts                 # Export barrel actualizado
+```
+
+### 🎨 Control Total de Elementos
+
+#### 🎯 Colores Personalizados
+- **Archivo:** `constants/default-theme.ts`
+- **Formato:** Variables CSS con OKLCH
+- **Control:** Todas las clases de color deben estar definidas localmente
+- **No usar:** Clases de Tailwind por defecto sin redefinir
+
+#### 📝 Tipografía Personalizada  
+- **Archivo:** `constants/typography-system.ts` (crear si no existe)
+- **Control:** Todas las familias, tamaños y pesos tipográficos
+- **Variables:** CSS custom properties para tipografía
+- **No usar:** Clases de Tailwind por defecto
+
+#### ⚛️ Átomos y Componentes
+- **Carpeta:** `ui/` (re-exports de Shadcn UI)
+- **Control:** Cada componente debe tener override local
+- **Personalización:** Todos los estilos en variables CSS
+- **Migración:** Fácil cambio de design system
+
+#### 🧩 Sistema de Tokens
+```typescript
+// Estructura de control obligatoria:
+theme-editor-3.0/
+├── constants/
+│   ├── color-tokens.ts      # Todos los colores
+│   ├── typography-tokens.ts # Toda la tipografía  
+│   ├── spacing-tokens.ts    # Todo el espaciado
+│   ├── border-tokens.ts     # Todos los bordes
+│   ├── shadow-tokens.ts     # Todas las sombras
+│   └── component-tokens.ts  # Tokens de componentes
+```
+
+### 🔄 Migración a Otros Proyectos
+Para asegurar migración fácil:
+1. **Copiar carpeta completa** `theme-editor-3.0/`
+2. **Verificar dependencias** en archivo de análisis
+3. **Instalar solo dependencias npm** listadas
+4. **Configurar variables CSS** en proyecto destino
+5. **Testing completo** de funcionalidades
+
+### 📊 Métricas de Autocontención
+- **Meta:** 0 dependencias externas
+- **Actual:** 81 dependencias externas (CRÍTICO)
+- **Autocontención:** 2% (98% dependiente)
+- **Próxima revisión:** Cada 2 semanas
+- **Última actualización:** 3 Agosto 2025
+
+### 🔍 Comandos de Validación
+Ejecutar cada 2 semanas para validar autocontención:
+
+```bash
+# 1. Buscar todas las dependencias @/ 
+cd packages/web/src/components/admin/theme-editor-3.0
+grep -r "from ['\"]@/" . --include="*.tsx" --include="*.ts"
+
+# 2. Contar dependencias externas
+grep -r "from ['\"]@/" . --include="*.tsx" --include="*.ts" | wc -l
+
+# 3. Listar archivos dependientes
+grep -r "from ['\"]@/" . --include="*.tsx" --include="*.ts" | cut -d: -f1 | sort | uniq
+
+# 4. Verificar imports de librerías externas (no npm)
+grep -r "from ['\"]../" . --include="*.tsx" --include="*.ts"
+```
+
+### 🚨 ALERTA DE AUTOCONTENCIÓN
+**ESTADO ACTUAL: CRÍTICO**
+- ❌ No es migrable a otros proyectos
+- ❌ 79 componentes UI externos
+- ❌ Dependencias de @/lib/utils
+- ⚠️ Requiere refactoring masivo para autocontención
+
+**PRÓXIMOS PASOS OBLIGATORIOS:**
+1. Crear carpeta `ui/` con todos los re-exports
+2. Implementar `utils/cn.ts` local
+3. Actualizar todos los imports internos
+4. Validar autocontención al 100%
+
 ---
 
 **Autor:** Theme Editor 3.0 Team  
 **Versión:** 1.0.0  
-**Fecha:** Enero 2025
+**Fecha:** 3 Agosto 2025  
+**Reglas actualizadas:** 3 Agosto 2025
