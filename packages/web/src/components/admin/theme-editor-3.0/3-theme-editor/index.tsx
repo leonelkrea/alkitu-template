@@ -7,6 +7,7 @@ import { useThemeUpdates } from '../hooks/useThemeUpdates';
 import { EditorSection } from '../types';
 import { Palette, Type, Building, Square, Grid, Zap, Scroll } from 'lucide-react';
 import { ColorEditor } from './colors/ColorEditor';
+import { TypographyEditor } from './typography';
 
 export function ThemeEditor() {
   const { state, setEditorSection } = useThemeEditor();
@@ -49,7 +50,16 @@ export function ThemeEditor() {
             </div>
           </TabsContent>
 
-          {sections.slice(1).map(({ id, label }) => (
+          <TabsContent value="typography" className="mt-4 flex-1 min-h-0 overflow-hidden">
+            <div className="h-full overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-background">
+              <TypographyEditor 
+                typography={state.currentTheme.typography}
+                onTypographyChange={themeUpdates.updateTypography}
+              />
+            </div>
+          </TabsContent>
+
+          {sections.slice(2).map(({ id, label }) => (
             <TabsContent key={id} value={id} className="mt-4 flex-1 min-h-0 overflow-hidden">
               <div className="h-full overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-background">
                 <div className="h-24 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">

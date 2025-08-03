@@ -1,10 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { ThemeTypography } from '../../types/theme.types';
+import { TypographySection } from './TypographySection';
+import { DEFAULT_TYPOGRAPHY } from './types';
+import { applyTypographyElements } from '../../utils/css-variables';
 
 interface TypographyEditorProps {
   typography: ThemeTypography;
@@ -44,6 +47,18 @@ export function TypographyEditor({
   className = ""
 }: TypographyEditorProps) {
   
+  // Safety check - provide default values if typography is undefined/null
+  if (!typography) {
+    console.warn('Typography is undefined, using fallback');
+    return (
+      <div className={`space-y-8 ${className}`}>
+        <div className="text-center p-8 text-muted-foreground">
+          Typography data is not available. Please check the theme configuration.
+        </div>
+      </div>
+    );
+  }
+
   const handleFontFamilyChange = (type: 'sans' | 'serif' | 'mono', fontName: string) => {
     const updatedTypography = {
       ...typography,
@@ -55,9 +70,29 @@ export function TypographyEditor({
     onTypographyChange(updatedTypography);
   };
 
+  // Handle typography elements changes
+  const handleTypographyElementsChange = (elements: TypographyElements) => {
+    // Apply changes to CSS variables in real-time
+    applyTypographyElements(elements);
+    
+    // Update the theme (this could be expanded to persist in the theme object)
+    console.log('Typography elements updated:', elements);
+    
+    // In the future, you might want to:
+    // onTypographyChange({ ...typography, elements });
+  };
+
+  // Apply initial typography elements on component mount
+  useEffect(() => {
+    applyTypographyElements(DEFAULT_TYPOGRAPHY);
+  }, []);
+
   return (
-    <div className={`space-y-6 ${className}`}>
-      {/* Font Families */}
+    <div className={`space-y-8 ${className}`}>
+      {/* New Typography Elements Section */}
+      <TypographySection />
+
+      {/* Existing Font Families Section */}
       <Card className="p-4">
         <h3 className="text-sm font-medium mb-4">Font Families</h3>
         
@@ -66,7 +101,7 @@ export function TypographyEditor({
           <div className="space-y-2">
             <Label className="text-xs">Sans Serif</Label>
             <Select 
-              value={typography.fontFamilies.sans[0]} 
+              value={Array.isArray(typography.fontFamilies?.sans) ? typography.fontFamilies.sans[0] : typography.fontFamilies?.sans?.split(',')[0]?.trim() || 'Inter'} 
               onValueChange={(value) => handleFontFamilyChange('sans', value)}
             >
               <SelectTrigger className="h-8">
@@ -82,7 +117,7 @@ export function TypographyEditor({
             </Select>
             <div 
               className="text-sm p-2 border rounded"
-              style={{ fontFamily: typography.fontFamilies.sans[0] }}
+              style={{ fontFamily: Array.isArray(typography.fontFamilies?.sans) ? typography.fontFamilies.sans[0] : typography.fontFamilies?.sans?.split(',')[0]?.trim() || 'Inter' }}
             >
               The quick brown fox jumps over the lazy dog.
             </div>
@@ -92,7 +127,7 @@ export function TypographyEditor({
           <div className="space-y-2">
             <Label className="text-xs">Serif</Label>
             <Select 
-              value={typography.fontFamilies.serif[0]} 
+              value={Array.isArray(typography.fontFamilies?.serif) ? typography.fontFamilies.serif[0] : typography.fontFamilies?.serif?.split(',')[0]?.trim() || 'Georgia'} 
               onValueChange={(value) => handleFontFamilyChange('serif', value)}
             >
               <SelectTrigger className="h-8">
@@ -108,7 +143,7 @@ export function TypographyEditor({
             </Select>
             <div 
               className="text-sm p-2 border rounded"
-              style={{ fontFamily: typography.fontFamilies.serif[0] }}
+              style={{ fontFamily: Array.isArray(typography.fontFamilies?.serif) ? typography.fontFamilies.serif[0] : typography.fontFamilies?.serif?.split(',')[0]?.trim() || 'Georgia' }}
             >
               The quick brown fox jumps over the lazy dog.
             </div>
@@ -118,7 +153,7 @@ export function TypographyEditor({
           <div className="space-y-2">
             <Label className="text-xs">Monospace</Label>
             <Select 
-              value={typography.fontFamilies.mono[0]} 
+              value={Array.isArray(typography.fontFamilies?.mono) ? typography.fontFamilies.mono[0] : typography.fontFamilies?.mono?.split(',')[0]?.trim() || 'JetBrains Mono'} 
               onValueChange={(value) => handleFontFamilyChange('mono', value)}
             >
               <SelectTrigger className="h-8">
@@ -134,7 +169,7 @@ export function TypographyEditor({
             </Select>
             <div 
               className="text-sm p-2 border rounded"
-              style={{ fontFamily: typography.fontFamilies.mono[0] }}
+              style={{ fontFamily: Array.isArray(typography.fontFamilies?.mono) ? typography.fontFamilies.mono[0] : typography.fontFamilies?.mono?.split(',')[0]?.trim() || 'JetBrains Mono' }}
             >
               const greeting = "Hello World";
             </div>
@@ -142,47 +177,11 @@ export function TypographyEditor({
         </div>
       </Card>
 
-      {/* Font Sizes Preview */}
-      <Card className="p-4">
-        <h3 className="text-sm font-medium mb-4">Font Sizes</h3>
-        <div className="space-y-3">
-          {Object.entries(typography.fontSizes).map(([key, size]) => (
-            <div key={key} className="flex items-center gap-4">
-              <div className="w-12 text-xs text-muted-foreground">{key}</div>
-              <div className="w-16 text-xs font-mono text-muted-foreground">{size}</div>
-              <div 
-                style={{ 
-                  fontSize: size,
-                  fontFamily: typography.fontFamilies.sans[0]
-                }}
-              >
-                Sample Text ({key})
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      {/* Font Weights Preview */}
-      <Card className="p-4">
-        <h3 className="text-sm font-medium mb-4">Font Weights</h3>
-        <div className="space-y-3">
-          {Object.entries(typography.fontWeights).map(([key, weight]) => (
-            <div key={key} className="flex items-center gap-4">
-              <div className="w-16 text-xs text-muted-foreground">{key}</div>
-              <div className="w-12 text-xs font-mono text-muted-foreground">{weight}</div>
-              <div 
-                style={{ 
-                  fontWeight: weight,
-                  fontFamily: typography.fontFamilies.sans[0]
-                }}
-              >
-                Sample Text ({key} - {weight})
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
     </div>
   );
 }
+
+// Re-export new components
+export { TypographySection } from './TypographySection';
+export { TypographyElementEditor } from './TypographyElementEditor';
+export type { TypographyElements, TypographyElement } from './types';

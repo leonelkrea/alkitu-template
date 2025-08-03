@@ -2,6 +2,7 @@
 import { ThemeData, ThemeColors, OklchColor } from '../types/theme.types';
 import { CSS_VARIABLE_MAP } from '../types/color-sections.types';
 import { oklchToHex } from './color-conversions';
+import { TypographyElements } from '../3-theme-editor/typography/types';
 
 /**
  * Converts OKLCH color object to CSS oklch() string
@@ -93,6 +94,26 @@ export function applyThemeToRoot(theme: ThemeData, mode: 'light' | 'dark' = 'lig
     '--shadow-2xl': theme.shadows.shadow2xl
   }).forEach(([property, value]) => {
     root.style.setProperty(property, value);
+  });
+}
+
+/**
+ * Applies typography elements to CSS root variables
+ */
+export function applyTypographyElements(typography: TypographyElements): void {
+  const root = document.documentElement;
+  
+  // Apply each typography element as CSS variables
+  Object.entries(typography).forEach(([elementKey, element]) => {
+    const prefix = `--typography-${elementKey}`;
+    
+    root.style.setProperty(`${prefix}-font-family`, element.fontFamily);
+    root.style.setProperty(`${prefix}-font-size`, element.fontSize);
+    root.style.setProperty(`${prefix}-font-weight`, element.fontWeight);
+    root.style.setProperty(`${prefix}-line-height`, element.lineHeight);
+    root.style.setProperty(`${prefix}-letter-spacing`, element.letterSpacing);
+    root.style.setProperty(`${prefix}-word-spacing`, element.wordSpacing);
+    root.style.setProperty(`${prefix}-text-decoration`, element.textDecoration);
   });
 }
 
