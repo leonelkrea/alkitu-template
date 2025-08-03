@@ -19,8 +19,6 @@ export function ThemeEditor() {
             {/* Top: Theme Selector */}
             <div className="h-[75px] flex-shrink-0 relative">
               <ThemeSelector />
-              {/* Vertical separator */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 h-8 w-px bg-border" />
             </div>
             
             {/* Bottom: Theme Editor */}
