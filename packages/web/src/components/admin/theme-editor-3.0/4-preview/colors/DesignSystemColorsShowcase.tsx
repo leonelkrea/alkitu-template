@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeColors } from '../../types/theme.types';
 import { CSS_VARIABLE_MAP } from '../../types/color-sections.types';
 import { oklchToHex } from '../../utils/color-conversions';
+import { useThemeEditor } from '../../context/ThemeEditorContext';
 
 interface DesignSystemColorsShowcaseProps {
   colors: ThemeColors;
@@ -117,11 +118,11 @@ function ColorCard({ item, colors }: { item: ColorShowcaseItem; colors: ThemeCol
           
           {/* Color Value & CSS Variable */}
           <div className="space-y-1">
-            <div className="text-xs font-mono text-muted-foreground">
+            <div className="text-xs font-mono text-muted-foreground truncate">
               {cssVariable}
             </div>
-            <div className="flex items-center justify-between bg-muted/30 px-2 py-1 rounded">
-              <span className="text-xs font-mono text-foreground">
+            <div className="flex items-center justify-between bg-muted/30 px-2 py-1 rounded min-w-0">
+              <span className="text-xs font-mono text-foreground truncate flex-1 mr-2">
                 {hexValue}
               </span>
               <Button
@@ -145,6 +146,18 @@ function ColorCard({ item, colors }: { item: ColorShowcaseItem; colors: ThemeCol
 }
 
 export function DesignSystemColorsShowcase({ colors }: DesignSystemColorsShowcaseProps) {
+  const { state } = useThemeEditor();
+
+  // Get responsive grid classes based on current viewport
+  const getGridClasses = () => {
+    const currentViewport = state.viewport.current;
+    if (currentViewport === 'smartphone') {
+      return 'grid grid-cols-1 gap-4';
+    }
+    // For desktop, tablet, and TV use responsive grids
+    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4';
+  };
+
   // Group colors by category
   const colorsByCategory = DESIGN_SYSTEM_COLORS.reduce((acc, item) => {
     if (!acc[item.category]) {
@@ -193,7 +206,7 @@ export function DesignSystemColorsShowcase({ colors }: DesignSystemColorsShowcas
           <h4 className="text-sm font-medium text-foreground border-b border-border pb-2">
             {category}
           </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className={getGridClasses()}>
             {colorsByCategory[category].map((item) => (
               <ColorCard key={item.colorKey} item={item} colors={colors} />
             ))}

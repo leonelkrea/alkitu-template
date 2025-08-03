@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 export function TypographyPreview() {
   return (
     <div className="space-y-6 p-4">
-      <h2 className="text-lg font-semibold mb-4">Typography Preview</h2>
+      <h2 className="text-lg font-semibold mb-4 text-foreground">Typography Preview</h2>
       
       {/* Typography Elements Showcase */}
       <div className="space-y-6">

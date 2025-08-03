@@ -73,23 +73,23 @@ function ContrastCard({ pair, colors }: ContrastCardProps) {
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <div 
-              className="w-6 h-6 rounded border border-border"
+              className="w-6 h-6 rounded border border-border flex-shrink-0"
               style={{ backgroundColor: bgColor }}
             />
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-foreground">Background</p>
-              <p className="text-xs text-muted-foreground font-mono">{bgColor}</p>
+              <p className="text-xs text-muted-foreground font-mono truncate">{bgColor}</p>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
             <div 
-              className="w-6 h-6 rounded border border-border"
+              className="w-6 h-6 rounded border border-border flex-shrink-0"
               style={{ backgroundColor: fgColor }}
             />
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-foreground">Foreground</p>
-              <p className="text-xs text-muted-foreground font-mono">{fgColor}</p>
+              <p className="text-xs text-muted-foreground font-mono truncate">{fgColor}</p>
             </div>
           </div>
         </div>
@@ -100,6 +100,25 @@ function ContrastCard({ pair, colors }: ContrastCardProps) {
 
 export function ContrastChecker() {
   const { state } = useThemeEditor();
+  
+  // Get responsive grid classes based on current viewport
+  const getGridClasses = () => {
+    const currentViewport = state.viewport.current;
+    if (currentViewport === 'smartphone') {
+      return 'grid grid-cols-1 gap-4';
+    }
+    // For desktop, tablet, and TV use responsive grids
+    return 'grid grid-cols-1 md:grid-cols-2 gap-4';
+  };
+
+  const getInteractiveGridClasses = () => {
+    const currentViewport = state.viewport.current;
+    if (currentViewport === 'smartphone') {
+      return 'grid grid-cols-1 gap-4';
+    }
+    // For desktop, tablet, and TV use responsive grids
+    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+  };
   // Use current mode colors for contrast checking
   const colors = state.themeMode === 'dark' 
     ? state.currentTheme?.darkColors 
@@ -145,30 +164,30 @@ export function ContrastChecker() {
   }).length;
 
   return (
-    <div className="space-y-6">
+    <div className={`${state.viewport.current === 'smartphone' ? 'space-y-3' : 'space-y-6'}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-foreground">Contrast Checker</h3>
+        <h3 className={`font-semibold text-foreground ${state.viewport.current === 'smartphone' ? 'text-base' : 'text-lg'}`}>Contrast Checker</h3>
       </div>
 
       {/* Filter Tabs */}
       <div className="flex items-center gap-2">
-        <Badge variant="secondary" className="cursor-pointer">All</Badge>
+        <Badge variant="secondary" className="cursor-pointer text-xs">All</Badge>
         <Badge 
           variant="outline" 
-          className={`cursor-pointer flex items-center gap-1 ${
+          className={`cursor-pointer flex items-center gap-1 text-xs ${
             contrastIssues > 0 ? 'text-destructive border-destructive/30' : ''
           }`}
         >
-          <AlertTriangle className="h-3 w-3" />
+          <AlertTriangle className="h-2 w-2" />
           Issues ({contrastIssues})
         </Badge>
       </div>
 
       {/* Content & Containers */}
       <div>
-        <h4 className="text-sm font-medium text-foreground mb-3">Content & Containers</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h4 className={`text-sm font-medium text-foreground ${state.viewport.current === 'smartphone' ? 'mb-2' : 'mb-3'}`}>Content & Containers</h4>
+        <div className={getGridClasses()}>
           {contentContainers.map((pair) => (
             <ContrastCard key={pair.name} pair={pair} colors={colors} />
           ))}
@@ -177,8 +196,8 @@ export function ContrastChecker() {
 
       {/* Interactive Elements */}
       <div>
-        <h4 className="text-sm font-medium text-foreground mb-3">Interactive Elements</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <h4 className={`text-sm font-medium text-foreground ${state.viewport.current === 'smartphone' ? 'mb-2' : 'mb-3'}`}>Interactive Elements</h4>
+        <div className={getInteractiveGridClasses()}>
           {interactiveElements.map((pair) => (
             <ContrastCard key={pair.name} pair={pair} colors={colors} />
           ))}
@@ -187,8 +206,8 @@ export function ContrastChecker() {
 
       {/* Navigation & Functional */}
       <div>
-        <h4 className="text-sm font-medium text-foreground mb-3">Navigation & Functional</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h4 className={`text-sm font-medium text-foreground ${state.viewport.current === 'smartphone' ? 'mb-2' : 'mb-3'}`}>Navigation & Functional</h4>
+        <div className={getGridClasses()}>
           {navigationFunctional.map((pair) => (
             <ContrastCard key={pair.name} pair={pair} colors={colors} />
           ))}

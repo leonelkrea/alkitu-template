@@ -66,12 +66,15 @@ export function ResizableLayout({ children, className }: ResizableLayoutProps) {
 
       {/* Resizer */}
       <div
-        className={cn(
-          "w-px bg-border hover:bg-border cursor-col-resize transition-colors",
-          isResizing && "bg-border"
-        )}
+        className="relative w-px bg-border hover:bg-border cursor-col-resize transition-colors"
         onMouseDown={handleMouseDown}
-      />
+      >
+        {/* Invisible capture area */}
+        <div 
+          className="absolute inset-y-0 -left-2 -right-2 cursor-col-resize"
+          onMouseDown={handleMouseDown}
+        />
+      </div>
 
       {/* Right Column */}
       <div 
